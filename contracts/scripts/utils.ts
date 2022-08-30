@@ -1,5 +1,5 @@
 import { TokenCreateTransaction,DelegateContractId, Hbar,  Client,  AccountId, PrivateKey, ContractFunctionParameters,
-  PublicKey, ContractCreateTransaction, FileCreateTransaction, FileAppendTransaction, TokenId, TokenSupplyType,
+  PublicKey, ContractCreateTransaction, FileCreateTransaction, FileAppendTransaction, TokenId,TokenSupplyType,
   ContractExecuteTransaction, AccountCreateTransaction } from "@hashgraph/sdk";
 
 import { HederaERC20__factory, HTSTokenOwner__factory, HederaERC1967Proxy__factory } from "../typechain-types";
@@ -261,6 +261,7 @@ export async function createECDSAAccount(client:any, amount:number) {
   const response = await new AccountCreateTransaction()
   .setKey(privateECDSAKey)
   .setInitialBalance(new Hbar(amount))
+<<<<<<< HEAD
   .setNodeAccountIds([
     AccountId.fromString('0.0.3'),
     AccountId.fromString('0.0.5'),
@@ -269,6 +270,8 @@ export async function createECDSAAccount(client:any, amount:number) {
     AccountId.fromString('0.0.8'),
     AccountId.fromString('0.0.9')
   ])
+=======
+>>>>>>> Mint functionality
   .execute(client);
   const receipt = await response.getReceipt(client);
   const account = receipt.accountId;
