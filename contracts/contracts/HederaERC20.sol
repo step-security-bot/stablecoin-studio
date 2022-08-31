@@ -7,12 +7,11 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20Metadat
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./hts-precompile/HederaTokenService.sol";
 import "./IHederaERC20.sol";
-
 import "./TokenOwner.sol";
 import "./extensions/Mintable.sol";
+import "./Rescatable.sol";
 
-
-contract HederaERC20 is IHederaERC20, HederaTokenService, Initializable, IERC20Upgradeable, Mintable {
+contract HederaERC20 is IHederaERC20, Initializable, IERC20Upgradeable,TokenOwner,HederaERC20Mintable,Rescatable {
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     function initialize () 
