@@ -7,10 +7,12 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20Metadat
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./hts-precompile/HederaTokenService.sol";
 import "./IHederaERC20.sol";
-import "./TokenOwner.sol";
-import "./HederaERC20Mintable.sol";
 
-contract HederaERC20 is IHederaERC20, Initializable, IERC20Upgradeable, HederaERC20Mintable {
+import "./TokenOwner.sol";
+import "./extensions/Mintable.sol";
+
+
+contract HederaERC20 is IHederaERC20, HederaTokenService, Initializable, IERC20Upgradeable, Mintable {
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     function initialize () 
@@ -61,13 +63,28 @@ contract HederaERC20 is IHederaERC20, Initializable, IERC20Upgradeable, HederaER
     {
         return IERC20Upgradeable(tokenAddress).balanceOf(account);
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> Mintable contract in extensions folder and associate/dissociate
     function associateToken(address adr) 
         public 
         returns (bool) 
     {         
         int256 responseCode = HederaTokenService.associateToken(adr, tokenAddress);
         return _checkResponse(responseCode);        
+<<<<<<< HEAD
+=======
+    }
+    
+    function dissociateToken(address adr) 
+        public 
+        returns (bool) 
+    {         
+        int256 responseCode = HederaTokenService.dissociateToken(adr, tokenAddress);
+        return _checkResponse(responseCode);        
+>>>>>>> Mintable contract in extensions folder and associate/dissociate
     }
     
     function dissociateToken(address adr) 
@@ -80,6 +97,7 @@ contract HederaERC20 is IHederaERC20, Initializable, IERC20Upgradeable, HederaER
     
     function _transfer(address from, address to, uint256 amount) 
         internal 
+        override
         returns (bool) 
     {
         require(balanceOf(from) >= amount, "Insufficient token balance");
@@ -127,6 +145,14 @@ contract HederaERC20 is IHederaERC20, Initializable, IERC20Upgradeable, HederaER
          require(false, "function not already implemented");
     }
     
+    function _checkResponse(int256 responseCode) 
+        internal 
+        returns (bool) 
+    {
+        require(responseCode == HederaResponseCodes.SUCCESS, "Error");
+        return true;
+    }
+
     function _checkResponse(int256 responseCode) 
         internal 
         returns (bool) 
