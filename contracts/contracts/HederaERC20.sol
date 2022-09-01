@@ -9,9 +9,9 @@ import "./hts-precompile/HederaTokenService.sol";
 import "./IHederaERC20.sol";
 
 import "./extensions/Mintable.sol";
-import "./Rescatable.sol";
+import "./extensions/Rescatable.sol";
 
-contract HederaERC20 is IHederaERC20, Initializable, IERC20Upgradeable,TokenOwner,HederaERC20Mintable,Rescatable {
+contract HederaERC20 is IHederaERC20, Initializable, IERC20Upgradeable,TokenOwner,Rescatable {
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     function initialize () 
@@ -93,7 +93,6 @@ contract HederaERC20 is IHederaERC20, Initializable, IERC20Upgradeable,TokenOwne
 
     function _transfer(address from, address to, uint256 amount) 
         internal 
-        override
         returns (bool) 
     {
         require(balanceOf(from) >= amount, "Insufficient token balance");
