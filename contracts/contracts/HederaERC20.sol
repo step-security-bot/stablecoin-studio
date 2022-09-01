@@ -11,7 +11,7 @@ import "./TokenOwner.sol";
 import "./extensions/Mintable.sol";
 import "./extensions/Rescatable.sol";
 
-contract HederaERC20 is IHederaERC20, Initializable, IERC20Upgradeable,TokenOwner,Rescatable {
+contract HederaERC20 is IHederaERC20, Initializable,HederaTokenService, IERC20Upgradeable,TokenOwner,Rescatable {
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     function initialize () 
