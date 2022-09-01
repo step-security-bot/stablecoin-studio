@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import "./IHederaERC20.sol";
+import "../IHederaERC20.sol";
 import "./IRescatable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "./Roles.sol";
+import "../Roles.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
 abstract contract Rescatable is IRescatable ,AccessControlUpgradeable, TokenOwner, Roles {
