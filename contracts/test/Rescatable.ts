@@ -3,7 +3,7 @@ require("@hashgraph/hardhat-hethers");
 require("@hashgraph/sdk");
 
 import { expect } from "chai";
-import { describe } from "mocha";
+
 import { deployContractsWithSDK, contractCall, getClient, createECDSAAccount } from "../scripts/utils";
 import { HederaERC20__factory } from "../typechain-types";
 
