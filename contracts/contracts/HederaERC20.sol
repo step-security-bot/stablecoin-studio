@@ -11,7 +11,7 @@ import "./TokenOwner.sol";
 import "./extensions/Mintable.sol";
 import "./extensions/Rescatable.sol";
 
-contract HederaERC20 is IHederaERC20, Initializable,HederaTokenService, IERC20Upgradeable,TokenOwner,Rescatable {
+contract HederaERC20 is IHederaERC20, Initializable,HederaTokenService, IERC20Upgradeable,TokenOwner,Rescatable,Mintable {
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     function initialize () 
@@ -19,7 +19,12 @@ contract HederaERC20 is IHederaERC20, Initializable,HederaTokenService, IERC20Up
         external 
         initializer 
     {
-    }
+         __AccessControl_init();
+
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(SUPPLIER_ROLE, msg.sender);
+    } 
+    
      
     function name() 
         external 
@@ -62,28 +67,12 @@ contract HederaERC20 is IHederaERC20, Initializable,HederaTokenService, IERC20Up
     {
         return IERC20Upgradeable(tokenAddress).balanceOf(account);
     }
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> Mintable contract in extensions folder and associate/dissociate
     function associateToken(address adr) 
         public 
         returns (bool) 
     {         
         int256 responseCode = HederaTokenService.associateToken(adr, tokenAddress);
         return _checkResponse(responseCode);        
-<<<<<<< HEAD
-=======
-    }
-    
-    function dissociateToken(address adr) 
-        public 
-        returns (bool) 
-    {         
-        int256 responseCode = HederaTokenService.dissociateToken(adr, tokenAddress);
-        return _checkResponse(responseCode);        
->>>>>>> Mintable contract in extensions folder and associate/dissociate
     }
     
     function dissociateToken(address adr) 
@@ -96,6 +85,7 @@ contract HederaERC20 is IHederaERC20, Initializable,HederaTokenService, IERC20Up
     
     function _transfer(address from, address to, uint256 amount) 
         internal 
+        override
         returns (bool) 
     {
         require(balanceOf(from) >= amount, "Insufficient token balance");
@@ -141,14 +131,6 @@ contract HederaERC20 is IHederaERC20, Initializable,HederaTokenService, IERC20Up
         returns (bool)
     {
          require(false, "function not already implemented");
-    }
-    
-    function _checkResponse(int256 responseCode) 
-        internal 
-        returns (bool) 
-    {
-        require(responseCode == HederaResponseCodes.SUCCESS, "Error");
-        return true;
     }
 
     function _checkResponse(int256 responseCode) 

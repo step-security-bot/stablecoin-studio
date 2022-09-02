@@ -261,7 +261,6 @@ export async function createECDSAAccount(client:any, amount:number) {
   const response = await new AccountCreateTransaction()
   .setKey(privateECDSAKey)
   .setInitialBalance(new Hbar(amount))
-<<<<<<< HEAD
   .setNodeAccountIds([
     AccountId.fromString('0.0.3'),
     AccountId.fromString('0.0.5'),
@@ -270,8 +269,7 @@ export async function createECDSAAccount(client:any, amount:number) {
     AccountId.fromString('0.0.8'),
     AccountId.fromString('0.0.9')
   ])
-=======
->>>>>>> Mint functionality
+
   .execute(client);
   const receipt = await response.getReceipt(client);
   const account = receipt.accountId;

@@ -95,6 +95,7 @@ export interface HederaERC20Interface extends utils.Interface {
     "hasRole(bytes32,address)": FunctionFragment;
     "initialize()": FunctionFragment;
     "isKyc(address,address)": FunctionFragment;
+    "mint(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "pauseToken(address)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
@@ -134,6 +135,7 @@ export interface HederaERC20Interface extends utils.Interface {
       | "hasRole"
       | "initialize"
       | "isKyc"
+      | "mint"
       | "name"
       | "pauseToken"
       | "renounceRole"
@@ -224,6 +226,10 @@ export interface HederaERC20Interface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "isKyc",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "mint",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
@@ -337,6 +343,7 @@ export interface HederaERC20Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isKyc", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pauseToken", data: BytesLike): Result;
   decodeFunctionResult(
@@ -611,6 +618,12 @@ export interface HederaERC20 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    mint(
+      account: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     name(overrides?: CallOverrides): Promise<[string]>;
 
     pauseToken(
@@ -775,6 +788,12 @@ export interface HederaERC20 extends BaseContract {
   isKyc(
     token: PromiseOrValue<string>,
     account: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  mint(
+    account: PromiseOrValue<string>,
+    amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -954,6 +973,12 @@ export interface HederaERC20 extends BaseContract {
     ): Promise<
       [BigNumber, boolean] & { responseCode: BigNumber; kycGranted: boolean }
     >;
+
+    mint(
+      account: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -1207,6 +1232,12 @@ export interface HederaERC20 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    mint(
+      account: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     pauseToken(
@@ -1376,6 +1407,12 @@ export interface HederaERC20 extends BaseContract {
     isKyc(
       token: PromiseOrValue<string>,
       account: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    mint(
+      account: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
