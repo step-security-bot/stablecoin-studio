@@ -18,11 +18,18 @@ module.exports = {
           // An array of predefined Externally Owned Accounts
           {
             // OG Account
-            account: "0.0.30917952",
-            privateKey:"302e020100300506032b657004220420634da975de171336cf59672de59f6ad10db7c3c7fe8e426889c15f58275e3f54",
-            publicKey:"302a300506032b65700321000d1356ad59d01a1031fc7cb7fad964a8205a2fdd7f766e6d394c1db3d09cb0f6",
+            account: "0.0.29511696",
+            publicKey: "302a300506032b6570032100f0869a0b216c9b4396714ea2ec547f5f627136afeff092b492b62425630b6495",
+            privateKey: "302e020100300506032b6570042204207a8a25387a3c636cb980d1ba548ee5ee3cc8cda158e42dc7af53dcd81022d8be",
             isED25519Type: true
           },
+          {
+            // OG Account
+            account: "0.0.29511696",
+            privateKey:"302e020100300506032b6570042204207a8a25387a3c636cb980d1ba548ee5ee3cc8cda158e42dc7af53dcd81022d8be",
+            publicKey:"302e020100300506032b6570042204207a8a25387a3c636cb980d1ba548ee5ee3cc8cda158e42dc7af53dcd81022d8be",
+            isED25519Type: true
+          }
         ],
       },
     },

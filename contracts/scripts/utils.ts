@@ -39,9 +39,13 @@ export async function deployContractsWithSDK(name:string, symbol:string, decimal
   
   console.log(`Deploying ${HTSTokenOwner__factory.name} contract... please wait.`);
   const tokenOwnerContract = await deployContractSDK(HTSTokenOwner__factory, 10, privateKey, clientSdk);
-
   console.log("Creating token... please wait.");
   const hederaToken = await createToken(tokenOwnerContract, name,  symbol, decimals, initialSupply, maxSupply, memo, freeze, account!, privateKey!, publicKey!, clientSdk);
+
+  /*
+  parametersContractCall = [tokenOwnerContract!.toSolidityAddress(),TokenId.fromString(hederaToken!.toString()).toSolidityAddress()];
+  await contractCall(tokenOwnerContract, 'setTokenAddress', parametersContractCall, clientSdk, 80000, HederaERC20__factory.abi);
+  */
 
   console.log("Setting up contract... please wait.");
   parametersContractCall = [tokenOwnerContract!.toSolidityAddress(),TokenId.fromString(hederaToken!.toString()).toSolidityAddress()];    

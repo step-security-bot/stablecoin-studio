@@ -1,13 +1,11 @@
-import { ContractFunctionParameters, ContractId, AccountId } from "@hashgraph/sdk";
+import { ContractId, AccountId } from "@hashgraph/sdk";
 require("@hashgraph/hardhat-hethers");
 require("@hashgraph/sdk");
 
-import { expect } from "chai";
+import { expect} from "chai";
 
 import { deployContractsWithSDK, contractCall, getClient, createECDSAAccount } from "../scripts/utils";
 import { HederaERC20__factory } from "../typechain-types";
-
-import dotenv from "dotenv";
 
 const hre = require("hardhat"); 
 
@@ -25,36 +23,65 @@ describe("Rescatable", function() {
     account = hreConfig.accounts[0].account;
     privateKey = hreConfig.accounts[0].privateKey;
     client.setOperator(account, privateKey);
+
   });
   beforeEach(async function () {
-    proxyAddress = await deployContractsWithSDK("MIDAS", "MD", 3, 1000, 5000, "Hedera Accelerator Stable Coin");    
+    
   });
   it("Should rescue 10000 token", async function() {
+    proxyAddress = await deployContractsWithSDK("MIDAS", "MD", 3, 20000000, 20000000, "Hedera Accelerator Stable Coin");    
     let params: any[] = [];  
     const response = await contractCall(ContractId.fromString(proxyAddress), 'getTokenOwnerAddress', params, client, 1300000, HederaERC20__factory.abi) 
     const tokenOwnerAddress = response[0] 
    
     params = [tokenOwnerAddress];  
-    //await contractCall(ContractId.fromString(proxyAddress), 'associateToken', params, client, 1300000, HederaERC20__factory.abi)  
-    //params = [tokenOwnerAddress, 1010];  
-   // await contractCall(ContractId.fromString(proxyAddress), 'mint', params, client, 400000, HederaERC20__factory.abi)  
-    params = [tokenOwnerAddress];  
     const result = await contractCall(ContractId.fromString(proxyAddress), 'balanceOf', params, client, 60000, HederaERC20__factory.abi)  
-    console.log(result);
-   /* expect(parseInt(result[0])).to.equals(1000);
-    const tokenAddress = await contractCall(ContractId.fromString(proxyAddress), 'getTokenAddress', params, client, 60000, HederaERC20__factory.abi)  
-    await contractCall(ContractId.fromString(proxyAddress), 'rescue', params, client, 60000, HederaERC20__factory.abi)  */
+    
+    params = [10000000];  
+    await contractCall(ContractId.fromString(proxyAddress), 'rescueToken', params, client, 120000, HederaERC20__factory.abi)  
+    
+    params = [tokenOwnerAddress];  
+    let balance = await contractCall(ContractId.fromString(proxyAddress), 'balanceOf', params, client, 60000, HederaERC20__factory.abi)  
+    expect(parseInt(balance[0])).to.equals(10000000)
+
+    params = [AccountId.fromString(account).toSolidityAddress()];  
+    let balanceAdm = await contractCall(ContractId.fromString(proxyAddress), 'balanceOf', params, client, 60000, HederaERC20__factory.abi)  
+    expect(parseInt(balanceAdm[0])).to.equals(10000000)
   });
 
-  /*it("Should fail rescue 10000 from contract token", async function() {
-    let params: any[] = [AccountId.fromString(account!).toSolidityAddress()];  
-    await contractCall(ContractId.fromString(proxyAddress), 'associateToken', params, client, 1300000, HederaERC20__factory.abi)  
-    params = [AccountId.fromString(account!).toSolidityAddress(), 1000];  
-    await contractCall(ContractId.fromString(proxyAddress), 'mint', params, client, 400000, HederaERC20__factory.abi)  
-    params = [AccountId.fromString(account!).toSolidityAddress()];  
+  it("I cannot rescue 10.000 from an account with 100 tokens", async function() {
+    proxyAddress = await deployContractsWithSDK("MIDAS", "MD", 3, 100000, 20000000, "Hedera Accelerator Stable Coin");    
+    let params: any[] = [];  
+    const response = await contractCall(ContractId.fromString(proxyAddress), 'getTokenOwnerAddress', params, client, 1300000, HederaERC20__factory.abi) 
+    const tokenOwnerAddress = response[0] 
+   
+    params = [tokenOwnerAddress];  
     const result = await contractCall(ContractId.fromString(proxyAddress), 'balanceOf', params, client, 60000, HederaERC20__factory.abi)  
-    expect(parseInt(result[0])).to.equals(1000);
-    const tokenAddress = await contractCall(ContractId.fromString(proxyAddress), 'getTokenAddress', params, client, 60000, HederaERC20__factory.abi)  
-    await contractCall(ContractId.fromString(proxyAddress), 'rescue', params, client, 60000, HederaERC20__factory.abi)  
-    });*/
+    
+    params = [10000000];  
+    console.log(22);
+    await expect ( contractCall(ContractId.fromString(proxyAddress), 'rescueToken', params, client, 120000, HederaERC20__factory.abi)).to.be.throw;
+
+  });
+
+  it("If the rescue key is not set, the option is disabled", async function() {
+    let client1:any = getClient();;
+    let account1 = hreConfig.accounts[1].account;
+    let privateKey1 = hreConfig.accounts[1].privateKey;
+    client1.setOperator(account1, privateKey1);
+
+    proxyAddress = await deployContractsWithSDK("MIDAS", "MD", 3, 20000, 20000, "Hedera Accelerator Stable Coin");    
+    let params: any[] = [];  
+    const response = await contractCall(ContractId.fromString(proxyAddress), 'getTokenOwnerAddress', params, client1, 1300000, HederaERC20__factory.abi) 
+    const tokenOwnerAddress = response[0] 
+   
+    params = [tokenOwnerAddress];  
+    const result = await contractCall(ContractId.fromString(proxyAddress), 'balanceOf', params, client, 60000, HederaERC20__factory.abi)  
+    
+    params = [10000];  
+
+    await expect(contractCall(ContractId.fromString(proxyAddress), 'rescueToken', params, client, 120000, HederaERC20__factory.abi)).to.be.throw;
+
+  });
+  
 });

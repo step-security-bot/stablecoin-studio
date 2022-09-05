@@ -23,6 +23,7 @@ contract HederaERC20 is IHederaERC20, Initializable,HederaTokenService, IERC20Up
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(SUPPLIER_ROLE, msg.sender);
+        _setupRole(ROLE_RESCUE, msg.sender);
     } 
     
      

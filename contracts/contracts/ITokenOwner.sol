@@ -8,4 +8,5 @@ interface ITokenOwner {
     function setTokenAddress(HTSTokenOwner _htsTokenOwnerAddress, address _tokenAddress) external;
     function getTokenAddress() external view returns(address);
     function getTokenOwnerAddress() external view returns(address);
+    
 }

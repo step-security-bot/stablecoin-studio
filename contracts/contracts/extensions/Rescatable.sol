@@ -1,14 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
+import "../IHTSTokenOwner.sol";
 import "../IHederaERC20.sol";
+import "../TokenOwner.sol";
 import "./IRescatable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "../Roles.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
 abstract contract Rescatable is IRescatable ,AccessControlUpgradeable, TokenOwner, Roles {
-    using SafeERC20Upgradeable for IERC20Upgradeable;
     /**
     * @dev Rescue `value` `tokenId` from contractTokenOwner to rescuer
     * 
@@ -21,7 +22,7 @@ abstract contract Rescatable is IRescatable ,AccessControlUpgradeable, TokenOwne
         uint256 oldBalance = IHederaERC20(address(this)).balanceOf(address(_getTokenOwnerAddress()));
         require(oldBalance >= amount, "Amount must not exceed the token balance");
         
-        IERC20Upgradeable(_getTokenOwnerAddress()).safeTransfer(msg.sender, amount);
+        IHTSTokenOwner(_getTokenOwnerAddress()).tranferContract(_getTokenAddress(),msg.sender, amount);
 
         emit TokenRescued (msg.sender, _getTokenAddress(), amount, oldBalance);
      

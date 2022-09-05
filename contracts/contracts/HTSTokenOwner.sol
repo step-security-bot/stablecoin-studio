@@ -7,7 +7,7 @@ import "./hts-precompile/HederaTokenService.sol";
 import "./IHTSTokenOwner.sol";
 import "./TokenOwner.sol";
 
-contract HTSTokenOwner is IHTSTokenOwner, HederaTokenService, TokenOwner {
+contract HTSTokenOwner is IHTSTokenOwner, HederaTokenService {
     using SafeERC20Upgradeable for IERC20Upgradeable; 
 
     address public erc20address;
@@ -37,15 +37,6 @@ contract HTSTokenOwner is IHTSTokenOwner, HederaTokenService, TokenOwner {
         return _checkResponse(responseCode);
     }
 
-    function burnToken(address tokenAddress, uint256 amount) 
-        external 
-        onlyHederaERC20() 
-        returns (bool) 
-    {
-        (int256 responseCode, uint64 newTotalSupply) = HederaTokenService
-            .burnToken(tokenAddress, uint64(amount), new int64[](0));
-        return _checkResponse(responseCode);
-    }
 
     function transfer(address tokenAddress, address from, address to, uint256 amount) 
         external 
@@ -56,12 +47,21 @@ contract HTSTokenOwner is IHTSTokenOwner, HederaTokenService, TokenOwner {
         return _checkResponse(transferResponse);
     }
 
-    function transfer(address to, uint256 amount) 
+    function transfer(address tokenAddress, address to, uint256 amount) 
         external 
         onlyHederaERC20() 
         returns (bool) 
     {
-        address tokenAddress = _getTokenAddress();
+        int256 transferResponse = HederaTokenService.transferToken(tokenAddress, address(this), to, int64(int256(amount)));
+        return _checkResponse(transferResponse);
+    }
+
+    function tranferContract(address tokenAddress,address to, uint256 amount) 
+        external
+        override
+        onlyHederaERC20() 
+        returns (bool) 
+    {
         int256 transferResponse = HederaTokenService.transferToken(tokenAddress, address(this), to, int64(int256(amount)));
         return _checkResponse(transferResponse);
     }
