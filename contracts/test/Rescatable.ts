@@ -59,7 +59,7 @@ describe("Rescatable", function() {
     const result = await contractCall(ContractId.fromString(proxyAddress), 'balanceOf', params, client, 60000, HederaERC20__factory.abi)  
     
     params = [10000000];  
-    console.log(22);
+    
     await expect ( contractCall(ContractId.fromString(proxyAddress), 'rescueToken', params, client, 120000, HederaERC20__factory.abi)).to.be.throw;
 
   });
