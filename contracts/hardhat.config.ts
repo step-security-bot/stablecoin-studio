@@ -1,7 +1,7 @@
 import "@nomicfoundation/hardhat-toolbox";
 import "@hashgraph/hardhat-hethers";
 import "@hashgraph/sdk";
-const { PrivateKey } = require("@hashgraph/sdk");
+import { PrivateKey } from "@hashgraph/sdk";
 require('hardhat-abi-exporter');
 require("hardhat-contract-sizer");
 
@@ -36,13 +36,14 @@ module.exports = {
             publicKey:"[include your public key]",
             isED25519Type: true
           },
-          {           
+          {
             account: "[include your account2]",
             privateKey:"[include your private key2]",
             publicKey:"[include your public key2]",
             isED25519Type: true
           },
         ],
+        
       },
     },
   },
