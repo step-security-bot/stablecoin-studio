@@ -6,6 +6,8 @@ import { HederaERC20__factory, HTSTokenOwner__factory, HederaERC1967Proxy__facto
 
 import Web3 from "web3";
 
+const axios = require('axios');
+
 const hre = require("hardhat");
 const hreConfig = hre.network.config;
 
@@ -77,9 +79,28 @@ export async function contractCall(contractId:any,
         AccountId.fromString('0.0.9')
       ])
       .execute(clientOperator);
-  
-  let record = await contractTx.getRecord(clientOperator);  
+    
+      let record;
+      let transFormat = contractTx.transactionId.toString().replace("@", "-");
+      transFormat = transFormat.substring(0, transFormat.lastIndexOf("."))  + "-" +  transFormat.substring(transFormat.lastIndexOf(".") +1 ,transFormat.lenght);
 
+      
+  try{
+    record = await contractTx.getRecord(clientOperator);  
+  }catch( error){
+    await sleep(30000);
+    
+    let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/transactions/${transFormat}`);
+    let data = res.data;
+    console.log(data);
+    console.log("-------------------------");
+    
+    
+  }
+    await sleep(15000);
+    let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/contracts/results/${transFormat}`);
+    let data = res.data;
+    console.log(data);
   const results = decodeFunctionResult(abi, functionName, record.contractFunctionResult?.bytes);
     
   return results;
@@ -250,3 +271,7 @@ async function fileCreate(
   const fileAppendRx = await fileAppendSubmit.getReceipt(clientOperator);
   return bytecodeFileId;
 };
+
+function sleep(ms:number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
