@@ -81,22 +81,21 @@ export async function contractCall(contractId:any,
       .execute(clientOperator);
     
     let record;
-    let transFormat = contractTx.transactionId.toString().replace("@", "-");
-    transFormat = transFormat.substring(0, transFormat.lastIndexOf("."))  + "-" +  transFormat.substring(transFormat.lastIndexOf(".") +1 ,transFormat.lenght);
-      
+    let transactionId = contractTx.transactionId.toString().replace("@", "-").replace(/.([^.]*)$/, '-$1'); 
+
     try {
       record = await contractTx.getRecord(clientOperator);  
     } catch(error) {
       await sleep(30000);
         
-      let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/transactions/${transFormat}`);
+      let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/transactions/${transactionId}`);
       let data = res.data;
       console.log(data);
       console.log("-------------------------");
     }
 
     await sleep(15000);
-    let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/contracts/results/${transFormat}`);
+    let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/contracts/results/${transactionId}`);
     let data = res.data;
     console.log(data);
     const results = decodeFunctionResult(abi, functionName, record.contractFunctionResult?.bytes);
