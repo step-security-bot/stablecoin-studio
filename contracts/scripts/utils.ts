@@ -80,27 +80,27 @@ export async function contractCall(contractId:any,
       ])
       .execute(clientOperator);
     
-    let record;
     let transactionId = contractTx.transactionId.toString().replace("@", "-").replace(/.([^.]*)$/, '-$1'); 
 
-    try {
-      record = await contractTx.getRecord(clientOperator);  
-    } catch(error) {
-      await sleep(30000);
-        
-      let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/transactions/${transactionId}`);
-      let data = res.data;
-      console.log(data);
-      console.log("-------------------------");
-    }
-
-    await sleep(15000);
-    let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/contracts/results/${transactionId}`);
-    let data = res.data;
-    console.log(data);
+    const record = await getRecord(contractTx, clientOperator, transactionId);
     const results = decodeFunctionResult(abi, functionName, record.contractFunctionResult?.bytes);
 
     return results;
+}
+
+async function getRecord(contractTx: any, clientOperator: any, transactionId: any) {
+  let record;
+  try {
+    record = await contractTx.getRecord(clientOperator);
+  } catch (error) {
+    await sleep(30000);
+
+    let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/transactions/${transactionId}`);
+    let data = res.data;
+    console.log(data);
+    throw(data.transactions[data.transactions.length - 1].result);
+  }
+  return record;
 }
 
 function encodeFunctionCall(functionName: any, parameters: any[], abi: any) {
