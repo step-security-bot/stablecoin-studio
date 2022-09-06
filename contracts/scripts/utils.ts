@@ -66,7 +66,7 @@ export async function contractCall(contractId:any,
 
   const functionCallParameters = encodeFunctionCall(functionName, parameters, abi);                            
   
-  const contractTx = await new ContractExecuteTransaction()
+    const contractTx = await new ContractExecuteTransaction()
       .setContractId(contractId)
       .setFunctionParameters(functionCallParameters)
       .setGas(gas)
@@ -80,30 +80,28 @@ export async function contractCall(contractId:any,
       ])
       .execute(clientOperator);
     
-      let record;
-      let transFormat = contractTx.transactionId.toString().replace("@", "-");
-      transFormat = transFormat.substring(0, transFormat.lastIndexOf("."))  + "-" +  transFormat.substring(transFormat.lastIndexOf(".") +1 ,transFormat.lenght);
-
+    let record;
+    let transFormat = contractTx.transactionId.toString().replace("@", "-");
+    transFormat = transFormat.substring(0, transFormat.lastIndexOf("."))  + "-" +  transFormat.substring(transFormat.lastIndexOf(".") +1 ,transFormat.lenght);
       
-  try{
-    record = await contractTx.getRecord(clientOperator);  
-  }catch( error){
-    await sleep(30000);
-    
-    let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/transactions/${transFormat}`);
-    let data = res.data;
-    console.log(data);
-    console.log("-------------------------");
-    
-    
-  }
+    try {
+      record = await contractTx.getRecord(clientOperator);  
+    } catch(error) {
+      await sleep(30000);
+        
+      let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/transactions/${transFormat}`);
+      let data = res.data;
+      console.log(data);
+      console.log("-------------------------");
+    }
+
     await sleep(15000);
     let res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/contracts/results/${transFormat}`);
     let data = res.data;
     console.log(data);
-  const results = decodeFunctionResult(abi, functionName, record.contractFunctionResult?.bytes);
-    
-  return results;
+    const results = decodeFunctionResult(abi, functionName, record.contractFunctionResult?.bytes);
+
+    return results;
 }
 
 function encodeFunctionCall(functionName: any, parameters: any[], abi: any) {
