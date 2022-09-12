@@ -1,7 +1,10 @@
 {
-  "name": "hedera-stable-coin",
+  "name": "hedera-accelerator-stablecoin",
   "version": "1.0.0",
   "description": "",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@hashgraph"
+  },
   "scripts": {
     "install": "node install.js",
     "setup": "npm run install"
