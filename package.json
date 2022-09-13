@@ -1,5 +1,5 @@
 {
-  "name": "@hashgraph-private/hedera-accelerator-stablecoin",
+  "name": "@hashgraph/hedera-accelerator-stablecoin",
   "version": "1.0.0",
   "description": "",
   "publishConfig": {
