@@ -8,8 +8,9 @@ import CashInOperation from '../views/Operations/CashIn';
 import StableCoinCreation from '../views/StableCoinCreation/StableCoinCreation';
 import Roles from '../views/Roles';
 import { RoutesMappingUrl } from './RoutesMappingUrl';
-import SDKService, { HashConnectConnectionState } from '../services/SDKService';
+import { HashConnectConnectionState } from '../services/SDKService';
 import { useEffect, useState } from 'react';
+import { useSDK } from '../provider/useSDK';
 
 const PrivateRoute = ({ status }: { status?: HashConnectConnectionState }) => {
 	return (
@@ -32,15 +33,25 @@ const OnboardingRoute = ({ status }: { status?: HashConnectConnectionState }) =>
 };
 
 const Router = () => {
-	const [status, setStatus] = useState<HashConnectConnectionState>();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [status, setStatus] = useState<HashConnectConnectionState>(
+		HashConnectConnectionState.Connected,
+	);
+
+	const sdk = useSDK();
+	console.log(sdk);
 
 	useEffect(() => {
-		getStatus();
-	}, []);
+		sdk && getStatus();
+	}, [sdk]);
 
 	const getStatus = async () => {
-		const status = await SDKService.getStatus();
-		setStatus(status);
+		if (sdk) {
+			const status = await sdk.gethashConnectConectionStatus();
+			console.log('st', status);
+
+			setStatus(status);
+		}
 	};
 
 	return (

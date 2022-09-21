@@ -9,41 +9,40 @@ import { BrowserRouter } from 'react-router-dom';
 import { Fonts } from '../components/Fonts';
 import { Focus } from '../components/Focus';
 import { ScrollBar } from '../components/Scrollbar';
-import { useEffect, useState } from 'react';
-import SDKService from '../services/SDKService';
+import { SDKContextProvider } from '../provider/SDKContext';
 
 function App() {
-	const [SDKInit, setSDKInit] = useState<boolean | undefined>();
+	// const [SDKInit, setSDKInit] = useState<boolean | undefined>();
 
-	useEffect(() => {
-		instanceSDK();
-	}, []);
+	// useEffect(() => {
+	// 	instanceSDK();
+	// }, []);
 
-	const instanceSDK = async () => {
-		SDKService.getInstance().then((response) => {
-			if (response) {
-				setTimeout(() => {
-					setSDKInit(true);
-				}, 100);
-			}
-		});
-	};
+	// const instanceSDK = async () => {
+	// 	SDKService.getInstance().then((response) => {
+	// 		if (response) {
+	// 			setTimeout(() => {
+	// 				setSDKInit(true);
+	// 			}, 100);
+	// 		}
+	// 	});
+	// };
 
-	return SDKInit ? (
+	return (
 		<I18nextProvider i18n={i18n}>
 			<Provider store={store}>
 				<ChakraProvider theme={theme}>
-					<BrowserRouter>
-						<Focus />
-						<Fonts />
-						<ScrollBar />
-						<Router />
-					</BrowserRouter>
+					<SDKContextProvider>
+						<BrowserRouter>
+							<Focus />
+							<Fonts />
+							<ScrollBar />
+							<Router />
+						</BrowserRouter>
+					</SDKContextProvider>
 				</ChakraProvider>
 			</Provider>
 		</I18nextProvider>
-	) : (
-		<></>
 	);
 }
 
