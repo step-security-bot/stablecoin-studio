@@ -1,4 +1,4 @@
-import { configurationService, language } from './../../../index.js';
+import { configurationService, language, wizardService } from './../../../index.js';
 import { Command } from 'commander';
 import Service from '../Service.js';
 import pkg from '../../../../package.json';
@@ -51,6 +51,13 @@ export default class CommanderService extends Service {
           },
           options.config,
         );
+        await wizardService.chooseAccount(
+          false,
+          configurationService.getConfiguration().defaultNetwork,
+        );
+        // Initialize SDK
+        await utilsService.initSDK(utilsService.getCurrentNetwork().name);
+        await wizardService.mainMenu();
         //await wizardService.chooseAccount(options.network);
       });
 
