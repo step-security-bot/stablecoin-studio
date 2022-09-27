@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ICallContractRequest } from '../../../port/out/hedera/types.js';
 import NetworkAdapter from '../../../port/out/network/NetworkAdapter.js';
-import Service from '../Service';
+import Service from '../Service.js';
 
 /**
  * Contracts Service

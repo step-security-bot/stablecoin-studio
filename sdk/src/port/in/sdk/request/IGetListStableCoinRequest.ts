@@ -1,3 +1,5 @@
+import { PrivateKey } from "../sdk.js";
+
 export interface IGetListStableCoinRequest {
-	privateKey?: string;
+	privateKey?: PrivateKey;
 }

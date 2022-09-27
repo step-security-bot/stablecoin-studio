@@ -1,4 +1,5 @@
+import { AccountId } from "../sdk.js";
 
 export interface IGetStableCoinRequest {
-	id: string;
+	id: AccountId;
 }

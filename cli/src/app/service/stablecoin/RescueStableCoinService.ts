@@ -1,7 +1,7 @@
 import { language } from '../../../index.js';
 import { utilsService } from '../../../index.js';
 import Service from '../Service.js';
-import { SDK } from 'hedera-stable-coin-sdk';
+import { AccountId, ContractId, PrivateKey, SDK } from 'hedera-stable-coin-sdk';
 
 /**
  * Create Stable Coin Service
@@ -24,7 +24,13 @@ export default class RescueStableCoinsService extends Service {
     const sdk: SDK = utilsService.getSDK();
 
     await utilsService.showSpinner(
-      sdk.rescue({ proxyContractId, privateKey, accountId, tokenId, amount }),
+      sdk.rescue({
+        proxyContractId: new ContractId(proxyContractId),
+        privateKey: new PrivateKey(privateKey),
+        accountId: new AccountId(accountId),
+        tokenId: new AccountId(tokenId),
+        amount,
+      }),
       {
         text: language.getText('state.loading'),
         successText: language.getText('state.loadCompleted') + '\n',

@@ -1,7 +1,7 @@
 import { language } from '../../../index.js';
 import { utilsService } from '../../../index.js';
 import Service from '../Service.js';
-import { SDK } from 'hedera-stable-coin-sdk';
+import { AccountId, ContractId, PrivateKey, SDK } from 'hedera-stable-coin-sdk';
 
 /**
  * Cash Out Stable Coin Service
@@ -29,10 +29,10 @@ export default class CashOutStableCoinsService extends Service {
     await utilsService.showSpinner(
       sdk
         .cashOut({
-          proxyContractId,
-          privateKey,
-          accountId,
-          tokenId,
+          proxyContractId: new ContractId(proxyContractId),
+          privateKey: new PrivateKey(privateKey),
+          accountId: new AccountId(accountId),
+          tokenId: new AccountId(tokenId),
           amount,
         })
         .then((response) => (respDetail = response)),

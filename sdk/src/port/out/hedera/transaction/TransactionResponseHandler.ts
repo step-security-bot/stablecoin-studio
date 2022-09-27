@@ -1,4 +1,4 @@
-import { TransactionType, HTSResponse } from '../sign/ISigner';
+import { TransactionType, HTSResponse } from '../sign/ISigner.js';
 import {
 	TransactionResponse,
 	Client,
@@ -7,7 +7,7 @@ import {
 } from '@hashgraph/sdk';
 import HederaError from '../error/HederaError.js';
 import Web3 from 'web3';
-import { HashConnectSigner } from 'hashconnect/dist/esm/provider/signer';
+import { HashConnectSigner } from 'hashconnect/dist/esm/provider/signer.js';
 import { MessageTypes } from 'hashconnect';
 
 export class TransactionResposeHandler {

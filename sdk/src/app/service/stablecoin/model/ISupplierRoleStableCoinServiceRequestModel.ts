@@ -1,6 +1,6 @@
 import {
 	IAccountWithKeyRequestModel,
-	IAmountOptionalRequestModel,
+	IAmountRequestModel,
 	IProxyContractIdRequestModel,
 	ITargetIdRequestModel,
 } from './CoreRequestModel.js';
@@ -8,5 +8,5 @@ import {
 export default interface ISupplierRoleStableCoinServiceRequestModel
 	extends IProxyContractIdRequestModel,
 		IAccountWithKeyRequestModel,
-		IAmountOptionalRequestModel,
+		IAmountRequestModel,
 		ITargetIdRequestModel {}

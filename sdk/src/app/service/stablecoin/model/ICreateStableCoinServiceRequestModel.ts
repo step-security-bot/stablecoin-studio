@@ -22,6 +22,6 @@ export default interface ICreateStableCoinServiceRequestModel
 	treasury?: AccountId;
 	tokenType?: TokenType;
 	supplyType?: TokenSupplyType;
-	id?: string;
+	id?: AccountId;
 	autoRenewAccount?: AccountId;
 }

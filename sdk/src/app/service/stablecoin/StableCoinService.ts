@@ -42,7 +42,8 @@ export default class StableCoinService extends Service {
 				: undefined,
 			maxSupply: req.maxSupply
 				? req.maxSupply * 10n ** BigInt(req.decimals)
-				: undefined,			memo: req.memo,
+				: undefined,
+			memo: req.memo,
 			freezeKey: req.freezeKey,
 			freezeDefault: req.freezeDefault,
 			kycKey: req.KYCKey,
@@ -57,8 +58,8 @@ export default class StableCoinService extends Service {
 		});
 		coin = await this.repository.saveCoin(
 			req.accountId,
-			req.privateKey,
 			coin,
+			req.privateKey,
 		);
 		return this.repository.getStableCoin(coin.id);
 	}
@@ -86,10 +87,10 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.getBalanceOf(
 			req.proxyContractId,
-			req.privateKey,
 			req.accountId,
 			req.targetId,
 			req.tokenId,
+			req.privateKey,
 		);
 	}
 
@@ -98,8 +99,8 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.getTokenOwnerBalance(
 			req.proxyContractId,
-			req.privateKey,
 			req.accountId,
+			req.privateKey,
 		);
 	}
 
@@ -108,8 +109,8 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.getNameToken(
 			req.proxyContractId,
-			req.privateKey,
 			req.accountId,
+			req.privateKey,
 		);
 	}
 
@@ -126,10 +127,10 @@ export default class StableCoinService extends Service {
 		}
 		return this.repository.cashIn(
 			req.proxyContractId,
-			req.privateKey,
 			req.accountId,
 			req.targetId,
 			amount,
+			req.privateKey,
 		);
 	}
 
@@ -151,9 +152,9 @@ export default class StableCoinService extends Service {
 		}
 		return this.repository.cashOut(
 			req.proxyContractId,
-			req.privateKey,
 			req.accountId,
 			amount,
+			req.privateKey,
 		);
 	}
 
@@ -162,8 +163,8 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.associateToken(
 			req.proxyContractId,
-			req.privateKey,
 			req.accountId,
+			req.privateKey,
 		);
 	}
 
@@ -190,15 +191,15 @@ export default class StableCoinService extends Service {
 		});
 
 		if (balance[0] < req.amount) {
-			throw new Error(`Insufficient funds on account ${req.targetId}`);
+			throw new Error(`Insufficient funds on account ${req.targetId.id}`);
 		}
 
 		return this.repository.wipe(
 			req.proxyContractId,
-			req.privateKey,
 			req.accountId,
 			req.targetId,
 			coin.toInteger(req.amount),
+			req.privateKey,
 		);
 	}
 
@@ -221,9 +222,9 @@ export default class StableCoinService extends Service {
 		}
 		return this.repository.rescue(
 			req.proxyContractId,
-			req.privateKey,
 			req.accountId,
 			amount,
+			req.privateKey,
 		);
 	}
 
@@ -232,9 +233,9 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.grantSupplierRole(
 			req.proxyContractId,
-			req.targetId,
-			req.privateKey,
+			req.targetId.id,
 			req.accountId,
+			req.privateKey,
 			req.amount,
 		);
 	}
@@ -244,9 +245,9 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.isUnlimitedSupplierAllowance(
 			req.proxyContractId,
-			req.targetId,
-			req.privateKey,
+			req.targetId.id,
 			req.accountId,
+			req.privateKey,
 		);
 	}
 	public async supplierAllowance(
@@ -254,9 +255,9 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.supplierAllowance(
 			req.proxyContractId,
-			req.targetId,
-			req.privateKey,
+			req.targetId.id,
 			req.accountId,
+			req.privateKey,
 		);
 	}
 	public async revokeSupplierRole(
@@ -264,9 +265,9 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.revokeSupplierRole(
 			req.proxyContractId,
-			req.targetId,
-			req.privateKey,
+			req.targetId.id,
 			req.accountId,
+			req.privateKey,
 		);
 	}
 	public async resetSupplierAllowance(
@@ -274,9 +275,9 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.resetSupplierAllowance(
 			req.proxyContractId,
-			req.targetId,
-			req.privateKey,
+			req.targetId.id,
 			req.accountId,
+			req.privateKey,
 		);
 	}
 	public async increaseSupplierAllowance(
@@ -284,10 +285,10 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.increaseSupplierAllowance(
 			req.proxyContractId,
-			req.targetId,
-			req.privateKey,
+			req.targetId.id,
 			req.accountId,
 			req.amount,
+			req.privateKey,
 		);
 	}
 	public async decreaseSupplierAllowance(
@@ -295,10 +296,10 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.decreaseSupplierAllowance(
 			req.proxyContractId,
-			req.targetId,
-			req.privateKey,
+			req.targetId.id,
 			req.accountId,
 			req.amount,
+			req.privateKey,
 		);
 	}
 
@@ -307,9 +308,9 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.isLimitedSupplierAllowance(
 			req.proxyContractId,
-			req.targetId,
-			req.privateKey,
+			req.targetId.id,
 			req.accountId,
+			req.privateKey,
 		);
 	}
 
@@ -319,14 +320,16 @@ export default class StableCoinService extends Service {
 		if (req.role != StableCoinRole.SUPPLIER_ROLE) {
 			return this.repository.grantRole(
 				req.proxyContractId,
-				req.targetId,
-				req.privateKey,
+				req.targetId.id,
 				req.accountId,
 				req.role,
+				req.privateKey,
 			);
 		}
-
-		return this.grantSupplierRole(req);
+		if (!req.amount || req.amount < 0) {
+			throw new Error('An amount must be supplied for SUPPLIER ROLE');
+		}
+		return this.grantSupplierRole({ ...req, amount: req.amount ?? 0 });
 	}
 
 	public async revokeRole(
@@ -335,10 +338,10 @@ export default class StableCoinService extends Service {
 		if (req.role != StableCoinRole.SUPPLIER_ROLE) {
 			return this.repository.revokeRole(
 				req.proxyContractId,
-				req.targetId,
-				req.privateKey,
+				req.targetId.id,
 				req.accountId,
 				req.role,
+				req.privateKey,
 			);
 		}
 		return this.revokeSupplierRole(req);
@@ -349,10 +352,10 @@ export default class StableCoinService extends Service {
 	): Promise<Uint8Array> {
 		return this.repository.hasRole(
 			req.proxyContractId,
-			req.targetId,
-			req.privateKey,
+			req.targetId.id,
 			req.accountId,
 			req.role,
+			req.privateKey,
 		);
 	}
 }

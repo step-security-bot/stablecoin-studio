@@ -2,7 +2,6 @@ import PublicKey from '../../../../src/domain/context/account/PublicKey.js';
 import { SDK } from '../../../../src/index.js';
 import { ACCOUNTS, getSDKAsync } from '../../../core.js';
 import AccountId from '../../../../src/domain/context/account/AccountId.js';
-import PrivateKey from '../../../../src/domain/context/account/PrivateKey.js';
 
 describe('🧪 [PORT] SDK', () => {
 	let sdk: SDK;
@@ -13,8 +12,8 @@ describe('🧪 [PORT] SDK', () => {
 
 	it('Creates a Stable Coin with EOAccount', async () => {
 		const coin = await sdk.createStableCoin({
-			accountId: new AccountId(ACCOUNTS.testnet.accountId.id),
-			privateKey: new PrivateKey(ACCOUNTS.testnet.privateKey.key),
+			accountId: ACCOUNTS.testnet.accountId,
+			privateKey: ACCOUNTS.testnet.privateKey,
 			name: 'TEST COIN',
 			symbol: 'TC',
 			decimals: 0,
@@ -25,7 +24,7 @@ describe('🧪 [PORT] SDK', () => {
 
 	it('Gets the token info', async () => {
 		const coin = await sdk.getStableCoin({
-			id: '0.0.48195895',
+			id: new AccountId('0.0.48195895'),
 		});
 		expect(coin).not.toBeNull();
 		expect(coin?.decimals).toBeGreaterThanOrEqual(0);
@@ -36,7 +35,7 @@ describe('🧪 [PORT] SDK', () => {
 
 	it('Gets the token list', async () => {
 		const list = await sdk.getListStableCoin({
-			privateKey: ACCOUNTS.testnet.privateKey.key,
+			privateKey: ACCOUNTS.testnet.privateKey,
 		});
 		expect(list).not.toBeNull();
 	});

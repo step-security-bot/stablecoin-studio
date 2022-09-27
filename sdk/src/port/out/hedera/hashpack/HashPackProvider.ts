@@ -353,7 +353,7 @@ export default class HashPackProvider implements IProvider {
 			pauseKey: hederaToken.pauseKey,
 			kycKey: hederaToken.kycKey,
 			supplyKey: hederaToken.supplyKey,
-			id: hederaToken.tokenId.toString(),
+			id: new AccountId(hederaToken.tokenId.toString()),
 			tokenType: stableCoin.tokenType,
 			supplyType: stableCoin.supplyType,
 		});

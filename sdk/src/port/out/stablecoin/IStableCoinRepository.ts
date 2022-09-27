@@ -1,135 +1,136 @@
 import { StableCoinRole } from '../../../core/enum.js';
 import AccountId from '../../../domain/context/account/AccountId.js';
 import PrivateKey from '../../../domain/context/account/PrivateKey.js';
+import ContractId from '../../../domain/context/contract/ContractId.js';
 import { StableCoin } from '../../../domain/context/stablecoin/StableCoin.js';
 import IStableCoinList from '../../in/sdk/response/IStableCoinList.js';
 
 export default interface IStableCoinRepository {
 	saveCoin(
 		accountId: AccountId,
-		privateKey: PrivateKey,
 		coin: StableCoin,
+		privateKey?: PrivateKey,
 	): Promise<StableCoin>;
-	getListStableCoins(privateKey: PrivateKey): Promise<IStableCoinList[]>;
-	getStableCoin(id: string): Promise<StableCoin>;
+	getListStableCoins(privateKey?: PrivateKey): Promise<IStableCoinList[]>;
+	getStableCoin(id: AccountId): Promise<StableCoin>;
 	getBalanceOf(
-		treasuryId: string,
-		privateKey: PrivateKey,
+		treasuryId: ContractId,
 		accountId: AccountId,
-		targetId: string,
-		tokenId: string,
+		targetId: AccountId,
+		tokenId: AccountId,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	getTokenOwnerBalance(
-		treasuryId: string,
-		privateKey: PrivateKey,
+		treasuryId: ContractId,
 		accountId: AccountId,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	getNameToken(
-		treasuryId: string,
-		privateKey: PrivateKey,
+		treasuryId: ContractId,
 		accountId: AccountId,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	cashIn(
-		treasuryId: string,
-		privateKey: PrivateKey,
+		treasuryId: ContractId,
 		accountId: AccountId,
-		targetId: string,
+		targetId: AccountId,
 		amount: number,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	cashOut(
-		treasuryId: string,
-		privateKey: PrivateKey,
+		treasuryId: ContractId,
 		accountId: AccountId,
 		amount: number,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	associateToken(
-		treasuryId: string,
-		privateKey: PrivateKey,
+		treasuryId: ContractId,
 		accountId: AccountId,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	wipe(
-		treasuryId: string,
-		privateKey: PrivateKey,
+		treasuryId: ContractId,
 		accountId: AccountId,
-		targetId: string,
+		targetId: AccountId,
 		amount: number,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	grantSupplierRole(
-		treasuryId: string,
+		treasuryId: ContractId,
 		address: string,
-		privateKey: PrivateKey,
 		accountId: AccountId,
+		privateKey?: PrivateKey,
 		amount?: number,
 	): Promise<Uint8Array>;
 	isUnlimitedSupplierAllowance(
-		treasuryId: string,
+		treasuryId: ContractId,
 		address: string,
-		privateKey: PrivateKey,
 		accountId: AccountId,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	supplierAllowance(
-		treasuryId: string,
+		treasuryId: ContractId,
 		address: string,
-		privateKey: PrivateKey,
 		accountId: AccountId,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	revokeSupplierRole(
-		treasuryId: string,
+		treasuryId: ContractId,
 		address: string,
-		privateKey: PrivateKey,
 		accountId: AccountId,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	resetSupplierAllowance(
-		treasuryId: string,
+		treasuryId: ContractId,
 		address: string,
-		privateKey: PrivateKey,
 		accountId: AccountId,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	increaseSupplierAllowance(
-		treasuryId: string,
+		treasuryId: ContractId,
 		address: string,
-		privateKey: PrivateKey,
-		accountId: AccountId,
-		amount?: number,
-	): Promise<Uint8Array>;
-	decreaseSupplierAllowance(
-		treasuryId: string,
-		address: string,
-		privateKey: PrivateKey,
-		accountId: AccountId,
-		amount?: number,
-	): Promise<Uint8Array>;
-	isLimitedSupplierAllowance(
-		treasuryId: string,
-		address: string,
-		privateKey: PrivateKey,
-		accountId: AccountId,
-	): Promise<Uint8Array>;
-	rescue(
-		treasuryId: string,
-		privateKey: PrivateKey,
 		accountId: AccountId,
 		amount: number,
+		privateKey?: PrivateKey,
+	): Promise<Uint8Array>;
+	decreaseSupplierAllowance(
+		treasuryId: ContractId,
+		address: string,
+		accountId: AccountId,
+		amount: number,
+		privateKey?: PrivateKey,
+	): Promise<Uint8Array>;
+	isLimitedSupplierAllowance(
+		treasuryId: ContractId,
+		address: string,
+		accountId: AccountId,
+		privateKey?: PrivateKey,
+	): Promise<Uint8Array>;
+	rescue(
+		treasuryId: ContractId,
+		accountId: AccountId,
+		amount: number,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	grantRole(
-		treasuryId: string,
+		treasuryId: ContractId,
 		address: string,
-		privateKey: PrivateKey,
 		accountId: AccountId,
 		role: StableCoinRole,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	revokeRole(
-		treasuryId: string,
+		treasuryId: ContractId,
 		address: string,
-		privateKey: PrivateKey,
 		accountId: AccountId,
 		role: StableCoinRole,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 	hasRole(
-		treasuryId: string,
+		treasuryId: ContractId,
 		address: string,
-		privateKey: PrivateKey,
 		accountId: AccountId,
 		role: StableCoinRole,
+		privateKey?: PrivateKey,
 	): Promise<Uint8Array>;
 }

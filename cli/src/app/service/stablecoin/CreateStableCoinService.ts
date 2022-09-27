@@ -1,4 +1,4 @@
-import { configurationService, language } from './../../../index.js';
+import { configurationService, language } from '../../../index.js';
 import { utilsService } from '../../../index.js';
 import { SDK, ICreateStableCoinRequest, AccountId, PrivateKey, PublicKey } from 'hedera-stable-coin-sdk';
 import { IManagedFeatures } from '../../../domain/configuration/interfaces/IManagedFeatures.js';

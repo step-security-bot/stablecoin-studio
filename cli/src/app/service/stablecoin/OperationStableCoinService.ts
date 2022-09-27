@@ -9,6 +9,7 @@ import {
 import Service from '../Service.js';
 import DetailsStableCoinsService from './DetailsStableCoinService.js';
 import {
+  PrivateKey,
   PublicKey,
   SDK,
   StableCoin,
@@ -51,7 +52,7 @@ export default class OperationStableCoinService extends Service {
       await utilsService.showSpinner(
         sdk
           .getListStableCoin({
-            privateKey: currentAccount.privateKey,
+            privateKey: new PrivateKey(currentAccount.privateKey),
           })
           .then((response: StableCoinList[]) => (resp = response)),
         {

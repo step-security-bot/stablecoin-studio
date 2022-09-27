@@ -1,7 +1,7 @@
 import { language } from '../../../index.js';
 import { utilsService } from '../../../index.js';
 import Service from '../Service.js';
-import { SDK, StableCoinRole } from 'hedera-stable-coin-sdk';
+import { AccountId, ContractId, PrivateKey, SDK, StableCoinRole } from 'hedera-stable-coin-sdk';
 
 /**
  * Create Role Stable Coin Service
@@ -28,17 +28,17 @@ export default class RoleStableCoinsService extends Service {
       sdk.grantRole(
         supplierType === 'unlimited'
           ? {
-              proxyContractId,
-              targetId,
-              privateKey,
-              accountId,
+              proxyContractId: new ContractId(proxyContractId),
+              targetId: new AccountId(targetId),
+              privateKey: new PrivateKey(privateKey),
+              accountId: new AccountId(accountId),
               role,
             }
           : {
-              proxyContractId,
-              targetId,
-              privateKey,
-              accountId,
+              proxyContractId: new ContractId(proxyContractId),
+              targetId: new AccountId(targetId),
+              privateKey: new PrivateKey(privateKey),
+              accountId: new AccountId(accountId),
               amount,
               role,
             },
@@ -69,10 +69,10 @@ export default class RoleStableCoinsService extends Service {
       await utilsService.showSpinner(
         sdk
           .isUnlimitedSupplierAllowance({
-            proxyContractId,
-            targetId,
-            privateKey,
-            accountId,
+            proxyContractId: new ContractId(proxyContractId),
+            targetId: new AccountId(targetId),
+            privateKey: new PrivateKey(privateKey),
+            accountId: new AccountId(accountId),
           })
           .then((response) => (respDetail = response[0])),
         {
@@ -85,10 +85,10 @@ export default class RoleStableCoinsService extends Service {
       await utilsService.showSpinner(
         sdk
           .isLimitedSupplierAllowance({
-            proxyContractId,
-            targetId,
-            privateKey,
-            accountId,
+            proxyContractId: new ContractId(proxyContractId),
+            targetId: new AccountId(targetId),
+            privateKey: new PrivateKey(privateKey),
+            accountId: new AccountId(accountId),
           })
           .then((response) => (respDetail = response[0])),
         {},
@@ -107,10 +107,10 @@ export default class RoleStableCoinsService extends Service {
     const sdk: SDK = utilsService.getSDK();
     await utilsService.showSpinner(
       sdk.increaseSupplierAllowance({
-        proxyContractId,
-        targetId,
-        privateKey,
-        accountId,
+        proxyContractId: new ContractId(proxyContractId),
+        targetId: new AccountId(targetId),
+        privateKey: new PrivateKey(privateKey),
+        accountId: new AccountId(accountId),
         amount,
       }),
       {
@@ -133,10 +133,10 @@ export default class RoleStableCoinsService extends Service {
     const sdk: SDK = utilsService.getSDK();
     await utilsService.showSpinner(
       sdk.decreaseSupplierAllowance({
-        proxyContractId,
-        targetId,
-        privateKey,
-        accountId,
+        proxyContractId: new ContractId(proxyContractId),
+        targetId: new AccountId(targetId),
+        privateKey: new PrivateKey(privateKey),
+        accountId: new AccountId(accountId),
         amount,
       }),
       {
@@ -159,10 +159,10 @@ export default class RoleStableCoinsService extends Service {
 
     await utilsService.showSpinner(
       sdk.resetSupplierAllowance({
-        proxyContractId,
-        targetId,
-        privateKey,
-        accountId,
+        proxyContractId: new ContractId(proxyContractId),
+        targetId: new AccountId(targetId),
+        privateKey: new PrivateKey(privateKey),
+        accountId: new AccountId(accountId),
       }),
       {
         text: language.getText('state.loading'),
@@ -185,10 +185,10 @@ export default class RoleStableCoinsService extends Service {
 
     await utilsService.showSpinner(
       sdk.grantRole({
-        proxyContractId,
-        targetId,
-        privateKey,
-        accountId,
+        proxyContractId: new ContractId(proxyContractId),
+        targetId: new AccountId(targetId),
+        privateKey: new PrivateKey(privateKey),
+        accountId: new AccountId(accountId),
         role: StableCoinRole[role],
       }),
       {
@@ -212,10 +212,10 @@ export default class RoleStableCoinsService extends Service {
 
     await utilsService.showSpinner(
       sdk.revokeRole({
-        proxyContractId,
-        targetId,
-        privateKey,
-        accountId,
+        proxyContractId: new ContractId(proxyContractId),
+        targetId: new AccountId(targetId),
+        privateKey: new PrivateKey(privateKey),
+        accountId: new AccountId(accountId),
         role: StableCoinRole[role],
       }),
       {
@@ -241,10 +241,10 @@ export default class RoleStableCoinsService extends Service {
     await utilsService.showSpinner(
       sdk
         .hasRole({
-          proxyContractId,
-          targetId,
-          privateKey,
-          accountId,
+          proxyContractId: new ContractId(proxyContractId),
+          targetId: new AccountId(targetId),
+          privateKey: new PrivateKey(privateKey),
+          accountId: new AccountId(accountId),
           role: StableCoinRole[role],
         })
         .then((response) => (hasRole = response[0])),
@@ -276,10 +276,10 @@ export default class RoleStableCoinsService extends Service {
     await utilsService.showSpinner(
       sdk
         .supplierAllowance({
-          proxyContractId,
-          targetId,
-          privateKey,
-          accountId,
+          proxyContractId: new ContractId(proxyContractId),
+          targetId: new AccountId(targetId),
+          privateKey: new PrivateKey(privateKey),
+          accountId: new AccountId(accountId),
         })
         .then((response) => {
           amount = response[0];

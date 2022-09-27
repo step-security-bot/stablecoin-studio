@@ -189,8 +189,6 @@ export class SDK {
 		try {
 			const req: ICreateStableCoinServiceRequestModel = {
 				...request,
-				accountId: request.accountId,
-				privateKey: request.privateKey,
 				autoRenewAccount: request.autoRenewAccount
 					? new AccountId(request.autoRenewAccount)
 					: undefined,
@@ -214,9 +212,6 @@ export class SDK {
 	): Promise<IStableCoinList[]> | null {
 		const req: IListStableCoinServiceRequestModel = {
 			...request,
-			privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 		};
 		return this.stableCoinService.getListStableCoins(req);
 	}
@@ -242,10 +237,6 @@ export class SDK {
 		try {
 			const req: IGetBalanceOfStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 				targetId: request.targetId,
 			};
 			return this.stableCoinService.getBalanceOf(req);
@@ -264,10 +255,6 @@ export class SDK {
 		try {
 			const req: IGetNameOfStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.getNameToken(req);
 		} catch (error) {
@@ -285,10 +272,6 @@ export class SDK {
 		try {
 			const req: ICashInStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.cashIn(req);
 		} catch (error) {
@@ -306,10 +289,6 @@ export class SDK {
 		try {
 			const req: ICashOutStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.cashOut(req);
 		} catch (error) {
@@ -327,10 +306,6 @@ export class SDK {
 		try {
 			const req: IAssociateTokenStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.associateToken(req);
 		} catch (error) {
@@ -346,10 +321,6 @@ export class SDK {
 		try {
 			const req: IWipeStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.wipe(req);
 		} catch (error) {
@@ -367,10 +338,6 @@ export class SDK {
 		try {
 			const req: IGetBasicRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.isUnlimitedSupplierAllowance(req);
 		} catch (error) {
@@ -387,10 +354,6 @@ export class SDK {
 		try {
 			const req: IGetBasicRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.supplierAllowance(req);
 		} catch (error) {
@@ -408,10 +371,6 @@ export class SDK {
 		try {
 			const req: IGetBasicRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.resetSupplierAllowance(req);
 		} catch (error) {
@@ -428,10 +387,6 @@ export class SDK {
 		try {
 			const req: ISupplierRoleStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.increaseSupplierAllowance(req);
 		} catch (error) {
@@ -448,10 +403,6 @@ export class SDK {
 		try {
 			const req: ISupplierRoleStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.decreaseSupplierAllowance(req);
 		} catch (error) {
@@ -469,10 +420,6 @@ export class SDK {
 		try {
 			const req: IGetBasicRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.isLimitedSupplierAllowance(req);
 		} catch (error) {
@@ -490,10 +437,6 @@ export class SDK {
 		try {
 			const req: IRescueStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 			return this.stableCoinService.rescue(req);
 		} catch (error) {
@@ -522,10 +465,6 @@ export class SDK {
 		try {
 			const req: IRoleStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 			};
 
 			return this.stableCoinService.grantRole(req);
@@ -541,10 +480,6 @@ export class SDK {
 		try {
 			const req: IRoleStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 				role: request.role,
 			};
 			return this.stableCoinService.revokeRole(req);
@@ -560,10 +495,6 @@ export class SDK {
 		try {
 			const req: IRoleStableCoinServiceRequestModel = {
 				...request,
-				accountId: new AccountId(request.accountId),
-				privateKey: request.privateKey
-					? new PrivateKey(request.privateKey)
-					: undefined,
 				role: request.role,
 			};
 			return this.stableCoinService.hasRole(req);

@@ -1,8 +1,8 @@
-import { language } from './../../../index.js';
+import { language } from '../../../index.js';
 import { utilsService } from '../../../index.js';
 import Service from '../Service.js';
 import { StableCoinList } from '../../../domain/stablecoin/StableCoinList.js';
-import { SDK } from 'hedera-stable-coin-sdk';
+import { PrivateKey, SDK } from 'hedera-stable-coin-sdk';
 
 /**
  * Create Stable Coin Service
@@ -25,7 +25,7 @@ export default class ListStableCoinsService extends Service {
     await utilsService.showSpinner(
       sdk
         .getListStableCoin({
-          privateKey: currentAccount.privateKey,
+          privateKey: new PrivateKey(currentAccount.privateKey),
         })
         .then((response: StableCoinList[]) => (resp = response)),
       {

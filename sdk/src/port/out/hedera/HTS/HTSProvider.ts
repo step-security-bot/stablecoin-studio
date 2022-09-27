@@ -329,7 +329,7 @@ export default class HTSProvider implements IProvider {
 				hederaToken.supplyKey instanceof HPublicKey
 					? PublicKey.fromHederaKey(hederaToken.supplyKey)
 					: hederaToken.supplyKey,
-			id: hederaToken.tokenId.toString(),
+			id: new AccountId(hederaToken.tokenId.toString()),
 			tokenType: stableCoin.tokenType,
 			supplyType: stableCoin.supplyType,
 		});

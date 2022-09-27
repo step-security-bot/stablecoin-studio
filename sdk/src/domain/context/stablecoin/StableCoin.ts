@@ -58,11 +58,11 @@ export class StableCoin extends BaseEntity {
 	/**
 	 * Id
 	 */
-	private _id: string;
-	public get id(): string {
+	private _id: AccountId;
+	public get id(): AccountId {
 		return this._id;
 	}
-	public set id(value: string) {
+	public set id(value: AccountId) {
 		this._id = value;
 	}
 
@@ -153,7 +153,7 @@ export class StableCoin extends BaseEntity {
 	public set wipeKey(value: ContractId | PublicKey | undefined) {
 		this._wipeKey = value;
 	}
-		 
+
 	/**
 	 * Pause key
 	 */
@@ -238,7 +238,7 @@ export class StableCoin extends BaseEntity {
 		treasury?: AccountId;
 		tokenType?: TokenType;
 		supplyType?: TokenSupplyType;
-		id?: string;
+		id?: AccountId;
 		autoRenewAccount?: AccountId;
 	}) {
 		super();
@@ -284,7 +284,7 @@ export class StableCoin extends BaseEntity {
 			(supplyType && !maxSupply) || !supplyType
 				? TokenSupplyType.INFINITE
 				: TokenSupplyType.FINITE;
-		this.id = id ?? '0.0.0';
+		this.id = id ?? AccountId.NULL;
 		this.autoRenewAccount = autoRenewAccount ?? new AccountId('0.0.0');
 	}
 

@@ -1,5 +1,6 @@
 import AccountId from '../../../../domain/context/account/AccountId.js';
 import PrivateKey from '../../../../domain/context/account/PrivateKey.js';
+import ContractId from '../../../../domain/context/contract/ContractId.js';
 
 export interface IAccountRequestModel {
 	accountId: AccountId;
@@ -23,13 +24,13 @@ export interface IAmountOptionalRequestModel {
 
 export interface IProxyContractIdRequestModel {
 	// TODO rename to something more appropiate
-	proxyContractId: string;
+	proxyContractId: ContractId;
 }
 
 export interface ITokenIdRequestModel {
-	tokenId: string;
+	tokenId: AccountId;
 }
 
 export interface ITargetIdRequestModel {
-	targetId: string;
+	targetId: AccountId;
 }
