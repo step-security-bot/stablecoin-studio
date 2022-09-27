@@ -374,7 +374,7 @@ export default class CreateStableCoinService extends Service {
       }
 
       case 'None':
-          return null;
+          return undefined;
 
       case 'The Smart Contract':
       default:
