@@ -5,6 +5,7 @@ import {
 	TransactionResponse,
 	ContractCreateFlow,
 	ContractExecuteTransaction,
+	Key,
 } from '@hashgraph/sdk';
 import { HashConnect, MessageTypes } from 'hashconnect';
 import { InitializationData } from '../types.js';
@@ -43,5 +44,10 @@ export class HashPackSigner implements ISigner {
 			}
 		}
 		throw new Error('Its necessary to have a Signer');
+	}
+
+	public async getPublicKey(signer: Signer): Promise<void>{
+		const key = await signer.getAccountInfo();
+		console.log(key.key);
 	}
 }

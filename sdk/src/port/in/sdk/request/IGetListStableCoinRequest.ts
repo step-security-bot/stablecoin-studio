@@ -1,3 +1,3 @@
 export interface IGetListStableCoinRequest {
-	privateKey: string;
+	privateKey?: string;
 }

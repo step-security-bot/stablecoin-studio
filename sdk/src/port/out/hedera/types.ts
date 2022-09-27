@@ -2,10 +2,10 @@ import {
 	TokenId,
 } from '@hashgraph/sdk';
 import { HashConnectTypes, MessageTypes } from 'hashconnect';
-import { AccountId, PublicKey } from '../../in/sdk/sdk.js';
+import { AccountId, ContractId, PrivateKey, PublicKey } from '../../in/sdk/sdk.js';
 
 export interface ICallContractRequest {
-	contractId: string;
+	contractId: ContractId;
 	parameters: string[];
 	gas: number;
 	abi: object[];
@@ -13,8 +13,8 @@ export interface ICallContractRequest {
 
 export interface ICallContractWithAccountRequest extends ICallContractRequest {
 	account: {
-		privateKey: string;
-		accountId: string;
+		privateKey?: PrivateKey;
+		accountId: AccountId;
 	};
 }
 

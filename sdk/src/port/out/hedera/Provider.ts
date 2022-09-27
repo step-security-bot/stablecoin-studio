@@ -8,6 +8,7 @@ import { StableCoin } from '../../../domain/context/stablecoin/StableCoin.js';
 import { AppMetadata } from './hashpack/types/types.js';
 import { ICallContractRequest, InitializationData } from './types.js';
 import EventService from '../../../app/service/event/EventService.js';
+import { AccountId } from '../../in/sdk/sdk.js';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Contract extends hethers.Contract {}
@@ -38,9 +39,9 @@ export interface IProvider {
 	): Uint8Array;
 	getPublicKeyString(privateKey?: PrivateKey | string | undefined): string;
 	deployStableCoin(
-		accountId: string,
-		privateKey: string,
+		accountId: AccountId,
 		stableCoin: StableCoin,
+		privateKey?: PrivateKey,
 	): Promise<StableCoin>;
 	getAvailabilityExtension(): boolean;
 	gethashConnectConectionState(): HashConnectConnectionState;

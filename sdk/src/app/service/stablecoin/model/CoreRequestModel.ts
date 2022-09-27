@@ -6,7 +6,7 @@ export interface IAccountRequestModel {
 }
 
 export interface IPrivateKeyRequestModel {
-	privateKey: PrivateKey;
+	privateKey?: PrivateKey;
 }
 
 export interface IAccountWithKeyRequestModel

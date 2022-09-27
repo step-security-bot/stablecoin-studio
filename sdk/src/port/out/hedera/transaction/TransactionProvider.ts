@@ -81,14 +81,17 @@ console.log("undefined");
 
 	public static buildContractCreateFlowTransaction(
 		factory: any,
-		admPrivateKey: string,
 		parameters: any,
 		gas: number,
+		admPrivateKey: string,
 	): ContractCreateFlow {
 		const transaction = new ContractCreateFlow()
 			.setBytecode(factory.bytecode)
-			.setGas(gas)
-			.setAdminKey(PrivateKey.fromStringED25519(admPrivateKey));
+			.setGas(gas);
+		admPrivateKey &&
+			transaction.setAdminKey(
+				PrivateKey.fromStringED25519(admPrivateKey),
+			);
 		if (parameters) {
 			transaction.setConstructorParameters(parameters);
 		}
