@@ -1,5 +1,8 @@
 import IStableCoinList from './response/IStableCoinList.js';
-import IStableCoinDetail from './response/IStableCoinDetail.js';
+import {
+	IStableCoinDetail,
+	IStableCoinDetailResponse,
+} from './response/IStableCoinDetail.js';
 import ContractsService from '../../../app/service/contract/ContractsService.js';
 import StableCoinService from '../../../app/service/stablecoin/StableCoinService.js';
 import { StableCoin } from '../../../domain/context/stablecoin/StableCoin.js';
@@ -72,6 +75,7 @@ export {
 	IRoleStableCoinRequest,
 	IWipeStableCoinRequest,
 	IBasicRequest,
+	IStableCoinDetailResponse,
 };
 
 /* Export basic types*/
