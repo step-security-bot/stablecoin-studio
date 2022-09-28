@@ -8,7 +8,7 @@ import {
 import HederaError from '../error/HederaError.js';
 import Web3 from 'web3';
 import { HashConnectSigner } from 'hashconnect/dist/esm/provider/signer.js';
-import { MessageTypes } from 'hashconnect';
+import { MessageTypes } from 'hashconnect/dist/esm/main.js';
 
 export class TransactionResposeHandler {
 	public async manageResponse(

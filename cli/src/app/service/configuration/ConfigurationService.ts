@@ -1,6 +1,6 @@
 import Service from '../Service.js';
 import shell from 'shelljs';
-import pkg from '../../../../package.json' assert { type: 'json' };
+import pkg from '../../../../package.json';
 import yaml from 'js-yaml';
 import fs from 'fs-extra';
 import { IConfiguration } from '../../../domain/configuration/interfaces/IConfiguration.js';

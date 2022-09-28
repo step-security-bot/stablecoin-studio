@@ -46,7 +46,7 @@ import { HashConnectSigner } from 'hashconnect/dist/esm/provider/signer';
 import Long from 'long';
 import ProviderEvent, { ProviderEventNames } from '../ProviderEvent.js';
 import EventService from '../../../../app/service/event/EventService.js';
-import { HashConnect } from 'hashconnect';
+import { HashConnect } from 'hashconnect/dist/esm/hashconnect.js';
 
 const logOpts = { newLine: true, clear: true };
 
@@ -134,7 +134,9 @@ export default class HashPackProvider implements IProvider {
 				ProviderEventNames.providerPairingEvent,
 				this.pairingData,
 			);
-			const signer = await this.getSigner(this.pairingData.accountIds[0]);
+			const signer = await this.getSigner(
+				data?.pairingData?.accountIds[0] ?? '',
+			);
 			console.log(await signer.getAccountInfo());
 		});
 

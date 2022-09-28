@@ -1,4 +1,4 @@
-import AccountId from '../../../../domain/context/account/AccountId.js';
+import { AccountId } from '../../../../domain/context/account/AccountId.js';
 import PrivateKey from '../../../../domain/context/account/PrivateKey.js';
 import PublicKey from '../../../../domain/context/account/PublicKey.js';
 

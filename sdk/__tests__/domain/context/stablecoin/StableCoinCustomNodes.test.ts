@@ -6,7 +6,7 @@ import { TokenType } from '../../../../src/domain/context/stablecoin/TokenType.j
 import { ACCOUNTS, getSDKAsync } from '../../../core.js';
 import { assert } from 'console';
 import PrivateKey from '../../../../src/domain/context/account/PrivateKey.js';
-import AccountId from '../../../../src/domain/context/account/AccountId.js';
+import { AccountId } from '../../../../src/domain/context/account/AccountId.js';
 
 describe('🧪 [DOMAIN] StableCoin',  () => {
 	let sdk:any;

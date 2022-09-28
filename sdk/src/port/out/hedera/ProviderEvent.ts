@@ -1,4 +1,4 @@
-import { HashConnectTypes, MessageTypes } from 'hashconnect';
+import { HashConnectTypes, MessageTypes } from 'hashconnect/dist/esm/main.js';
 import { HashConnectConnectionState } from 'hashconnect/dist/esm/types/index.js';
 import Event from '../../../core/event.js';
 import { InitializationData } from './types.js';

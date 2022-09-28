@@ -2,7 +2,7 @@ import { SDK } from '../src/index';
 import { ICreateStableCoinRequest } from '../src/port/in/sdk/request/ICreateStableCoinRequest.js';
 import { getSDK, getSDKAsync } from './core.js';
 import PrivateKey from '../src/domain/context/account/PrivateKey.js';
-import AccountId from '../src/domain/context/account/AccountId.js';
+import { AccountId } from '../src/domain/context/account/AccountId.js';
 import EOAccount from '../src/domain/context/account/EOAccount.js';
 
 const ACCOUNT_ID = '0.0.29511696';

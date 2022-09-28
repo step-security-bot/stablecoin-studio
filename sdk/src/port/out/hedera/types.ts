@@ -1,7 +1,7 @@
 import {
 	TokenId,
 } from '@hashgraph/sdk';
-import { HashConnectTypes, MessageTypes } from 'hashconnect';
+import { HashConnectTypes, MessageTypes } from 'hashconnect/dist/esm/main.js';
 import { AccountId, ContractId, PrivateKey, PublicKey } from '../../in/sdk/sdk.js';
 
 export interface ICallContractRequest {

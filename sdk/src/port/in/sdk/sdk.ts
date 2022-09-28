@@ -39,7 +39,7 @@ import { IRescueStableCoinRequest } from './request/IRescueStableCoinRequest.js'
 import { IRoleStableCoinRequest } from './request/IRoleStableCoinRequest.js';
 import { IWipeStableCoinRequest } from './request/IWipeStableCoinRequest.js';
 import { IBasicRequest } from './request/IBasicRequest.js';
-import AccountId from '../../../domain/context/account/AccountId.js';
+import { AccountId } from '../../../domain/context/account/AccountId.js';
 import EOAccount from '../../../domain/context/account/EOAccount.js';
 import PrivateKey from '../../../domain/context/account/PrivateKey.js';
 import PublicKey from '../../../domain/context/account/PublicKey.js';

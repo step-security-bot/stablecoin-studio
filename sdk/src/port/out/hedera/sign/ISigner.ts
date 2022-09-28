@@ -4,7 +4,7 @@ import {
 	TransactionResponse,
 	TransactionReceipt,
 } from '@hashgraph/sdk';
-import { MessageTypes } from 'hashconnect';
+import { MessageTypes } from 'hashconnect/dist/esm/main.js';
 
 export enum TransactionType {
 	RECORD,

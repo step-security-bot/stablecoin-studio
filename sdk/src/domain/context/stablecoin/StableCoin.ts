@@ -1,5 +1,5 @@
 import BaseEntity from '../../BaseEntity.js';
-import AccountId from '../account/AccountId.js';
+import { AccountId } from '../account/AccountId.js';
 import PublicKey from '../account/PublicKey.js';
 import ContractId from '../contract/ContractId.js';
 import InvalidAmountDomainError from './error/InvalidAmountDomainError.js';

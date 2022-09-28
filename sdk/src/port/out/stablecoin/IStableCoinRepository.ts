@@ -1,5 +1,5 @@
 import { StableCoinRole } from '../../../core/enum.js';
-import AccountId from '../../../domain/context/account/AccountId.js';
+import { AccountId } from '../../../domain/context/account/AccountId.js';
 import PrivateKey from '../../../domain/context/account/PrivateKey.js';
 import ContractId from '../../../domain/context/contract/ContractId.js';
 import { StableCoin } from '../../../domain/context/stablecoin/StableCoin.js';

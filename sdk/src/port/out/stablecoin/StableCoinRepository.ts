@@ -12,7 +12,7 @@ import { IToken } from './types/IToken.js';
 import PublicKey from '../../../domain/context/account/PublicKey.js';
 import PrivateKey from '../../../domain/context/account/PrivateKey.js';
 import { AccountId as HAccountId } from '@hashgraph/sdk';
-import AccountId from '../../../domain/context/account/AccountId.js';
+import { AccountId } from '../../../domain/context/account/AccountId.js';
 import { IPublicKey } from './types/IPublicKey.js';
 import ContractId from '../../../domain/context/contract/ContractId.js';
 import { getHederaNetwork, StableCoinRole } from '../../../core/enum.js';

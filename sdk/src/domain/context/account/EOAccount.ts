@@ -1,5 +1,5 @@
 import BaseEntity from '../../BaseEntity.js';
-import AccountId from './AccountId.js';
+import { AccountId } from './AccountId.js';
 import PrivateKey from './PrivateKey.js';
 
 export default class EOAccount extends BaseEntity {

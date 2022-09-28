@@ -7,7 +7,7 @@ import {
 	ContractExecuteTransaction,
 	Key,
 } from '@hashgraph/sdk';
-import { HashConnect, MessageTypes } from 'hashconnect';
+import { HashConnect, MessageTypes } from 'hashconnect/dist/esm/main.js';
 import { InitializationData } from '../types.js';
 
 export class HashPackSigner implements ISigner {

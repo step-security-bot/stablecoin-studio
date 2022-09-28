@@ -1,4 +1,4 @@
-import AccountId from '../../../../src/domain/context/account/AccountId.js';
+import { AccountId } from '../../../../src/domain/context/account/AccountId.js';
 import DomainError from '../../../../src/domain/error/DomainError.js';
 import { ACCOUNTS } from '../../../core.js';
 

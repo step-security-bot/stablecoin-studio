@@ -1,5 +1,13 @@
-import { HederaNetwork, HederaNetworkEnviroment, NetworkMode, SDK } from 'hedera-stable-coin-sdk';
-import type { AppMetadata, InitializationData , AcknowledgeMessage} from 'hedera-stable-coin-sdk';
+import {
+	AccountId,
+	ContractId,
+	HederaNetwork,
+	HederaNetworkEnviroment,
+	NetworkMode,
+	PrivateKey,
+	SDK,
+} from 'hedera-stable-coin-sdk';
+import type { AppMetadata, InitializationData, AcknowledgeMessage } from 'hedera-stable-coin-sdk';
 
 export enum HashConnectConnectionState {
 	Connected = 'Connected',
@@ -95,7 +103,14 @@ export class SDKService {
 		amount,
 	}: CashInRequest) {
 		return await SDKService.getInstance().then((instance) =>
-			instance.cashIn({ proxyContractId, privateKey, accountId, tokenId, targetId, amount }),
+			instance.cashIn({
+				proxyContractId: new ContractId(proxyContractId),
+				privateKey: new PrivateKey(privateKey),
+				accountId: new AccountId(accountId),
+				tokenId: new AccountId(tokenId),
+				targetId: new AccountId(targetId),
+				amount,
+			}),
 		);
 	}
 }
