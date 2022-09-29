@@ -213,7 +213,7 @@ export default class UtilitiesService extends Service {
   }
 
   public async drawTableListStableCoin(data?: StableCoinList[]): Promise<void> {
-    if (data.length === 0) {
+    if (data?.length === 0) {
       console.log('There are no stable coins available at this time.');
     } else {
       const table = new Table({

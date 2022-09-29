@@ -5,10 +5,11 @@ module.exports = {
       lines: 70,
     },
   },
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/js-with-ts',
   globals: {
     'ts-jest': {
       useESM: true,
+      useCJS: true,
     },
   },
   moduleNameMapper: {
