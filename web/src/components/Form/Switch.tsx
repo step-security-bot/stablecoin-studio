@@ -3,6 +3,7 @@ import { Text, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 export interface SwitchProps {
+	dataTestId: string;
 	checked: boolean;
 	disabled?: boolean;
 	onChange: () => void;
@@ -13,7 +14,7 @@ const yes: SwitchOptions = 'yes';
 const no: SwitchOptions = 'no';
 
 const SwitchComponent = (props: SwitchProps) => {
-	const { checked, disabled, onChange } = props;
+	const { dataTestId, checked, disabled, onChange } = props;
 	const { t } = useTranslation('global');
 
 	const getText = (option: SwitchOptions) => (
@@ -36,7 +37,7 @@ const SwitchComponent = (props: SwitchProps) => {
 			checked={checked}
 			checkedHandleIcon={getText(yes)}
 			checkedIcon={false}
-			data-testid='switch'
+			data-testid={dataTestId}
 			disabled={disabled}
 			handleDiameter={29}
 			height={35}

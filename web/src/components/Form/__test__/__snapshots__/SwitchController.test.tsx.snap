@@ -45,7 +45,7 @@ exports[`<SwitchController /> should render correctly 1`] = `
     <input
       aria-checked="true"
       checked=""
-      data-testid="switch"
+      data-testid="switch-controller"
       id="switch-component"
       role="switch"
       style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px;"

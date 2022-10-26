@@ -18,7 +18,12 @@ const SwitchController = (props: SwitchControllerProps) => {
 			defaultValue={defaultValue}
 			name={name}
 			render={({ field: { onChange, value } }) => (
-				<Switch checked={value} disabled={disabled} onChange={() => onChange(!value)} />
+				<Switch
+					dataTestId={name}
+					checked={value}
+					disabled={disabled}
+					onChange={() => onChange(!value)}
+				/>
 			)}
 		/>
 	);

@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event';
 const translations = en.common;
 
 const defaultProps: SwitchProps = {
+	dataTestId: 'switch',
 	checked: true,
 	disabled: false,
 	onChange: jest.fn(),

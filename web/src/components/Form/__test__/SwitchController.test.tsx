@@ -43,7 +43,7 @@ describe(`<${SwitchController.name} />`, () => {
 		const noHandler = component.getByTestId('switch-handler-no');
 		expect(noHandler).not.toBeVisible();
 
-		const switchComponent = component.getByTestId('switch');
+		const switchComponent = component.getByTestId('switch-controller');
 		userEvent.click(switchComponent);
 
 		expect(handler).toHaveAttribute('aria-checked', 'false');
