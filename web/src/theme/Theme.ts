@@ -8,6 +8,63 @@ import { Heading } from './components/Heading';
 import { Tabs } from './components/Tabs';
 import { FormError } from './components/FormError';
 import { DirectAccess } from './components/DirectAccess';
+import { StepsStyleConfig } from 'chakra-ui-steps';
+
+const CustomSteps = {
+	...StepsStyleConfig,
+	// @ts-ignore
+	baseStyle: (props) => {
+		return {
+			...StepsStyleConfig.baseStyle(props),
+			icon: {
+				...StepsStyleConfig.baseStyle(props).icon,
+				strokeWidth: '1px',
+			},
+			stepIconContainer: {
+				display: 'flex',
+				borderRadius: '50%',
+				alignItems: 'center',
+				justifyContent: 'center',
+				bg: '#FFFFFF',
+				borderColor: '#B699F5',
+				color: '#B699F5',
+				transitionProperty: 'background, border-color',
+				transitionDuration: 'normal',
+				'border-width': '1px !important',
+				_activeStep: {
+					bg: '#B699F5',
+					borderColor: '#B699F5',
+					_invalid: {
+						bg: 'red.500',
+						borderColor: 'red.500',
+					},
+				},
+				_highlighted: {
+					bg: '#D1BEEE',
+					borderColor: '#D1BEEE',
+				},
+			},
+			iconLabel: {
+				...StepsStyleConfig.baseStyle(props).iconLabel,
+				/* color: '#B699F5',
+				_active: {
+					color: '#FFFFFF',
+				}, */
+			},
+			connector: {
+				...StepsStyleConfig.baseStyle(props).connector,
+				borderColor: '#B699F5',
+				_highlighted: {
+					borderColor: '#B699F5',
+				},
+			},
+			steps: {
+				...StepsStyleConfig.baseStyle(props).steps,
+				fontFamily: 'regular',
+			},
+		};
+	},
+};
 
 const theme = extendTheme({
 	config: {
@@ -72,6 +129,7 @@ const theme = extendTheme({
 		Tabs,
 		FormError,
 		DirectAccess,
+		Steps: CustomSteps,
 	},
 	styles: {
 		global: {

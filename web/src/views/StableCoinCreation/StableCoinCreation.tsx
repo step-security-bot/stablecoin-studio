@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Stack, useDisclosure } from '@chakra-ui/react';
+import { Flex, Stack, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import type { FieldValues } from 'react-hook-form';
 import BaseContainer from '../../components/BaseContainer';
 import BasicDetails from './BasicDetails';
-import type { Step } from '../../components/Stepper';
-import Stepper from '../../components/Stepper';
+import type { StepTimeLine } from '../../components/TimeLine';
+import TimeLine from '../../components/TimeLine';
 import { NamedRoutes } from '../../Router/NamedRoutes';
 import { RouterManager } from '../../Router/RouterManager';
 import OptionalDetails from './OptionalDetails';
@@ -75,26 +75,26 @@ const StableCoinCreation = () => {
 		}
 	}, [getValues(), currentStep]);
 
-	const steps: Step[] = [
+	const steps: StepTimeLine[] = [
 		{
 			number: '01',
-			title: t('tabs.basicDetails'),
-			children: <BasicDetails control={control} request={request} />,
+			label: t('tabs.basicDetails'),
+			content: <BasicDetails control={control} request={request} />,
 		},
 		{
 			number: '02',
-			title: t('tabs.optionalDetails'),
-			children: <OptionalDetails control={control} form={form} request={request} />,
+			label: t('tabs.optionalDetails'),
+			content: <OptionalDetails control={control} form={form} request={request} />,
 		},
 		{
 			number: '03',
-			title: t('tabs.managementPermissions'),
-			children: <ManagementPermissions control={control} request={request} />,
+			label: t('tabs.managementPermissions'),
+			content: <ManagementPermissions control={control} request={request} />,
 		},
 		{
 			number: '04',
-			title: t('tabs.review'),
-			children: <Review form={form} />,
+			label: t('tabs.review'),
+			content: <Review form={form} />,
 		},
 	];
 
@@ -200,7 +200,7 @@ const StableCoinCreation = () => {
 		RouterManager.to(navigate, NamedRoutes.Operations);
 	};
 
-	const stepperProps = {
+	const timeLineProps = {
 		steps,
 		handleLastButtonPrimary: handleFinish,
 		handleFirstButtonSecondary: handleCancel,
@@ -213,7 +213,15 @@ const StableCoinCreation = () => {
 	return (
 		<Stack h='full'>
 			<BaseContainer title={t('common.createNewStableCoin')}>
-				<Stepper {...stepperProps} />
+				<Flex
+					direction='column'
+					bg='brand.gray100'
+					px={{ base: 4, lg: 14 }}
+					pt={{ base: 4, lg: 14 }}
+					pb={6}
+				>
+					<TimeLine {...timeLineProps} />
+				</Flex>
 			</BaseContainer>
 			<ModalNotification
 				variant={success ? 'success' : 'error'}
