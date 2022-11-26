@@ -19,6 +19,11 @@ let OPERATOR_ID: string;
 let OPERATOR_KEY: string;
 let OPERATOR_PUBLIC: string;
 
+let client1:any;
+let client1account: string;
+let client1privatekey: string;
+let client1publickey: string;
+
 let client2:any;
 let client2account: string;
 let client2privatekey: string;
@@ -36,14 +41,21 @@ describe("Pause Tests", function() {
 
   before(async function  () {         
     // Generate Client (token admin) and Client 2
-    [client,
-      OPERATOR_ID, 
-      OPERATOR_KEY,
-      OPERATOR_PUBLIC,
+    [client1,
+      client1account, 
+      client1privatekey,
+      client1publickey,
       client2,
       client2account,
       client2privatekey,
       client2publickey] = initializeClients();
+
+      const clientId = 2;
+
+      client = (clientId == 1) ? client1 : client2;
+      OPERATOR_ID = (clientId == 1) ? client1account : client2account;
+      OPERATOR_KEY = (clientId == 1) ? client1privatekey : client2privatekey
+      OPERATOR_PUBLIC = (clientId == 1) ? client1privatekey : client2privatekey;
   
       // Deploy Token using Client
       let result = await deployContractsWithSDK(
@@ -55,7 +67,8 @@ describe("Pause Tests", function() {
         TokenMemo, 
         OPERATOR_ID, 
         OPERATOR_KEY, 
-        OPERATOR_PUBLIC); 
+        OPERATOR_PUBLIC
+        ); 
         
       proxyAddress = result[0];
     });    
