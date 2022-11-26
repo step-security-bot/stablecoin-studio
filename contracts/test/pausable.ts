@@ -9,15 +9,32 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 
-import { deployContractsWithSDK, initializeClients } from "../scripts/deploy";
+import { deployContractsWithSDK, initializeClients, 
+  getOperatorClient,
+  getOperatorAccount,
+  getOperatorPrivateKey,
+getOperatorPublicKey,
+getNonOperatorClient,
+getNonOperatorAccount,
+getNonOperatorPrivateKey,
+getNonOperatorPublicKey
+ } from "../scripts/deploy";
 import {grantRole, revokeRole, hasRole, pause, unpause, associateToken } from "../scripts/contractsMethods";
 import {PAUSE_ROLE} from "../scripts/constants";
 
 let proxyAddress:any;
-let client:any ;
-let OPERATOR_ID: string;
-let OPERATOR_KEY: string;
-let OPERATOR_PUBLIC: string;
+
+const clientId = 2;
+
+let operatorClient: any;
+let nonOperatorClient: any;
+let operatorAccount: string;
+let nonOperatorAccount: string;
+let operatorPriKey: string;
+let nonOperatorPriKey: string;
+let operatorPubKey: string;
+let nonOperatorPubKey: string;
+
 
 let client1:any;
 let client1account: string;
@@ -37,10 +54,12 @@ const INIT_SUPPLY = BigNumber.from(0).mul(TokenFactor);
 const MAX_SUPPLY = BigNumber.from(1).mul(TokenFactor);
 const TokenMemo = "Hedera Accelerator Stable Coin"
 
+
+
 describe("Pause Tests", function() {
 
   before(async function  () {         
-    // Generate Client (token admin) and Client 2
+    // Generate Client 1 and Client 2
     [client1,
       client1account, 
       client1privatekey,
@@ -50,13 +69,13 @@ describe("Pause Tests", function() {
       client2privatekey,
       client2publickey] = initializeClients();
 
-      const clientId = 2;
+      operatorClient = getOperatorClient(client1, client2, clientId);
+      nonOperatorClient = getNonOperatorClient(client1, client2, clientId);
+      operatorAccount = getOperatorAccount(client1account, client2account, clientId);
+      nonOperatorAccount = getNonOperatorAccount(client1account, client2account, clientId);
+      operatorPriKey = getOperatorPrivateKey(client1privatekey, client2privatekey, clientId);
+      operatorPubKey = getOperatorPublicKey(client1publickey, client2publickey, clientId);
 
-      client = (clientId == 1) ? client1 : client2;
-      OPERATOR_ID = (clientId == 1) ? client1account : client2account;
-      OPERATOR_KEY = (clientId == 1) ? client1privatekey : client2privatekey
-      OPERATOR_PUBLIC = (clientId == 1) ? client1privatekey : client2privatekey;
-  
       // Deploy Token using Client
       let result = await deployContractsWithSDK(
         TokenName, 
@@ -65,9 +84,9 @@ describe("Pause Tests", function() {
         INIT_SUPPLY.toString(), 
         MAX_SUPPLY.toString(), 
         TokenMemo, 
-        OPERATOR_ID, 
-        OPERATOR_KEY, 
-        OPERATOR_PUBLIC
+        operatorAccount, 
+        operatorPriKey, 
+        operatorPubKey
         ); 
         
       proxyAddress = result[0];
@@ -75,81 +94,81 @@ describe("Pause Tests", function() {
 
     it("Admin account can grant and revoke pause role to an account", async function() {    
       // Admin grants pause role : success    
-      let result = await hasRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account);
+      let result = await hasRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
       expect(result).to.equals(false);
   
-      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account);
+      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
   
-      result = await hasRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account);
+      result = await hasRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
       expect(result).to.equals(true);
   
       // Admin revokes pause role : success    
-      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account);
-      result = await hasRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account);
+      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
+      result = await hasRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
       expect(result).to.equals(false);
   
     });
   
     it("Non Admin account can not grant pause role to an account", async function() {   
       // Non Admin grants pause role : fail       
-      await expect(grantRole(PAUSE_ROLE, ContractId, proxyAddress, client2, client2account)).to.eventually.be.rejectedWith(Error);
+      await expect(grantRole(PAUSE_ROLE, ContractId, proxyAddress, nonOperatorClient, nonOperatorAccount)).to.eventually.be.rejectedWith(Error);
     });
   
     it("Non Admin account can not revoke pause role to an account", async function() {
       // Non Admin revokes pause role : fail       
-      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account);
-      await expect(revokeRole(PAUSE_ROLE, ContractId, proxyAddress, client2, client2account)).to.eventually.be.rejectedWith(Error);
+      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
+      await expect(revokeRole(PAUSE_ROLE, ContractId, proxyAddress, nonOperatorClient, nonOperatorAccount)).to.eventually.be.rejectedWith(Error);
   
       //Reset status
-      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account)
+      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount)
     });
 
     it("An account without pause role can't pause a token", async function() {
-      await expect(pause(ContractId, proxyAddress, client2)).to.eventually.be.rejectedWith(Error);
+      await expect(pause(ContractId, proxyAddress, nonOperatorClient)).to.eventually.be.rejectedWith(Error);
     });  
 
     it("An account without pause role can't unpause a token", async function() {
-      await expect(unpause(ContractId, proxyAddress, client2)).to.eventually.be.rejectedWith(Error);
+      await expect(unpause(ContractId, proxyAddress, nonOperatorClient)).to.eventually.be.rejectedWith(Error);
     });  
 
     it("An account with pause role can pause a token", async function() {
-      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account);
+      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, client2account);
 
       await expect(pause(ContractId, proxyAddress, client2)).not.to.eventually.be.rejectedWith(Error);
 
       //Reset status
       await unpause(ContractId, proxyAddress, client2);
-      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account)
+      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount)
     });  
 
     it("An account with pause role can unpause a token", async function() {
-      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account);
+      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
 
       await expect(unpause(ContractId, proxyAddress, client2)).not.to.eventually.be.rejectedWith(Error);;
 
       //Reset status
-      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account)
+      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount)
     });  
 
     it("A paused token can not be used for any other operation, like associating", async function() {
-      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account);
+      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, client2account);
 
       await pause(ContractId, proxyAddress, client2);
-      await expect(associateToken(ContractId, proxyAddress, client2, client2account)).to.eventually.be.rejectedWith(Error);
+      await expect(associateToken(ContractId, proxyAddress, nonOperatorClient, nonOperatorAccount)).to.eventually.be.rejectedWith(Error);
 
       //Reset status
       await unpause(ContractId, proxyAddress, client2);
-      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account)
+      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount)
     });  
 
     it("An unpaused token can be used for any other operation, like associating", async function() {
-      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account);
+      await grantRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
 
       await pause(ContractId, proxyAddress, client2);
       await unpause(ContractId, proxyAddress, client2);
-      await expect(associateToken(ContractId, proxyAddress, client2, client2account)).not.to.eventually.be.rejectedWith(Error);
+      await expect(associateToken(ContractId, proxyAddress, nonOperatorClient, nonOperatorAccount)).not.to.eventually.be.rejectedWith(Error);
 
       //Reset status
-      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, client, client2account)
+      await revokeRole(PAUSE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount)
     });  
   });

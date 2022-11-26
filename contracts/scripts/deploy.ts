@@ -57,6 +57,37 @@ export function initializeClients(){
     client2publickey]
 }
 
+export function getOperatorClient(client1 : any, client2 : any, clientId : number): any{
+    return (clientId == 1) ? client1 : client2;
+}
+
+export function getOperatorAccount(client1account : any, client2account : any, clientId : number): any{
+    return (clientId == 1) ? client1account : client2account;
+}
+
+export function getOperatorPrivateKey(client1privatekey : any, client2privatekey : any, clientId : number): any{
+    return (clientId == 1) ? client1privatekey : client2privatekey;
+}
+
+export function getOperatorPublicKey(client1publickey : any, client2publickey : any, clientId : number): any{
+    return (clientId == 1) ? client1publickey : client2publickey;
+}
+
+export function getNonOperatorClient(client1 : any, client2 : any, clientId : number): any{
+    return (clientId == 2) ? client1 : client2;
+}
+
+export function getNonOperatorAccount(client1account : any, client2account : any, clientId : number): any{
+    return (clientId == 2) ? client1account : client2account;
+}
+
+export function getNonOperatorPrivateKey(client1privatekey : any, client2privatekey : any, clientId : number): any{
+    return (clientId == 2) ? client1privatekey : client2privatekey;
+}
+
+export function getNonOperatorPublicKey(client1publickey : any, client2publickey : any, clientId : number): any{
+    return (clientId == 2) ? client1publickey : client2publickey;
+}
 
 export async function deployFactory(
     clientOperator: any,

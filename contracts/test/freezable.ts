@@ -9,15 +9,37 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 
-import { deployContractsWithSDK, initializeClients } from "../scripts/deploy";
-import {grantRole, revokeRole, hasRole, freeze, unfreeze, rescue, getBalanceOf } from "../scripts/contractsMethods";
+import { deployContractsWithSDK, initializeClients, 
+  getOperatorClient,
+  getOperatorAccount,
+  getOperatorPrivateKey,
+getOperatorPublicKey,
+getNonOperatorClient,
+getNonOperatorAccount,
+getNonOperatorPrivateKey,
+getNonOperatorPublicKey
+ } from "../scripts/deploy";
+ import {grantRole, revokeRole, hasRole, freeze, unfreeze, rescue, getBalanceOf } from "../scripts/contractsMethods";
 import {FREEZE_ROLE} from "../scripts/constants";
 
 let proxyAddress:any;
-let client:any ;
-let OPERATOR_ID: string;
-let OPERATOR_KEY: string;
-let OPERATOR_PUBLIC: string;
+
+const clientId = 2;
+
+let operatorClient: any;
+let nonOperatorClient: any;
+let operatorAccount: string;
+let nonOperatorAccount: string;
+let operatorPriKey: string;
+let nonOperatorPriKey: string;
+let operatorPubKey: string;
+let nonOperatorPubKey: string;
+
+
+let client1:any;
+let client1account: string;
+let client1privatekey: string;
+let client1publickey: string;
 
 let client2:any;
 let client2account: string;
@@ -35,16 +57,23 @@ const TokenMemo = "Hedera Accelerator Stable Coin"
 describe("Freeze Tests", function() {
 
   before(async function  () {         
-    // Generate Client (token admin) and Client 2
-    [client,
-      OPERATOR_ID, 
-      OPERATOR_KEY,
-      OPERATOR_PUBLIC,
+    // Generate Client 1 and Client 2
+    [client1,
+      client1account, 
+      client1privatekey,
+      client1publickey,
       client2,
       client2account,
       client2privatekey,
       client2publickey] = initializeClients();
-  
+
+      operatorClient = getOperatorClient(client1, client2, clientId);
+      nonOperatorClient = getNonOperatorClient(client1, client2, clientId);
+      operatorAccount = getOperatorAccount(client1account, client2account, clientId);
+      nonOperatorAccount = getNonOperatorAccount(client1account, client2account, clientId);
+      operatorPriKey = getOperatorPrivateKey(client1privatekey, client2privatekey, clientId);
+      operatorPubKey = getOperatorPublicKey(client1publickey, client2publickey, clientId);
+
       // Deploy Token using Client
       let result = await deployContractsWithSDK(
         TokenName, 
@@ -53,88 +82,89 @@ describe("Freeze Tests", function() {
         INIT_SUPPLY.toString(), 
         MAX_SUPPLY.toString(), 
         TokenMemo, 
-        OPERATOR_ID, 
-        OPERATOR_KEY, 
-        OPERATOR_PUBLIC);    
+        operatorAccount, 
+        operatorPriKey, 
+        operatorPubKey
+        );     
 
       proxyAddress = result[0];
     });    
 
     it("Admin account can grant and revoke freeze role to an account", async function() {    
       // Admin grants freeze role : success    
-      let result = await hasRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account);
+      let result = await hasRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
       expect(result).to.equals(false);
   
-      await grantRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account);
+      await grantRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
   
-      result = await hasRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account);
+      result = await hasRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
       expect(result).to.equals(true);
   
       // Admin revokes freeze role : success    
-      await revokeRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account);
-      result = await hasRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account);
+      await revokeRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
+      result = await hasRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
       expect(result).to.equals(false);
   
     });
   
     it("Non Admin account can not grant freeze role to an account", async function() {   
       // Non Admin grants freeze role : fail       
-      await expect(grantRole(FREEZE_ROLE, ContractId, proxyAddress, client2, client2account)).to.eventually.be.rejectedWith(Error);
+      await expect(grantRole(FREEZE_ROLE, ContractId, proxyAddress, nonOperatorClient, nonOperatorAccount)).to.eventually.be.rejectedWith(Error);
     });
   
     it("Non Admin account can not revoke freeze role to an account", async function() {
       // Non Admin revokes freeze role : fail       
-      await grantRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account);
-      await expect(revokeRole(FREEZE_ROLE, ContractId, proxyAddress, client2, client2account)).to.eventually.be.rejectedWith(Error);
+      await grantRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
+      await expect(revokeRole(FREEZE_ROLE, ContractId, proxyAddress, nonOperatorClient, nonOperatorAccount)).to.eventually.be.rejectedWith(Error);
   
       //Reset status
-      await revokeRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account)
+      await revokeRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount)
     });
 
     it("An account without freeze role can't freeze transfers of the token for the account", async function() {
-      await expect(freeze(ContractId, proxyAddress, client2, OPERATOR_ID)).to.eventually.be.rejectedWith(Error);
+      await expect(freeze(ContractId, proxyAddress, nonOperatorClient, operatorAccount)).to.eventually.be.rejectedWith(Error);
     });  
 
     it("An account without freeze role can't unfreeze transfers of the token for the account", async function() {
-      await expect(unfreeze(ContractId, proxyAddress, client2, OPERATOR_ID)).to.eventually.be.rejectedWith(Error);
+      await expect(unfreeze(ContractId, proxyAddress, nonOperatorClient, operatorAccount)).to.eventually.be.rejectedWith(Error);
     });  
 
     it("An account with freeze role can freeze transfers of the token for the account", async function() {
-      await grantRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account);
+      await grantRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
 
-      await expect(freeze(ContractId, proxyAddress, client2, OPERATOR_ID)).not.to.eventually.be.rejectedWith(Error);
+      await expect(freeze(ContractId, proxyAddress, nonOperatorClient, operatorAccount)).not.to.eventually.be.rejectedWith(Error);
 
       //Reset status
-      await unfreeze(ContractId, proxyAddress, client2, OPERATOR_ID);
-      await revokeRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account)
+      await unfreeze(ContractId, proxyAddress, nonOperatorClient, operatorAccount);
+      await revokeRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount)
     });  
 
     it("An account with freeze role can unfreeze transfers of the token for the account", async function() {
-      await grantRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account);
+      await grantRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount);
 
-      await expect(unfreeze(ContractId, proxyAddress, client2, OPERATOR_ID)).not.to.eventually.be.rejectedWith(Error);;
+      await expect(unfreeze(ContractId, proxyAddress, nonOperatorClient, operatorAccount)).not.to.eventually.be.rejectedWith(Error);;
 
       //Reset status
-      await revokeRole(FREEZE_ROLE, ContractId, proxyAddress, client, client2account)
+      await revokeRole(FREEZE_ROLE, ContractId, proxyAddress, operatorClient, nonOperatorAccount)
     });  
 
     it("When freezing transfers of the token for the account a rescue operation can not be performed", async function() {
       const AmountToRescue = BigNumber.from(1).mul(TokenFactor);
 
-      await freeze(ContractId, proxyAddress, client, OPERATOR_ID);
-      await expect(rescue(ContractId, proxyAddress, AmountToRescue, client)).to.eventually.be.rejectedWith(Error);
+      await freeze(ContractId, proxyAddress, operatorClient, operatorAccount);
+      await expect(rescue(ContractId, proxyAddress, AmountToRescue, operatorClient)).to.eventually.be.rejectedWith(Error);
 
       //Reset status
-      await unfreeze(ContractId, proxyAddress, client, OPERATOR_ID);
+      await unfreeze(ContractId, proxyAddress, operatorClient, operatorAccount);
     });  
 
     it("When unfreezing transfers of the token for the account a rescue operation can be performed", async function() {
       const AmountToRescue = BigNumber.from(1).mul(TokenFactor);
 
-      await freeze(ContractId, proxyAddress, client, OPERATOR_ID);
-      await unfreeze(ContractId, proxyAddress, client, OPERATOR_ID);
-      await rescue(ContractId, proxyAddress, AmountToRescue, client);
-      const balance = await getBalanceOf(ContractId, proxyAddress, client, OPERATOR_ID);  
+      await freeze(ContractId, proxyAddress, operatorClient, operatorAccount);
+      await unfreeze(ContractId, proxyAddress, operatorClient, operatorAccount);
+      await rescue(ContractId, proxyAddress, AmountToRescue, operatorClient);
+      const balance = await getBalanceOf(ContractId, proxyAddress, operatorClient, operatorAccount);  
       expect(balance.toString()).to.equals(AmountToRescue.toString());
     });  
 });
