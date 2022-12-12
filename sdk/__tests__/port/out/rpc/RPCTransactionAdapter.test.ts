@@ -44,6 +44,7 @@ describe('🧪 [BUILDER] RPCTransactionBuilder', () => {
 		new Account({
 			environment: 'testnet',
 			evmAddress,
+			id: '0.0.48471385',
 		}),
 	);
 	const stableCoinCapabilitiesSC = new StableCoinCapabilities(
@@ -70,6 +71,7 @@ describe('🧪 [BUILDER] RPCTransactionBuilder', () => {
 		new Account({
 			environment: 'testnet',
 			evmAddress,
+			id: '0.0.48471385',
 		}),
 	);
 
@@ -240,6 +242,7 @@ describe('🧪 [BUILDER] RPCTransactionBuilder', () => {
 
 	it('Test getRoles', async () => {
 		tr = await th.getRoles(stableCoinCapabilitiesSC, evmAddress);
+		console.log(tr);
 	}, 1500000);
 
 	//  TODO To test
