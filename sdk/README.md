@@ -36,7 +36,7 @@
 	- [PrivateKey](#privatekey)
 		- [Fields](#fields-4)
 		- [Example](#example-3)
-	- [PrivateKeyType [WIP]](#privatekeytype-wip)
+	- [PrivateKeyType](#privatekeytype)
 		- [Example](#example-4)
 	- [PublicKey](#publickey)
 		- [Fields](#fields-5)
@@ -46,6 +46,12 @@
 		- [Example](#example-6)
 - [Usage](#usage)
 		- [**Important**](#important)
+- [Input Ports](#input-ports)
+	- [Account](#account-1)
+- [Get Public Key](#get-public-key)
+- [List of Stable Coins](#list-of-stable-coins)
+- [Get Info](#get-info)
+- [Is public key null](#is-public-key-null)
 	- [Create Stable Coin](#create-stable-coin)
 	- [Get capabilities stable coin](#get-capabilities-stable-coin)
 	- [Get stable coin list](#get-stable-coin-list)
@@ -419,6 +425,98 @@ The SDK has an `async` function to initialize the SDK, to which you optionally c
 			console.log("SDK initialized");
 		}
 	})
+```
+
+# Input Ports
+
+Below is the list of input ports, grouped according to the file in which they are found depending on the functionality they carry out.
+
+## Account
+
+# Get Public Key
+
+Gets the public key of an account.
+
+**Spec:**
+
+```Typescript
+	getPublicKey(request: GetPublicKeyRequest): Promise<PublicKey>
+```
+
+**Example:**
+
+```Typescript
+	const publicKey: PublicKey = await Account.getPublicKey(
+		new GetPublicKeyRequest({
+			account: {
+				accountId: "0.0.1"
+			}
+		})
+	);
+```
+
+# List of Stable Coins
+
+**Spec:**
+
+Gets the list of stable coins of an account
+
+```Typescript
+	listStableCoins(request: GetListStableCoinRequest): Promise<StableCoinListViewModel>
+```
+
+**Example:**
+
+```Typescript
+	const stableCoinListViewModel: StableCoinListViewModel = await Account.listStableCoins(
+		new GetListStableCoinRequest({
+			account: {
+				accountId: "0.0.1"
+			}
+		})
+	);
+```
+
+# Get Info
+
+Gets information of an account.
+
+**Spec:**
+
+```Typescript
+	getInfo(request: GetAccountInfoRequest): Promise<AccountViewModel>
+```
+
+**Example:**
+
+```Typescript
+	const accountViewModel: AccountViewModel = await Account.getInfo(
+		new GetAccountInfoRequest({
+			account: {
+				accountId: "0.0.1"
+			}
+		})
+	);
+```
+
+# Is public key null
+
+Reports whether the key and type of a public key are both null.
+
+**Spec:**
+
+```Typescript
+	isPublicKeyNull(val?: { key: string; type: string }): boolean
+```
+
+**Example:**
+
+```Typescript
+	const isPublicKeyNull: boolean = await Account.isPublicKeyNull({
+			key: 'b173df887f8af85ca71b1733d47bd76fbbc91e767343abb17ea448fefa26544a',
+			type: 'Ed25519'
+		})
+	);
 ```
 
 ## Create Stable Coin
