@@ -54,6 +54,11 @@
 - [Is public key null](#is-public-key-null)
 	- [Event](#event)
 - [Register](#register)
+	- [Network](#network)
+- [Set Network](#set-network)
+- [Init](#init)
+- [Connect](#connect)
+- [Disconnect](#disconnect)
 	- [Create Stable Coin](#create-stable-coin)
 	- [Get capabilities stable coin](#get-capabilities-stable-coin)
 	- [Get stable coin list](#get-stable-coin-list)
@@ -440,6 +445,7 @@ Manages functionalities in order to get different information about a certain ac
 # Get Public Key
 
 Gets the public key of an account.
+Returns an object with the account public key along with its type: Ed25519 or ECDSA.
 
 **Spec:**
 
@@ -464,6 +470,7 @@ Gets the public key of an account.
 **Spec:**
 
 Gets the list of stable coins of an account
+Returns an object containing a list of coins consisting in an id and a symbol.
 
 ```Typescript
 	listStableCoins(request: GetListStableCoinRequest): Promise<StableCoinListViewModel>
@@ -484,6 +491,7 @@ Gets the list of stable coins of an account
 # Get Info
 
 Gets information of an account.
+Returns an `AccountViewModel` object containing account information properties.
 
 **Spec:**
 
@@ -530,6 +538,7 @@ Manages the functionality to register wallets events that must be listened to.
 # Register
 
 Registers wallets events.
+Returns registered wallets events.
 
 **Spec:**
 
@@ -577,6 +586,100 @@ Registers wallets events.
 			}
 		)
 	);
+```
+
+## Network
+
+Manages the functionality to register wallets events that must be listened to.
+
+# Set Network
+
+Sets the Hedera network you are working with.
+
+**Spec:**
+
+```Typescript
+	setNetwork(req: SetNetworkRequest): Promise<NetworkResponse>
+```
+
+**Example:**
+
+```Typescript
+	await Network.setNetwork(
+		new SetNetworkRequest({ environment: 'testnet' })
+	);
+```
+
+# Init
+
+Initializes Hedera network environment:
+- Sets the Hedera network.
+- It could also register wallets events.
+- Registers wallets the SDK is able to work with.
+
+Returns a list of supported wallets.
+
+**Spec:**
+
+```Typescript
+	(req: InitializationRequest): Promise<SupportedWallets[]> 
+```
+
+**Example:**
+
+```Typescript
+	await Network.init(
+		new InitializationRequest({
+			network: 'testnet'
+		})
+	);
+```
+
+# Connect
+
+Connects an account to a Hedera network using a certain wallet.
+Returns an object which could contain:
+- The connected account.
+- The pairing code.
+- The Hashconnect topic.
+
+**Spec:**
+
+```Typescript
+	connect(req: ConnectRequest): Promise<InitializationData>
+```
+
+**Example:**
+
+```Typescript
+	await Network.connect(
+		new ConnectRequest({
+			account: {
+				accountId: '0.0.1',
+				evmAddress: 'aaaaaaaaaaaaaaaaaaaaaaaa9abcdefabcdefbbb',
+				privateKey: '0123456789abcdefg01234567890abcdefg0123456789abcd',
+			},
+			network: 'testnet',
+			wallet: 'HashPack',
+		}),
+	);
+```
+
+# Disconnect
+
+Disconnects the current account.
+Returns true if the disconnect was successful, false otherwise.
+
+**Spec:**
+
+```Typescript
+	disconnect(): Promise<boolean>
+```
+
+**Example:**
+
+```Typescript
+	Network.disconnect();
 ```
 
 ## Create Stable Coin
