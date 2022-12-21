@@ -130,6 +130,7 @@ Typescript test files can be foud in the `test` folder:
 
 - `burnable.ts`: Tests the stable coin burn functionality.
 - `deletable.ts`: Tests the stable coin delete functionality.
+- `deployFactory.ts`: Tests the factory deployment functionality.
 - `freezable.ts`: Tests the stable coin freeze/unfreeze functionality.
 - `HederaERC20.ts`: Tests the HederaERC20 functionality.
 - `pausable.ts`: Tests the stable coin pause functionality.
