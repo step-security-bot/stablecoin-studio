@@ -52,6 +52,8 @@
 - [List of Stable Coins](#list-of-stable-coins)
 - [Get Info](#get-info)
 - [Is public key null](#is-public-key-null)
+	- [Event](#event)
+- [Register](#register)
 	- [Create Stable Coin](#create-stable-coin)
 	- [Get capabilities stable coin](#get-capabilities-stable-coin)
 	- [Get stable coin list](#get-stable-coin-list)
@@ -433,6 +435,8 @@ Below is the list of input ports, grouped according to the file in which they ar
 
 ## Account
 
+Manages functionalities in order to get different information about a certain account.
+
 # Get Public Key
 
 Gets the public key of an account.
@@ -512,10 +516,66 @@ Reports whether the key and type of a public key are both null.
 **Example:**
 
 ```Typescript
-	const isPublicKeyNull: boolean = await Account.isPublicKeyNull({
+	const isPublicKeyNull: boolean = Account.isPublicKeyNull({
 			key: 'b173df887f8af85ca71b1733d47bd76fbbc91e767343abb17ea448fefa26544a',
 			type: 'Ed25519'
 		})
+	);
+```
+
+## Event
+
+Manages the functionality to register wallets events that must be listened to.
+
+# Register
+
+Registers wallets events.
+
+**Spec:**
+
+```Typescript
+	register(events: Partial<WalletEvent>): void
+```
+
+**Example:**
+
+```Typescript
+	const walletPaired = (event: EventParameter<'walletPaired'>) => {
+		onLastWalletEvent(event, () => {
+			dispatch(walletActions.setData(event.data));
+			dispatch(walletActions.setStatus(ConnectionState.Paired));
+		});
+	};
+
+	const walletConnectionStatusChanged = (
+		event: EventParameter<'walletConnectionStatusChanged'>,
+	) => {
+		onLastWalletEvent(event, () => {
+			dispatch(walletActions.setStatus(event.status));
+		});
+	};
+
+	const walletDisconnect = (event: EventParameter<'walletDisconnect'>) => {
+		onLastWalletEvent(event, () => {
+			dispatch(walletActions.setStatus(ConnectionState.Disconnected));
+		});
+	};
+
+	const walletFound = (event: EventParameter<'walletFound'>) => {
+		if (event) {
+			dispatch(walletActions.setHasWalletExtension(event.name));
+		}
+	};
+
+	Event.register(
+		new GetPublicKeyRequest(
+			{
+				walletFound,
+				walletPaired,
+				walletConnectionStatusChanged,
+				walletDisconnect,
+			}
+		)
 	);
 ```
 
