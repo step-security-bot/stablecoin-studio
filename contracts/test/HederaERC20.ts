@@ -67,9 +67,12 @@ let nonOperatorIsE25519: boolean
 const TokenName = 'MIDAS'
 const TokenSymbol = 'MD'
 const TokenDecimals = 3
+const ReserveDecimals = 2
 const TokenFactor = BigNumber.from(10).pow(TokenDecimals)
+const ReserveFactor = BigNumber.from(10).pow(ReserveDecimals)
 const INIT_SUPPLY = BigNumber.from(10).mul(TokenFactor)
 const MAX_SUPPLY = BigNumber.from(1000).mul(TokenFactor)
+const INIT_RESERVE = BigNumber.from(900).mul(ReserveFactor)
 const TokenMemo = 'Hedera Accelerator Stable Coin'
 const abiERC20ProxyAdmin = HederaERC20ProxyAdmin__factory.abi
 
@@ -134,7 +137,7 @@ describe('HederaERC20 Tests', function() {
             privateKey: operatorPriKey,
             publicKey: operatorPubKey,
             isED25519Type: operatorIsE25519,
-            initialAmountDataFeed: BigNumber.from('2000').toString(),
+            initialAmountDataFeed: INIT_RESERVE.toString(),
         })
 
         proxyAddress = result[0]
@@ -475,6 +478,18 @@ describe('HederaERC20 Tests', function() {
         expect(totalSupply).to.equal(
             initialTotalSupply.add(BigNumber.from(1).mul(TokenFactor))
         )
+    })
+
+    it.only('Mint token reverts when amount exceeds initial reserve', async () => {
+        await expect(
+            Mint(
+                proxyAddress,
+                BigNumber.from(891).mul(TokenFactor),
+                operatorClient,
+                operatorAccount,
+                operatorIsE25519
+            )
+        ).to.eventually.be.rejectedWith(Error)
     })
 })
 

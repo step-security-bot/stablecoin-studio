@@ -124,7 +124,7 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 					keys.push(key);
 				}
 			});
-
+console.log(`reserve to fixed number: ${reserveInitialAmount!.toFixedNumber()}`);
 			const stableCoinToCreate = new FactoryStableCoin(
 				coin.name,
 				coin.symbol,
@@ -230,6 +230,7 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 			targetId: targetId,
 			amount: amount,
 		});
+console.log(`xxxxx amount: ${amount}`);
 		return this.performOperation(
 			coin,
 			Operation.CASH_IN,

@@ -91,7 +91,9 @@ describe('🧪 [ADAPTER] HTSTransactionAdapter with ECDSA accounts', () => {
 			coinSC,
 			new ContractId(FactoryAddressTestnet),
 			new ContractId(HederaERC20AddressTestnet),
-			false,
+			true,
+			undefined,
+			BigDecimal.fromString('5', RESERVE_DECIMALS),
 		);
 		const tokenIdSC = ContractId.fromHederaContractId(
 			HContractId.fromSolidityAddress(tr.response[0][3]),
@@ -104,7 +106,7 @@ describe('🧪 [ADAPTER] HTSTransactionAdapter with ECDSA accounts', () => {
 			name: 'TestCoinAccount',
 			symbol: 'TCA',
 			decimals: 6,
-			initialSupply: BigDecimal.fromString('5.60', 6),
+			initialSupply: BigDecimal.fromString('5', 6),
 			maxSupply: BigDecimal.fromString('1000', 6),
 			freezeDefault: false,
 			adminKey: CLIENT_ACCOUNT_ECDSA.publicKey,
@@ -123,8 +125,9 @@ describe('🧪 [ADAPTER] HTSTransactionAdapter with ECDSA accounts', () => {
 			new ContractId(HederaERC20AddressTestnet),
 			true,
 			undefined,
-			BigDecimal.fromString('100000000', RESERVE_DECIMALS)
+			BigDecimal.fromString('5', RESERVE_DECIMALS)
 		);
+console.log(`Se ha creado el token: ${JSON.stringify(tr.response)}`);				
 		const tokenIdHTS = ContractId.fromHederaContractId(
 			HContractId.fromSolidityAddress(tr.response[0][3]),
 		);
@@ -133,6 +136,35 @@ describe('🧪 [ADAPTER] HTSTransactionAdapter with ECDSA accounts', () => {
 			tokenIdHTS,
 		);
 	}, 1500000);
+
+
+	/*it('Test cannnot create a stable coin when initial supply is greather than reserve', async () => {
+		const coin = new StableCoin({
+			name: 'TestCoinAccount',
+			symbol: 'TCA',
+			decimals: 6,
+			initialSupply: BigDecimal.fromString('10.01', 6),
+			maxSupply: BigDecimal.fromString('1000', 6),
+			freezeDefault: false,
+			adminKey: CLIENT_ACCOUNT_ECDSA.publicKey,
+			freezeKey: CLIENT_ACCOUNT_ECDSA.publicKey,
+			wipeKey: CLIENT_ACCOUNT_ECDSA.publicKey,
+			pauseKey: CLIENT_ACCOUNT_ECDSA.publicKey,
+			supplyKey: CLIENT_ACCOUNT_ECDSA.publicKey,
+			autoRenewAccount: CLIENT_ACCOUNT_ECDSA.id,
+			supplyType: TokenSupplyType.FINITE,
+			treasury: CLIENT_ACCOUNT_ECDSA.id,
+		});
+
+		await expect(th.create(
+			coin,
+			new ContractId(FactoryAddressTestnet),
+			new ContractId(HederaERC20AddressTestnet),
+			true,
+			undefined,
+			BigDecimal.fromString('10', RESERVE_DECIMALS))
+		).toThrowError
+	}, 150000);*/
 
 	it('Test cashin HTS', async () => {
 		const accountInitialBalance = await getBalance(
@@ -164,6 +196,22 @@ describe('🧪 [ADAPTER] HTSTransactionAdapter with ECDSA accounts', () => {
 				),
 			),
 		);
+	}, 150000);
+
+	it('Test cashin HTS cannot be performed if amount exceeds reserve', async () => {
+		tr = await th.getReserveAmount(
+			stableCoinCapabilitiesHTS
+		);
+
+		console.log(`initial reserve: ${JSON.stringify(tr.response)}`);
+
+		const num: BigDecimal = BigDecimal.fromString('100', 6);
+console.log(`num: ${num.toString()}`);		
+		await expect(await th.cashin(
+			stableCoinCapabilitiesHTS,
+			CLIENT_ACCOUNT_ECDSA.id,
+			BigDecimal.fromString('10', stableCoinCapabilitiesHTS.coin.decimals))
+		)
 	}, 150000);
 
 	it('Test burn HTS', async () => {
