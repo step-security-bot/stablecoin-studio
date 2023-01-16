@@ -93,7 +93,7 @@ describe('🧪 [ADAPTER] HTSTransactionAdapter with ECDSA accounts', () => {
 			new ContractId(HederaERC20AddressTestnet),
 			true,
 			undefined,
-			BigDecimal.fromString('5', RESERVE_DECIMALS),
+			BigDecimal.fromString('5.60', RESERVE_DECIMALS),
 		);
 		const tokenIdSC = ContractId.fromHederaContractId(
 			HContractId.fromSolidityAddress(tr.response[0][3]),
@@ -203,7 +203,27 @@ console.log(`Se ha creado el token: ${JSON.stringify(tr.response)}`);
 			stableCoinCapabilitiesHTS
 		);
 
+		expect(tr.response).toEqual(BigDecimal.fromStringFixed('500', RESERVE_DECIMALS))
+
 		console.log(`initial reserve: ${JSON.stringify(tr.response)}`);
+
+		tr = await th.getReserveAddress(
+			stableCoinCapabilitiesHTS
+		);
+		const reserveContractId: HContractId = HContractId.fromSolidityAddress(tr.response);
+		await connectAccount(CLIENT_ACCOUNT_ECDSA);
+		tr = await th.updateReserveAmount(
+			new ContractId(reserveContractId.toString()),
+			BigDecimal.fromStringFixed('5', RESERVE_DECIMALS)
+		);		
+
+		tr = await th.getReserveAmount(
+			stableCoinCapabilitiesHTS
+		);		
+
+		expect(tr.response).toEqual(BigDecimal.fromStringFixed('5', RESERVE_DECIMALS))
+
+console.log(`initial reserve2: ${JSON.stringify(tr.response)}`);
 
 		const num: BigDecimal = BigDecimal.fromString('100', 6);
 console.log(`num: ${num.toString()}`);		
