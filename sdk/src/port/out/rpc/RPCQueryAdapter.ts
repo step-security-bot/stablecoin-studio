@@ -71,4 +71,14 @@ export default class RPCQueryAdapter {
 			this.provider,
 		).balanceOf(target);
 	}
+
+	async getRoles(address: string, target: string): Promise<string[]>{
+		console.log(this.provider, address, target);
+		return await HederaERC20__factory.connect(
+			address,
+			this.provider,
+		).getRoles(target);
+	}
+
+
 }

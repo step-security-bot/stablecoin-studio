@@ -21,6 +21,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import Injectable from '../../core/Injectable.js';
+import { QueryBus } from '../../core/query/QueryBus.js';
 import { CommandBus } from '../../core/command/CommandBus.js';
 import {
 	GetRolesRequest,
@@ -37,7 +38,7 @@ import { HasRoleCommand } from '../../app/usecase/command/stablecoin/roles/hasRo
 import { HederaId } from '../../domain/context/shared/HederaId.js';
 import { GrantRoleCommand } from '../../app/usecase/command/stablecoin/roles/grantRole/GrantRoleCommand.js';
 import { RevokeRoleCommand } from '../../app/usecase/command/stablecoin/roles/revokeRole/RevokeRoleCommand.js';
-import { GetRolesCommand } from '../../app/usecase/command/stablecoin/roles/getRoles/GetRolesCommand.js';
+import { GetRolesQuery } from '../../app/usecase/query/stablecoin/roles/getRoles/GetRolesQuery.js';
 import { GetAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/getAllowance/GetAllowanceCommand.js';
 import { ResetAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/resetAllowance/ResetAllowanceCommand.js';
 import { IncreaseAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/increaseAllowance/IncreaseAllowanceCommand.js';
@@ -75,6 +76,7 @@ interface IRole {
 
 class RoleInPort implements IRole {
 	constructor(
+		private readonly queryBus: QueryBus = Injectable.resolve(QueryBus),
 		private readonly commandBus: CommandBus = Injectable.resolve(
 			CommandBus,
 		),
@@ -163,8 +165,8 @@ class RoleInPort implements IRole {
 		handleValidation('GetRolesRequest', request);
 
 		return (
-			await this.commandBus.execute(
-				new GetRolesCommand(
+			await this.queryBus.execute(
+				new GetRolesQuery(
 					HederaId.from(targetId),
 					HederaId.from(tokenId),
 				),
