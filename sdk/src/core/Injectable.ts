@@ -75,6 +75,7 @@ import { GetReserveAddressCommandHandler } from '../app/usecase/command/stableco
 import { GetReserveAmountCommandHandler } from '../app/usecase/command/reserve/operations/getReserveAmount/GetReserveAmountCommandHandler.js';
 import { UpdateReserveAddressCommandHandler } from '../app/usecase/command/stablecoin/operations/updateReserveAddress/UpdateReserveAddressCommandHandler.js';
 import { UpdateReserveAmountCommandHandler } from '../app/usecase/command/reserve/operations/updateReserveAmount/UpdateReserveAmountCommandHandler.js';
+import { BalanceOfQueryHandler } from '../app/usecase/query/stablecoin/balanceof/BalanceOfQueryHandler.js';
 
 
 export const TOKENS = {
@@ -243,6 +244,10 @@ const QUERY_HANDLERS = [
 	{
 		token: TOKENS.QUERY_HANDLER,
 		useClass: GetAccountTokenAssociatedQueryHandler,
+	},
+	{
+		token: TOKENS.QUERY_HANDLER,
+		useClass: BalanceOfQueryHandler,
 	},
 ];
 
