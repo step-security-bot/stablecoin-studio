@@ -44,7 +44,7 @@ import { DecreaseAllowanceCommandHandler } from '../app/usecase/command/stableco
 import { GetAllowanceCommandHandler } from '../app/usecase/command/stablecoin/roles/getAllowance/GetAllowanceCommandHandler.js';
 import { GetRolesQueryHandler } from '../app/usecase/query/stablecoin/roles/getRoles/GetRolesQueryHandler.js';
 import { GrantRoleCommandHandler } from '../app/usecase/command/stablecoin/roles/grantRole/GrantRoleCommandHandler.js';
-import { HasRoleCommandHandler } from '../app/usecase/command/stablecoin/roles/hasRole/HasRoleCommandHandler.js';
+import { HasRoleQueryHandler } from '../app/usecase/query/stablecoin/roles/hasRole/HasRoleQueryHandler.js';
 import { IncreaseAllowanceCommandHandler } from '../app/usecase/command/stablecoin/roles/increaseAllowance/IncreaseAllowanceCommandHandler.js';
 import { IsLimitedCommandHandler } from '../app/usecase/command/stablecoin/roles/isLimited/IsLimitedCommandHandler.js';
 import { IsUnlimitedCommandHandler } from '../app/usecase/command/stablecoin/roles/isUnlimited/IsUnlimitedCommandHandler.js';
@@ -155,10 +155,6 @@ const COMMAND_HANDLERS = [
 	},
 	{
 		token: TOKENS.COMMAND_HANDLER,
-		useClass: HasRoleCommandHandler,
-	},
-	{
-		token: TOKENS.COMMAND_HANDLER,
 		useClass: IncreaseAllowanceCommandHandler,
 	},
 	{
@@ -246,8 +242,12 @@ const QUERY_HANDLERS = [
 		useClass: BalanceOfQueryHandler,
 	},
 	{
-		token: TOKENS.COMMAND_HANDLER,
+		token: TOKENS.QUERY_HANDLER,
 		useClass: GetRolesQueryHandler,
+	},
+	{
+		token: TOKENS.QUERY_HANDLER,
+		useClass: HasRoleQueryHandler,
 	},
 ];
 

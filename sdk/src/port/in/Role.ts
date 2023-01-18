@@ -34,7 +34,7 @@ import ResetSupplierAllowanceRequest from './request/ResetSupplierAllowanceReque
 import IncreaseSupplierAllowanceRequest from './request/IncreaseSupplierAllowanceRequest.js';
 import DecreaseSupplierAllowanceRequest from './request/DecreaseSupplierAllowanceRequest.js';
 import CheckSupplierLimitRequest from './request/CheckSupplierLimitRequest.js';
-import { HasRoleCommand } from '../../app/usecase/command/stablecoin/roles/hasRole/HasRoleCommand.js';
+import { HasRoleQuery } from '../../app/usecase/query/stablecoin/roles/hasRole/HasRoleQuery.js';
 import { HederaId } from '../../domain/context/shared/HederaId.js';
 import { GrantRoleCommand } from '../../app/usecase/command/stablecoin/roles/grantRole/GrantRoleCommand.js';
 import { RevokeRoleCommand } from '../../app/usecase/command/stablecoin/roles/revokeRole/RevokeRoleCommand.js';
@@ -86,8 +86,8 @@ class RoleInPort implements IRole {
 		const { tokenId, targetId, role } = request;
 		handleValidation('HasRoleRequest', request);
 		return (
-			await this.commandBus.execute(
-				new HasRoleCommand(
+			await this.queryBus.execute(
+				new HasRoleQuery(
 					role!,
 					HederaId.from(targetId),
 					HederaId.from(tokenId),
@@ -242,8 +242,8 @@ class RoleInPort implements IRole {
 		const { tokenId, targetId } = request;
 		handleValidation('CheckSupplierLimitRequest', request);
 		const hasRole = (
-			await this.commandBus.execute(
-				new HasRoleCommand(
+			await this.queryBus.execute(
+				new HasRoleQuery(
 					StableCoinRole.CASHIN_ROLE,
 					HederaId.from(targetId),
 					HederaId.from(tokenId),
