@@ -43,7 +43,6 @@ import { GetAllowanceQuery} from '../../app/usecase/query/stablecoin/roles/getAl
 import { ResetAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/resetAllowance/ResetAllowanceCommand.js';
 import { IncreaseAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/increaseAllowance/IncreaseAllowanceCommand.js';
 import { DecreaseAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/decreaseAllowance/DecreaseAllowanceCommand.js';
-import { IsUnlimitedCommand } from '../../app/usecase/command/stablecoin/roles/isUnlimited/IsUnlimitedCommand.js';
 import {
 	StableCoinRole,
 	StableCoinRoleLabel,
@@ -53,6 +52,7 @@ import { GrantUnlimitedSupplierRoleCommand } from '../../app/usecase/command/sta
 import { RevokeSupplierRoleCommand } from '../../app/usecase/command/stablecoin/roles/revokeSupplierRole/RevokeSupplierRoleCommand.js';
 import { handleValidation } from './Common.js';
 import { Balance } from '../../domain/context/stablecoin/Balance.js';
+import { IsUnlimitedQuery } from '../../app/usecase/query/stablecoin/isUnlimited/IsUnlimitedQuery.js';
 
 export { StableCoinRole, StableCoinRoleLabel };
 
@@ -251,8 +251,8 @@ class RoleInPort implements IRole {
 			)
 		).payload;
 		const unlimited = (
-			await this.commandBus.execute(
-				new IsUnlimitedCommand(
+			await this.queryBus.execute(
+				new IsUnlimitedQuery(
 					HederaId.from(targetId),
 					HederaId.from(tokenId),
 				),
@@ -265,8 +265,8 @@ class RoleInPort implements IRole {
 		const { tokenId, targetId } = request;
 		handleValidation('CheckSupplierLimitRequest', request);
 		return (
-			await this.commandBus.execute(
-				new IsUnlimitedCommand(
+			await this.queryBus.execute(
+				new IsUnlimitedQuery(
 					HederaId.from(targetId),
 					HederaId.from(tokenId),
 				),

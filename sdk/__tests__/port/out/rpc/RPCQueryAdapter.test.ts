@@ -18,7 +18,6 @@
  *
  */
 
-import { BigNumber } from 'ethers';
 import { BalanceOfQuery } from '../../../../src/app/usecase/query/stablecoin/balanceof/BalanceOfQuery.js';
 import { GetReserveAddressQuery } from '../../../../src/app/usecase/query/stablecoin/getReserveAddress/GetReserveAddressQuey.js';
 import { GetReserveAmountQuery } from '../../../../src/app/usecase/query/stablecoin/getReserveAmount/GetReserveAmountQuery.js';
@@ -65,7 +64,6 @@ describe('🧪 RPCQueryAdapter', () => {
 				HederaId.from(adminAccountId),
 			),
 		);
-		console.log('RES', res);
 		expect(res).not.toBeUndefined();
 	});
 
@@ -76,7 +74,6 @@ describe('🧪 RPCQueryAdapter', () => {
 				HederaId.from(tokenId),
 			),
 		);
-		console.log('RES', res);
 		expect(res).not.toBeUndefined();
 	});
 
@@ -88,7 +85,6 @@ describe('🧪 RPCQueryAdapter', () => {
 				HederaId.from(tokenId),
 			),
 		);
-		console.log('RES', res);
 		expect(res).not.toBeUndefined();
 	});
 
@@ -99,27 +95,24 @@ describe('🧪 RPCQueryAdapter', () => {
 				HederaId.from(tokenId),
 			),
 		);
-		console.log('RES', res);
 		expect(res).not.toBeUndefined();
 	});
 
 	it('Test it fetches reserve address', async () => {
 		const res = await bus.execute(
 			new GetReserveAddressQuery(
-				HederaId.from('0.0.49332748'),
+				HederaId.from(tokenId),
 			),
 		);
-		console.log('RES', res);
 		expect(res).not.toBeUndefined();
 	});
 
 	it('Test it fetches reserve amount', async () => {
 		const res = await bus.execute(
 			new GetReserveAmountQuery(
-				HederaId.from('0.0.49332748'),
+				HederaId.from(tokenId),
 			),
 		);
-		console.log('RES', res);
 		expect(res).not.toBeUndefined();
 	});
 });

@@ -27,7 +27,7 @@ import StableCoinService from "../../../../service/StableCoinService.js";
 import { IsUnlimitedQuery, IsUnlimitedQueryResponse } from "./IsUnlimitedQuery.js";
 
 @QueryHandler(IsUnlimitedQuery)
-export class IsUnlimitedCommandHandler
+export class IsUnlimitedQueryHandler
 	implements IQueryHandler<IsUnlimitedQuery>
 {
 	constructor(

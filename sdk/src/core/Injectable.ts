@@ -45,8 +45,6 @@ import { GetRolesQueryHandler } from '../app/usecase/query/stablecoin/roles/getR
 import { GrantRoleCommandHandler } from '../app/usecase/command/stablecoin/roles/grantRole/GrantRoleCommandHandler.js';
 import { HasRoleQueryHandler } from '../app/usecase/query/stablecoin/roles/hasRole/HasRoleQueryHandler.js';
 import { IncreaseAllowanceCommandHandler } from '../app/usecase/command/stablecoin/roles/increaseAllowance/IncreaseAllowanceCommandHandler.js';
-import { IsLimitedCommandHandler } from '../app/usecase/command/stablecoin/roles/isLimited/IsLimitedCommandHandler.js';
-import { IsUnlimitedCommandHandler } from '../app/usecase/command/stablecoin/roles/isUnlimited/IsUnlimitedCommandHandler.js';
 import { ResetAllowanceCommandHandler } from '../app/usecase/command/stablecoin/roles/resetAllowance/ResetAllowanceCommandHandler.js';
 import { RevokeRoleCommandHandler } from '../app/usecase/command/stablecoin/roles/revokeRole/RevokeRoleCommandHandler.js';
 import { ConnectCommandHandler } from '../app/usecase/command/network/connect/ConnectCommandHandler.js';
@@ -75,6 +73,7 @@ import { UpdateReserveAddressCommandHandler } from '../app/usecase/command/stabl
 import { UpdateReserveAmountCommandHandler } from '../app/usecase/command/reserve/operations/updateReserveAmount/UpdateReserveAmountCommandHandler.js';
 import { BalanceOfQueryHandler } from '../app/usecase/query/stablecoin/balanceof/BalanceOfQueryHandler.js';
 import { GetReserveAddressQueryHandler } from '../app/usecase/query/stablecoin/getReserveAddress/GetReserveAddressQueryHandler.js';
+import { IsUnlimitedQueryHandler } from '../app/usecase/query/stablecoin/isUnlimited/IsUnlimitedQueryHandler.js';
 
 export const TOKENS = {
 	COMMAND_HANDLER: Symbol('CommandHandler'),
@@ -146,14 +145,6 @@ const COMMAND_HANDLERS = [
 	{
 		token: TOKENS.COMMAND_HANDLER,
 		useClass: IncreaseAllowanceCommandHandler,
-	},
-	{
-		token: TOKENS.COMMAND_HANDLER,
-		useClass: IsLimitedCommandHandler,
-	},
-	{
-		token: TOKENS.COMMAND_HANDLER,
-		useClass: IsUnlimitedCommandHandler,
 	},
 	{
 		token: TOKENS.COMMAND_HANDLER,
@@ -243,6 +234,11 @@ const QUERY_HANDLERS = [
 	{
 		token: TOKENS.QUERY_HANDLER,
 		useClass: GetAllowanceQueryHandler,
+
+	},
+	{
+		token: TOKENS.QUERY_HANDLER,
+		useClass: IsUnlimitedQueryHandler,
 
 	},
 ];
