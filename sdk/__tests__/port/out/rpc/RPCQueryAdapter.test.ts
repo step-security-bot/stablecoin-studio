@@ -21,6 +21,8 @@
 import { BigNumber } from 'ethers';
 import { HederaERC20__factory } from 'hedera-stable-coin-contracts';
 import { BalanceOfQuery } from '../../../../src/app/usecase/query/stablecoin/balanceof/BalanceOfQuery.js';
+import { GetReserveAddressQuery } from '../../../../src/app/usecase/query/stablecoin/getReserveAddress/GetReserveAddressQuey.js';
+import { GetReserveAmountQuery } from '../../../../src/app/usecase/query/stablecoin/getReserveAmount/GetReserveAmountQuery.js';
 import Injectable from '../../../../src/core/Injectable.js';
 import { QueryBus } from '../../../../src/core/query/QueryBus.js';
 import { HederaId } from '../../../../src/domain/context/shared/HederaId.js';
@@ -52,6 +54,26 @@ describe('🧪 RPCQueryAdapter', () => {
 			new BalanceOfQuery(
 				HederaId.from('0.0.49332748'),
 				HederaId.from('0.0.49142551'),
+			),
+		);
+		console.log('RES', res);
+		expect(res).not.toBeUndefined();
+	});
+
+	it('Test it fetches reserve address', async () => {
+		const res = await bus.execute(
+			new GetReserveAddressQuery(
+				HederaId.from('0.0.49332748'),
+			),
+		);
+		console.log('RES', res);
+		expect(res).not.toBeUndefined();
+	});
+
+	it('Test it fetches reserve amount', async () => {
+		const res = await bus.execute(
+			new GetReserveAmountQuery(
+				HederaId.from('0.0.49332748'),
 			),
 		);
 		console.log('RES', res);
