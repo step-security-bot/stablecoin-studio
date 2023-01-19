@@ -39,6 +39,10 @@ describe('🧪 RPCQueryAdapter', () => {
 		);
 	});
 
+	beforeEach(async() => {
+		await adapter.init();
+	})
+
 	it('Test it initializes', async () => {
 		const env = await adapter.init('testUrl');
 
