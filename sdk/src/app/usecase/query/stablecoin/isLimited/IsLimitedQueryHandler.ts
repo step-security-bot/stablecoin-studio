@@ -53,6 +53,6 @@ export class IsLimitedQueryHandler
 				await this.mirrorNode.accountToEvmAddress(targetId));
 
 		
-		return Promise.resolve({ payload: res.response === false ?? false });
+		return Promise.resolve({ payload: res});
 	}
 }

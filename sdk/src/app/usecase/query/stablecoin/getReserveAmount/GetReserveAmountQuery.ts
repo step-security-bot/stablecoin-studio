@@ -17,6 +17,7 @@
  * limitations under the License.
  *
  */
+
 import { Query } from "../../../../../core/query/Query.js";
 import { QueryResponse } from "../../../../../core/query/QueryResponse.js";
 import BigDecimal from "../../../../../domain/context/shared/BigDecimal.js";
