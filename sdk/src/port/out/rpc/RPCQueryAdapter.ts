@@ -90,5 +90,13 @@ export default class RPCQueryAdapter {
 
 	}
 
+	async supplierAllowance(address: string, target: string): Promise<BigNumber> {
+		console.log(this.provider, address, target);
+		return await HederaERC20__factory.connect(
+			address,
+			this.provider,
+		).getSupplierAllowance(target);
+	}
+
 
 }

@@ -39,7 +39,7 @@ import { HederaId } from '../../domain/context/shared/HederaId.js';
 import { GrantRoleCommand } from '../../app/usecase/command/stablecoin/roles/grantRole/GrantRoleCommand.js';
 import { RevokeRoleCommand } from '../../app/usecase/command/stablecoin/roles/revokeRole/RevokeRoleCommand.js';
 import { GetRolesQuery } from '../../app/usecase/query/stablecoin/roles/getRoles/GetRolesQuery.js';
-import { GetAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/getAllowance/GetAllowanceCommand.js';
+import { GetAllowanceQuery} from '../../app/usecase/query/stablecoin/roles/getAllowance/GetAllowanceQuery.js';
 import { ResetAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/resetAllowance/ResetAllowanceCommand.js';
 import { IncreaseAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/increaseAllowance/IncreaseAllowanceCommand.js';
 import { DecreaseAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/decreaseAllowance/DecreaseAllowanceCommand.js';
@@ -178,8 +178,8 @@ class RoleInPort implements IRole {
 		const { tokenId, targetId } = request;
 		handleValidation('GetSupplierAllowanceRequest', request);
 
-		const res = await this.commandBus.execute(
-			new GetAllowanceCommand(
+		const res = await this.queryBus.execute(
+			new GetAllowanceQuery(
 				HederaId.from(targetId),
 				HederaId.from(tokenId),
 			),
