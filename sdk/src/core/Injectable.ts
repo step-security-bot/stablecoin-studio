@@ -41,10 +41,10 @@ import { UnFreezeCommandHandler } from '../app/usecase/command/stablecoin/operat
 import { UnPauseCommandHandler } from '../app/usecase/command/stablecoin/operations/unpause/UnPauseCommandHandler.js';
 import { WipeCommandHandler } from '../app/usecase/command/stablecoin/operations/wipe/WipeCommandHandler.js';
 import { DecreaseAllowanceCommandHandler } from '../app/usecase/command/stablecoin/roles/decreaseAllowance/DecreaseAllowanceCommandHandler.js';
-import { GetAllowanceCommandHandler } from '../app/usecase/command/stablecoin/roles/getAllowance/GetAllowanceCommandHandler.js';
-import { GetRolesCommandHandler } from '../app/usecase/command/stablecoin/roles/getRoles/GetRolesCommandHandler.js';
+import { GetAllowanceQueryHandler } from '../app/usecase/query/stablecoin/roles/getAllowance/GetAllowanceQueryHandler.js';
+import { GetRolesQueryHandler } from '../app/usecase/query/stablecoin/roles/getRoles/GetRolesQueryHandler.js';
 import { GrantRoleCommandHandler } from '../app/usecase/command/stablecoin/roles/grantRole/GrantRoleCommandHandler.js';
-import { HasRoleCommandHandler } from '../app/usecase/command/stablecoin/roles/hasRole/HasRoleCommandHandler.js';
+import { HasRoleQueryHandler } from '../app/usecase/query/stablecoin/roles/hasRole/HasRoleQueryHandler.js';
 import { IncreaseAllowanceCommandHandler } from '../app/usecase/command/stablecoin/roles/increaseAllowance/IncreaseAllowanceCommandHandler.js';
 import { IsLimitedCommandHandler } from '../app/usecase/command/stablecoin/roles/isLimited/IsLimitedCommandHandler.js';
 import { IsUnlimitedCommandHandler } from '../app/usecase/command/stablecoin/roles/isUnlimited/IsUnlimitedCommandHandler.js';
@@ -146,19 +146,7 @@ const COMMAND_HANDLERS = [
 	},
 	{
 		token: TOKENS.COMMAND_HANDLER,
-		useClass: GetAllowanceCommandHandler,
-	},
-	{
-		token: TOKENS.COMMAND_HANDLER,
-		useClass: GetRolesCommandHandler,
-	},
-	{
-		token: TOKENS.COMMAND_HANDLER,
 		useClass: GrantRoleCommandHandler,
-	},
-	{
-		token: TOKENS.COMMAND_HANDLER,
-		useClass: HasRoleCommandHandler,
 	},
 	{
 		token: TOKENS.COMMAND_HANDLER,
@@ -247,6 +235,20 @@ const QUERY_HANDLERS = [
 	{
 		token: TOKENS.QUERY_HANDLER,
 		useClass: GetReserveAddressQueryHandler,
+		
+	},
+	{
+		token: TOKENS.QUERY_HANDLER,
+		useClass: GetRolesQueryHandler,
+	},
+	{
+		token: TOKENS.QUERY_HANDLER,
+		useClass: HasRoleQueryHandler,
+	},
+	{
+		token: TOKENS.QUERY_HANDLER,
+		useClass: GetAllowanceQueryHandler,
+
 	},
 ];
 

@@ -28,7 +28,8 @@ import { singleton } from 'tsyringe';
 import { lazyInject } from '../../../core/decorator/LazyInjectDecorator.js';
 import NetworkService from '../../../app/service/NetworkService.js';
 import LogService from '../../../app/service/LogService.js';
-import { HederaERC20__factory, HederaReserve__factory } from 'hedera-stable-coin-contracts';
+import { HederaERC20__factory } from 'hedera-stable-coin-contracts';
+import { StableCoinRole } from "../../../domain/context/stablecoin/StableCoinRole.js";
 
 type Contract = ethers.Contract;
 
@@ -97,5 +98,33 @@ export default class RPCQueryAdapter {
 			this.provider
 		).isUnlimitedSupplierAllowance( target);
 	}
+
+
+
+	async getRoles(address: string, target: string): Promise<string[]>{
+		console.log(this.provider, address, target);
+		return await HederaERC20__factory.connect(
+			address,
+			this.provider,
+		).getRoles(target);
+	}
+
+	async hasRole(address: string, target: string, role: StableCoinRole): Promise<boolean>{
+		console.log(this.provider, address, target, role);
+		return await HederaERC20__factory.connect(
+			address,
+			this.provider,
+		).hasRole(role, target);
+
+	}
+
+	async supplierAllowance(address: string, target: string): Promise<BigNumber> {
+		console.log(this.provider, address, target);
+		return await HederaERC20__factory.connect(
+			address,
+			this.provider,
+		).getSupplierAllowance(target);
+	}
+
 
 }
