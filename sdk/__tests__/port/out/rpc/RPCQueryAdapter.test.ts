@@ -19,17 +19,22 @@
  */
 
 import { BigNumber } from 'ethers';
-import { HederaERC20__factory } from 'hedera-stable-coin-contracts';
 import { BalanceOfQuery } from '../../../../src/app/usecase/query/stablecoin/balanceof/BalanceOfQuery.js';
+import { GetRolesQuery } from '../../../../src/app/usecase/query/stablecoin/roles/getRoles/GetRolesQuery.js';
+import { HasRoleQuery } from '../../../../src/app/usecase/query/stablecoin/roles/hasRole/HasRoleQuery.js';
+import { GetAllowanceQuery } from '../../../../src/app/usecase/query/stablecoin/roles/getAllowance/GetAllowanceQuery.js';
 import Injectable from '../../../../src/core/Injectable.js';
 import { QueryBus } from '../../../../src/core/query/QueryBus.js';
 import { HederaId } from '../../../../src/domain/context/shared/HederaId.js';
 import { Network, SetNetworkRequest } from '../../../../src/index.js';
 import RPCQueryAdapter from '../../../../src/port/out/rpc/RPCQueryAdapter.js';
+import { StableCoinRole } from "../../../../src/domain/context/stablecoin/StableCoinRole.js";
 
 describe('🧪 RPCQueryAdapter', () => {
 	const bus = Injectable.resolve(QueryBus);
 	const adapter = Injectable.resolve(RPCQueryAdapter);
+	const tokenId = '0.0.49332748';
+	const adminAccountId = '0.0.49142551';
 
 	beforeAll(async () => {
 		await Network.setNetwork(
@@ -54,8 +59,42 @@ describe('🧪 RPCQueryAdapter', () => {
 	it('Test it fetches a balance', async () => {
 		const res = await bus.execute(
 			new BalanceOfQuery(
-				HederaId.from('0.0.49332748'),
-				HederaId.from('0.0.49142551'),
+				HederaId.from(tokenId),
+				HederaId.from(adminAccountId),
+			),
+		);
+		console.log('RES', res);
+		expect(res).not.toBeUndefined();
+	});
+
+	it('Test it gets roles', async () => {
+		const res = await bus.execute(
+			new GetRolesQuery(
+				HederaId.from(adminAccountId),
+				HederaId.from(tokenId),
+			),
+		);
+		console.log('RES', res);
+		expect(res).not.toBeUndefined();
+	});
+
+	it('Test it has role', async () => {
+		const res = await bus.execute(
+			new HasRoleQuery(
+				StableCoinRole.DEFAULT_ADMIN_ROLE,
+				HederaId.from(adminAccountId),
+				HederaId.from(tokenId),
+			),
+		);
+		console.log('RES', res);
+		expect(res).not.toBeUndefined();
+	});
+
+	it('Test it gets allowance', async () => {
+		const res = await bus.execute(
+			new GetAllowanceQuery(
+				HederaId.from(adminAccountId),
+				HederaId.from(tokenId),
 			),
 		);
 		console.log('RES', res);
