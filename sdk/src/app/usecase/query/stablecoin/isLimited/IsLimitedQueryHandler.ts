@@ -27,9 +27,7 @@ import StableCoinService from "../../../../service/StableCoinService.js";
 import { IsLimitedQuery, IsLimitedQueryResponse } from "./IsLimitedQuery.js";
 
 @QueryHandler(IsLimitedQuery)
-export class IsLimitedQueryHandler
-	implements IQueryHandler<IsLimitedQuery>
-{
+export class IsLimitedQueryHandler implements IQueryHandler<IsLimitedQuery> {
 	constructor(
 		@lazyInject(StableCoinService)
 		public readonly stableCoinService: StableCoinService,
@@ -39,20 +37,17 @@ export class IsLimitedQueryHandler
 		public readonly queryAdapter: RPCQueryAdapter,
 	) {}
 
-	async execute(
-		command: IsLimitedQuery,
-	): Promise<IsLimitedQueryResponse> {
+	async execute(command: IsLimitedQuery): Promise<IsLimitedQueryResponse> {
 		const { targetId, tokenId } = command;
-			
-		
+
 		const coin = await this.stableCoinService.get(tokenId);
 		if (!coin.evmProxyAddress) throw new Error('Invalid token id');
 
 		const res = await this.queryAdapter.isUnlimited(
-				coin.evmProxyAddress,
-				await this.mirrorNode.accountToEvmAddress(targetId));
+			coin.evmProxyAddress,
+			await this.mirrorNode.accountToEvmAddress(targetId),
+		);
 
-		
-		return Promise.resolve({ payload: res});
+		return Promise.resolve({ payload: res });
 	}
 }
