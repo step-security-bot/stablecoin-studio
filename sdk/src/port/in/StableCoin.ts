@@ -56,7 +56,6 @@ import {
 import { TokenSupplyType } from '../../domain/context/stablecoin/TokenSupply.js';
 import Account from '../../domain/context/account/Account.js';
 import { BurnCommand } from '../../app/usecase/command/stablecoin/operations/burn/BurnCommand.js';
-import { BalanceOfCommand } from '../../app/usecase/command/stablecoin/operations/balanceof/BalanceOfCommand.js';
 import { RescueCommand } from '../../app/usecase/command/stablecoin/operations/rescue/RescueCommand.js';
 import { WipeCommand } from '../../app/usecase/command/stablecoin/operations/wipe/WipeCommand.js';
 import { PauseCommand } from '../../app/usecase/command/stablecoin/operations/pause/PauseCommand.js';
@@ -73,6 +72,7 @@ import { GetReserveAddressCommand } from '../../app/usecase/command/stablecoin/o
 import { UpdateReserveAddressCommand } from '../../app/usecase/command/stablecoin/operations/updateReserveAddress/UpdateReserveAddressCommand.js';
 import { RESERVE_DECIMALS } from '../../domain/context/reserve/Reserve.js';
 import ReserveViewModel from '../out/mirror/response/ReserveViewModel.js';
+import { BalanceOfQuery } from '../../app/usecase/query/stablecoin/balanceof/BalanceOfQuery.js';
 
 export const HederaERC20AddressTestnet = '0.0.49318811';
 export const HederaERC20AddressPreviewnet = '0.0.11111111';
@@ -285,8 +285,8 @@ class StableCoinInPort implements IStableCoinInPort {
 	async getBalanceOf(request: GetAccountBalanceRequest): Promise<Balance> {
 		handleValidation('GetAccountBalanceRequest', request);
 
-		const res = await this.commandBus.execute(
-			new BalanceOfCommand(
+		const res = await this.queryBus.execute(
+			new BalanceOfQuery(
 				HederaId.from(request.targetId),
 				HederaId.from(request.tokenId),
 			),

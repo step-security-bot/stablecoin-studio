@@ -48,7 +48,7 @@ export class IsLimitedQueryHandler
 		const coin = await this.stableCoinService.get(tokenId);
 		if (!coin.evmProxyAddress) throw new Error('Invalid token id');
 
-		const res = await this.queryAdapter.isUlimited(
+		const res = await this.queryAdapter.isUnlimited(
 				coin.evmProxyAddress,
 				await this.mirrorNode.accountToEvmAddress(targetId));
 
