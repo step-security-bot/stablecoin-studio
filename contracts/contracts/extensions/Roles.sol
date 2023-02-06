@@ -78,6 +78,14 @@ abstract contract Roles is IRoles, AccessControlUpgradeable {
         0xdb11624602202c396fa347735a55e345a3aeb3e60f8885e1a71f1bf8d5886db7;
 
     /**
+     * @dev Role that allows to grant or revoke KYC to an account for the token
+     *
+     * keccak256("FEESCHEDULE_ROLE");
+     */
+    bytes32 private constant _FEESCHEDULE_ROLE =
+        0xf4ee7c8b689f9191b4c871d398a45866923ef07e891c2ac53fcae2a8f5cf09d4;
+
+    /**
      * @dev Array containing all roles
      *
      */
@@ -94,6 +102,7 @@ abstract contract Roles is IRoles, AccessControlUpgradeable {
         _roles.push(_FREEZE_ROLE);
         _roles.push(_DELETE_ROLE);
         _roles.push(_KYC_ROLE);
+        _roles.push(_FEESCHEDULE_ROLE);
     }
 
     /**

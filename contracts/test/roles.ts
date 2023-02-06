@@ -30,6 +30,7 @@ import {
     WITHOUT_ROLE,
     DEFAULT_ADMIN_ROLE,
     KYC_ROLE,
+    FEESCHEDULE_ROLE,
     RolesId,
 } from '../scripts/constants'
 
@@ -206,6 +207,13 @@ describe('Roles Tests', function () {
             nonOperatorAccount,
             nonOperatorIsE25519
         )
+        await grantRole(
+            FEESCHEDULE_ROLE,
+            proxyAddress,
+            operatorClient,
+            nonOperatorAccount,
+            nonOperatorIsE25519
+        )
 
         // Checking roles
         result = await getRoles(
@@ -247,6 +255,10 @@ describe('Roles Tests', function () {
             else if (i == RolesId.Kyc)
                 expect(result[i].toUpperCase()).to.equals(
                     KYC_ROLE.toUpperCase()
+                )
+            else if (i == RolesId.FeeSchedule)
+                expect(result[i].toUpperCase()).to.equals(
+                    FEESCHEDULE_ROLE.toUpperCase()
                 )
             else if (i == RolesId.Admin)
                 expect(result[i].toUpperCase()).to.equals(
@@ -310,6 +322,13 @@ describe('Roles Tests', function () {
         )
         await revokeRole(
             KYC_ROLE,
+            proxyAddress,
+            operatorClient,
+            nonOperatorAccount,
+            nonOperatorIsE25519
+        )
+        await revokeRole(
+            FEESCHEDULE_ROLE,
             proxyAddress,
             operatorClient,
             nonOperatorAccount,
@@ -383,6 +402,11 @@ describe('Roles Tests', function () {
             operatorClient,
             RolesId.Kyc
         )
+        const roleFeeSchedule = await getRoleId(
+            proxyAddress,
+            operatorClient,
+            RolesId.FeeSchedule
+        )
 
         // Checking
         expect(roleAdmin.toUpperCase()).to.equals(
@@ -396,5 +420,8 @@ describe('Roles Tests', function () {
         expect(roleFreeze.toUpperCase()).to.equals(FREEZE_ROLE.toUpperCase())
         expect(roleDelete.toUpperCase()).to.equals(DELETE_ROLE.toUpperCase())
         expect(roleKyc.toUpperCase()).to.equals(KYC_ROLE.toUpperCase())
+        expect(roleFeeSchedule.toUpperCase()).to.equals(
+            FEESCHEDULE_ROLE.toUpperCase()
+        )
     })
 })
