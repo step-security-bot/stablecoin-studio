@@ -34,6 +34,7 @@ import {
 	CLIENT_PUBLIC_KEY_ED25519,
 	CLIENT_PRIVATE_KEY_ED25519_2,
 	CLIENT_PUBLIC_KEY_ED25519_2,
+	Current_Key,
 } from '../../config.js';
 import ChangeAccountKeyRequest from '../../../src/port/in/request/ChangeAccountKeyRequest.js';
 import { PrivateKey as HPrivateKey } from '@hashgraph/sdk';
@@ -60,8 +61,21 @@ describe('🧪 Account test', () => {
 
 		const pK = PublicKey.fromHederaKey(newGeneratedKey.publicKey);*/
 
-		CLIENT_ACCOUNT_ED25519.publicKey = CLIENT_PUBLIC_KEY_ED25519_2;
-		CLIENT_ACCOUNT_ED25519.privateKey = CLIENT_PRIVATE_KEY_ED25519_2;
+		const currentKeyId = parseInt(Current_Key!); // change this
+
+		const newKeyId = Current_Key === '0' ? 1 : 0;
+
+		const PublicKeys = [
+			CLIENT_PUBLIC_KEY_ED25519,
+			CLIENT_PUBLIC_KEY_ED25519_2,
+		];
+		const PrivateKeys = [
+			CLIENT_PRIVATE_KEY_ED25519,
+			CLIENT_PRIVATE_KEY_ED25519_2,
+		];
+
+		CLIENT_ACCOUNT_ED25519.publicKey = PublicKeys[currentKeyId];
+		CLIENT_ACCOUNT_ED25519.privateKey = PrivateKeys[currentKeyId];
 
 		await Network.connect(
 			new ConnectRequest({
@@ -77,8 +91,8 @@ describe('🧪 Account test', () => {
 		const res = await Account.changeKey(
 			new ChangeAccountKeyRequest({
 				targetId: CLIENT_ACCOUNT_ED25519.id.toString(),
-				newKey: CLIENT_PUBLIC_KEY_ED25519,
-				newPrivateKey: CLIENT_PRIVATE_KEY_ED25519,
+				newKey: PublicKeys[newKeyId],
+				newPrivateKey: PrivateKeys[newKeyId],
 			}),
 		);
 		expect(res).toEqual(true);

@@ -78,3 +78,4 @@ export const CLIENT_PUBLIC_KEY_ED25519_2 = new PublicKey({
 	key: process.env.CLIENT_PUBLIC_KEY_ED25519_2 ?? '',
 	type: 'ED25519',
 });
+export const Current_Key = process.env.Current_Key;
