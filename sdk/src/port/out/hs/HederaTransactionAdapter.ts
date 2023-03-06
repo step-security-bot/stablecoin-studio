@@ -47,6 +47,7 @@ import {
 import BigDecimal from '../../../domain/context/shared/BigDecimal.js';
 import { TransactionType } from '../TransactionResponseEnums.js';
 import { HTSTransactionBuilder } from './HTSTransactionBuilder.js';
+import { HASTransactionBuilder } from './HASTransactionBuilder.js';
 import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole.js';
 import Account from '../../../domain/context/account/Account.js';
 import { MirrorNodeAdapter } from '../mirror/MirrorNodeAdapter.js';
@@ -60,12 +61,28 @@ import TransactionResultViewModel from '../mirror/response/TransactionResultView
 import { TransactionResponseError } from '../error/TransactionResponseError.js';
 import { FactoryRole } from '../../../domain/context/factory/FactoryRole.js';
 import { FactoryCashinRole } from '../../../domain/context/factory/FactoryCashinRole.js';
+import PrivateKey from '../../../domain/context/account/PrivateKey.js';
 
 export abstract class HederaTransactionAdapter extends TransactionAdapter {
 	private web3 = new Web3();
 
 	constructor(public readonly mirrorNodeAdapter: MirrorNodeAdapter) {
 		super();
+	}
+
+	public async changeAccountKey(
+		targetId: HederaId,
+		newKey: PublicKey,
+		newPrivateKey: PrivateKey,
+	): Promise<TransactionResponse<any, Error>> {
+		let t: Transaction = new Transaction();
+		t = HASTransactionBuilder.changeAccountKeyTransaction(targetId, newKey);
+
+		const Frozen_t = await this.freezeTransaction(t);
+
+		Frozen_t.sign(newPrivateKey.toHashgraphKey());
+
+		return this.signAndSendTransaction(Frozen_t, TransactionType.RECEIPT);
 	}
 
 	public async create(
@@ -1102,6 +1119,8 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 		nameFunction?: string,
 		abi?: any[],
 	): Promise<TransactionResponse>;
+
+	abstract freezeTransaction(t: Transaction): Promise<Transaction>;
 }
 
 class Params {

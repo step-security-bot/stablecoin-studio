@@ -98,6 +98,10 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 		this.setUpHashConnectEvents();
 	}
 
+	freezeTransaction(t: Transaction): Promise<Transaction> {
+		throw new Error('Method not implemented.');
+	}
+
 	async init(): Promise<string> {
 		this.initData = await this.hc.init(
 			SDK.appMetadata,

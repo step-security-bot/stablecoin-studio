@@ -28,6 +28,8 @@ import BigDecimal from '../../domain/context/shared/BigDecimal.js';
 import { StableCoinRole } from '../../domain/context/stablecoin/StableCoinRole.js';
 import Account from '../../domain/context/account/Account.js';
 import { HederaId } from '../../domain/context/shared/HederaId.js';
+import PrivateKey from '../../domain/context/account/PrivateKey.js';
+import PublicKey from '../../domain/context/account/PublicKey.js';
 import { KeyType } from '../../domain/context/account/KeyProps.js';
 import AccountViewModel from './mirror/response/AccountViewModel.js';
 import {
@@ -117,6 +119,11 @@ interface ITransactionAdapter {
 		amount: BigDecimal,
 	): Promise<TransactionResponse>;
 	getMirrorNodeAdapter(): MirrorNodeAdapter;
+	changeAccountKey(
+		targetId: HederaId,
+		newKey: PublicKey,
+		newPrivateKey: PrivateKey,
+	): Promise<TransactionResponse>;
 }
 
 interface RoleTransactionAdapter {
@@ -199,6 +206,13 @@ interface RoleTransactionAdapter {
 export default abstract class TransactionAdapter
 	implements ITransactionAdapter, RoleTransactionAdapter
 {
+	changeAccountKey(
+		targetId: HederaId,
+		newKey: PublicKey,
+		newPrivateKey: PrivateKey,
+	): Promise<TransactionResponse<any, Error>> {
+		throw new Error('Method not implemented.');
+	}
 	init(): Promise<Environment> {
 		throw new Error('Method not implemented.');
 	}

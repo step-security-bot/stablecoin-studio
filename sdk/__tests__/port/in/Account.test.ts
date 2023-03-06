@@ -31,7 +31,12 @@ import ConnectRequest, {
 import {
 	CLIENT_ACCOUNT_ED25519,
 	CLIENT_PUBLIC_KEY_ED25519,
+	CLIENT_PRIVATE_KEY_ED25519_2,
+	CLIENT_PUBLIC_KEY_ED25519_2,
 } from '../../config.js';
+import ChangeAccountKeyRequest from '../../../src/port/in/request/ChangeAccountKeyRequest.js';
+import { PrivateKey as HPrivateKey } from '@hashgraph/sdk';
+import PublicKey from '../../../src/domain/context/account/PublicKey.js';
 
 describe('🧪 Account test', () => {
 	beforeAll(async () => {
@@ -46,6 +51,29 @@ describe('🧪 Account test', () => {
 			}),
 		);
 	}, 60_000);
+
+	it('Change Account Key', async () => {
+		/*const newGeneratedKey = await HPrivateKey.generateED25519Async();
+		console.log("Public Key : " + newGeneratedKey.publicKey.toStringRaw());
+		console.log("Private Key : " + newGeneratedKey.toStringRaw());
+
+		const pK = PublicKey.fromHederaKey(newGeneratedKey.publicKey);*/
+
+		const res = await Account.changeKey(
+			new ChangeAccountKeyRequest({
+				targetId: CLIENT_ACCOUNT_ED25519.id.toString(),
+				newKey: {
+					key: CLIENT_PUBLIC_KEY_ED25519_2!,
+					type: 'ED25519',
+				},
+				newPrivateKey: {
+					key: CLIENT_PRIVATE_KEY_ED25519_2!,
+					type: 'ED25519',
+				},
+			}),
+		);
+		expect(res).toEqual(true);
+	});
 
 	it('Gets a public key', async () => {
 		const res = await Account.getPublicKey(

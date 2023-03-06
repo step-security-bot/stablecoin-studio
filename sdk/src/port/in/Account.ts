@@ -32,10 +32,14 @@ import { default as HederaAccount } from '../../domain/context/account/Account.j
 import StableCoinListViewModel from '../out/mirror/response/StableCoinListViewModel.js';
 import AccountViewModel from '../out/mirror/response/AccountViewModel.js';
 import { HederaId } from '../../domain/context/shared/HederaId.js';
+import PrivateKey from '../../domain/context/account/PrivateKey.js';
 import { GetAccountInfoQuery } from '../../app/usecase/query/account/info/GetAccountInfoQuery.js';
 import { InvalidResponse } from '../out/mirror/error/InvalidResponse.js';
 import { handleValidation } from './Common.js';
 import { LogError } from '../../core/decorator/LogErrorDecorator.js';
+import ChangeAccountKeyRequest from './request/ChangeAccountKeyRequest.js';
+import { CommandBus } from '../../core/command/CommandBus.js';
+import { ChangeAccountKeyCommand } from '../../app/usecase/command/account/operations/update/ChangeAccountKeyCommand.js';
 
 export { AccountViewModel, StableCoinListViewModel };
 
@@ -45,6 +49,7 @@ interface IAccountInPort {
 		request: GetListStableCoinRequest,
 	): Promise<StableCoinListViewModel>;
 	getInfo(request: GetAccountInfoRequest): Promise<AccountViewModel>;
+	changeKey(request: ChangeAccountKeyRequest): Promise<boolean>;
 }
 
 class AccountInPort implements IAccountInPort {
@@ -53,7 +58,30 @@ class AccountInPort implements IAccountInPort {
 
 	constructor(
 		private readonly queryBus: QueryBus = Injectable.resolve(QueryBus),
+		private readonly commandBus: CommandBus = Injectable.resolve(
+			CommandBus,
+		),
 	) {}
+	async changeKey(request: ChangeAccountKeyRequest): Promise<boolean> {
+		const { targetId, newKey, newPrivateKey } = request;
+		handleValidation('ChangeAccountKeyRequest', request);
+
+		return (
+			await this.commandBus.execute(
+				new ChangeAccountKeyCommand(
+					new HederaId(targetId),
+					new PublicKey({
+						key: newKey.key,
+						type: newKey.type,
+					}),
+					new PrivateKey({
+						key: newPrivateKey.key ?? '',
+						type: newPrivateKey.type ?? '',
+					}),
+				),
+			)
+		).payload;
+	}
 
 	@LogError
 	async getPublicKey(request: GetPublicKeyRequest): Promise<PublicKey> {

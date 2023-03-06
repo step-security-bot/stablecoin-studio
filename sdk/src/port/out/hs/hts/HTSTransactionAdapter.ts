@@ -132,6 +132,10 @@ export class HTSTransactionAdapter extends HederaTransactionAdapter {
 		);
 	}
 
+	public async freezeTransaction(t: Transaction): Promise<Transaction> {
+		return t.freezeWith(this.client);
+	}
+
 	getAccount(): Account {
 		return this.account;
 	}
