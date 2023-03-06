@@ -30,6 +30,7 @@ import ConnectRequest, {
 
 import {
 	CLIENT_ACCOUNT_ED25519,
+	CLIENT_PRIVATE_KEY_ED25519,
 	CLIENT_PUBLIC_KEY_ED25519,
 	CLIENT_PRIVATE_KEY_ED25519_2,
 	CLIENT_PUBLIC_KEY_ED25519_2,
@@ -59,17 +60,25 @@ describe('🧪 Account test', () => {
 
 		const pK = PublicKey.fromHederaKey(newGeneratedKey.publicKey);*/
 
+		CLIENT_ACCOUNT_ED25519.publicKey = CLIENT_PUBLIC_KEY_ED25519_2;
+		CLIENT_ACCOUNT_ED25519.privateKey = CLIENT_PRIVATE_KEY_ED25519_2;
+
+		await Network.connect(
+			new ConnectRequest({
+				account: {
+					accountId: CLIENT_ACCOUNT_ED25519.id.toString(),
+					privateKey: CLIENT_ACCOUNT_ED25519.privateKey,
+				},
+				network: 'testnet',
+				wallet: SupportedWallets.CLIENT,
+			}),
+		);
+
 		const res = await Account.changeKey(
 			new ChangeAccountKeyRequest({
 				targetId: CLIENT_ACCOUNT_ED25519.id.toString(),
-				newKey: {
-					key: CLIENT_PUBLIC_KEY_ED25519_2!,
-					type: 'ED25519',
-				},
-				newPrivateKey: {
-					key: CLIENT_PRIVATE_KEY_ED25519_2!,
-					type: 'ED25519',
-				},
+				newKey: CLIENT_PUBLIC_KEY_ED25519,
+				newPrivateKey: CLIENT_PRIVATE_KEY_ED25519,
 			}),
 		);
 		expect(res).toEqual(true);
