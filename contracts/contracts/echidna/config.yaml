@@ -45,7 +45,7 @@ solcArgs: ""
 #solcLibs is solc libraries
 solcLibs: []
 #cryticArgs allows special args to crytic
-cryticArgs: []
+cryticArgs: ["--ignore-compile"]
 #quiet produces (much) less verbose output
 quiet: false
 #initialize the blockchain with some data
