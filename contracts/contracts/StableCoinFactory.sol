@@ -1,15 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import './hts-precompile/IHederaTokenService.sol';
-import './hts-precompile/HederaResponseCodes.sol';
-import './HederaERC20.sol';
-import '@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol';
-import '@openzeppelin/contracts/proxy/transparent/ProxyAdmin.sol';
-import './HederaReserve.sol';
-import './Interfaces/IStableCoinFactory.sol';
-import '@openzeppelin/contracts/utils/Strings.sol';
-import '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
+import {IHederaTokenService} from './hts-precompile/IHederaTokenService.sol';
+import {HederaResponseCodes} from './hts-precompile/HederaResponseCodes.sol';
+import {HederaERC20, IHederaERC20} from './HederaERC20.sol';
+import {
+    TransparentUpgradeableProxy
+} from '@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol';
+import {
+    ProxyAdmin
+} from '@openzeppelin/contracts/proxy/transparent/ProxyAdmin.sol';
+import {HederaReserve} from './HederaReserve.sol';
+import {IStableCoinFactory} from './Interfaces/IStableCoinFactory.sol';
+import {Strings} from '@openzeppelin/contracts/utils/Strings.sol';
+import {
+    Initializable
+} from '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
+import {KeysLib} from './library/KeysLib.sol';
 
 contract StableCoinFactory is
     IStableCoinFactory,
@@ -23,8 +30,6 @@ contract StableCoinFactory is
     string private constant _MEMO_3 = '"}';
     address private _admin;
     address[] private _hederaERC20Address;
-
-    event StableCoinFactoryInitialized();
 
     modifier isAdmin() {
         require(
@@ -201,7 +206,7 @@ contract StableCoinFactory is
         for (uint256 i = 0; i < requestedToken.keys.length; i++) {
             keys[i] = IHederaTokenService.TokenKey({
                 keyType: requestedToken.keys[i].keyType,
-                key: _generateKey(
+                key: KeysLib.generateKey(
                     requestedToken.keys[i].publicKey,
                     stableCoinProxyAddress,
                     requestedToken.keys[i].isED25519
@@ -225,21 +230,6 @@ contract StableCoinFactory is
             );
 
         return token;
-    }
-
-    function _generateKey(
-        bytes memory publicKey,
-        address stableCoinProxyAddress,
-        bool isED25519
-    ) private pure returns (IHederaTokenService.KeyValue memory) {
-        // If the Public Key is empty we assume the user has chosen the proxy
-        IHederaTokenService.KeyValue memory key;
-        if (publicKey.length == 0)
-            key.delegatableContractId = stableCoinProxyAddress;
-        else if (isED25519) key.ed25519 = publicKey;
-        else key.ECDSA_secp256k1 = publicKey;
-
-        return key;
     }
 
     function _treasuryIsContract(
@@ -287,6 +277,7 @@ contract StableCoinFactory is
         checkAddressIsNotZero(newAddress)
     {
         _hederaERC20Address.push(newAddress);
+        emit HederaERC20AddressAdded(newAddress);
     }
 
     function getHederaERC20Address() external view returns (address[] memory) {
@@ -302,7 +293,9 @@ contract StableCoinFactory is
         isAdmin
         checkAddressIsNotZero(newAddress)
     {
+        address oldAddress = _hederaERC20Address[index];
         _edit(index, newAddress);
+        emit HederaERC20AddressEdited(oldAddress, newAddress);
     }
 
     function _edit(uint256 index, address newAddress) internal {
@@ -312,7 +305,9 @@ contract StableCoinFactory is
     function removeHederaERC20Address(
         uint256 index
     ) external override(IStableCoinFactory) isAdmin {
+        address addressRemoved = _hederaERC20Address[index];
         _edit(index, address(0));
+        emit HederaERC20AddressRemoved(index, addressRemoved);
     }
 
     function changeAdmin(
@@ -323,7 +318,9 @@ contract StableCoinFactory is
         isAdmin
         checkAddressIsNotZero(newAddress)
     {
+        address oldAdmin = _admin;
         _admin = newAddress;
+        emit AdminChanged(oldAdmin, newAddress);
     }
 
     function getAdmin() external view returns (address) {

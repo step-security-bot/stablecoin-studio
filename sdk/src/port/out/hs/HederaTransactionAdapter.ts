@@ -27,6 +27,7 @@ import {
 	PublicKey as HPublicKey,
 	ContractId as HContractId,
 	CustomFee as HCustomFee,
+	DelegateContractId,
 } from '@hashgraph/sdk';
 import TransactionAdapter from '../TransactionAdapter';
 import TransactionResponse from '../../../domain/context/transaction/TransactionResponse.js';
@@ -68,6 +69,56 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 		super();
 	}
 
+	private setKeysForSmartContract(providedKeys: any[]): FactoryKey[] {
+		const keys: FactoryKey[] = [];
+
+		providedKeys.forEach((providedKey, index) => {
+			if (providedKey) {
+				const key = new FactoryKey();
+				switch (index) {
+					case 0: {
+						key.keyType = 1; // admin
+						break;
+					}
+					case 1: {
+						key.keyType = 2; // kyc
+						break;
+					}
+					case 2: {
+						key.keyType = 4; // freeze
+						break;
+					}
+					case 3: {
+						key.keyType = 8; // wipe
+						break;
+					}
+					case 4: {
+						key.keyType = 16; // supply
+						break;
+					}
+					case 5: {
+						key.keyType = 32; // fee schedule
+						break;
+					}
+					case 6: {
+						key.keyType = 64; // pause
+						break;
+					}
+				}
+				const providedKeyCasted = providedKey as PublicKey;
+				key.publicKey =
+					providedKeyCasted.key == PublicKey.NULL.key
+						? '0x'
+						: HPublicKey.fromString(
+								providedKeyCasted.key,
+						  ).toBytesRaw();
+				key.isED25519 = providedKeyCasted.type === 'ED25519';
+				keys.push(key);
+			}
+		});
+		return keys;
+	}
+
 	public async create(
 		coin: StableCoinProps,
 		factory: ContractId,
@@ -77,8 +128,6 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 		reserveInitialAmount?: BigDecimal,
 	): Promise<TransactionResponse<any, Error>> {
 		try {
-			const keys: FactoryKey[] = [];
-
 			const cashinRole: FactoryCashinRole = {
 				account:
 					coin.cashInRoleAccount == undefined ||
@@ -104,50 +153,8 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 				coin.pauseKey,
 			];
 
-			providedKeys.forEach((providedKey, index) => {
-				if (providedKey) {
-					const key = new FactoryKey();
-					switch (index) {
-						case 0: {
-							key.keyType = 1; // admin
-							break;
-						}
-						case 1: {
-							key.keyType = 2; // kyc
-							break;
-						}
-						case 2: {
-							key.keyType = 4; // freeze
-							break;
-						}
-						case 3: {
-							key.keyType = 8; // wipe
-							break;
-						}
-						case 4: {
-							key.keyType = 16; // supply
-							break;
-						}
-						case 5: {
-							key.keyType = 32; // fee schedule
-							break;
-						}
-						case 6: {
-							key.keyType = 64; // pause
-							break;
-						}
-					}
-					const providedKeyCasted = providedKey as PublicKey;
-					key.publicKey =
-						providedKeyCasted.key == PublicKey.NULL.key
-							? '0x'
-							: HPublicKey.fromString(
-									providedKeyCasted.key,
-							  ).toBytesRaw();
-					key.isED25519 = providedKeyCasted.type === 'ED25519';
-					keys.push(key);
-				}
-			});
+			const keys: FactoryKey[] =
+				this.setKeysForSmartContract(providedKeys);
 
 			const providedRoles = [
 				{
@@ -241,7 +248,6 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 						hederaERC20.value,
 					).toSolidityAddress(),
 			];
-
 			return await this.contractCall(
 				factory.value,
 				'deployStableCoin',
@@ -573,6 +579,26 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 		);
 	}
 
+	public async grantRoles(
+		coin: StableCoinCapabilities,
+		targetsId: HederaId[],
+		roles: StableCoinRole[],
+		amounts: BigDecimal[],
+	): Promise<TransactionResponse> {
+		const params = new Params({
+			roles: roles,
+			targetsId: targetsId,
+			amounts: amounts,
+		});
+		return this.performOperation(
+			coin,
+			Operation.ROLE_MANAGEMENT,
+			'grantRoles',
+			4000000,
+			params,
+		);
+	}
+
 	public async grantUnlimitedSupplierRole(
 		coin: StableCoinCapabilities,
 		targetId: HederaId,
@@ -621,6 +647,24 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 			Operation.ROLE_MANAGEMENT,
 			'revokeRole',
 			400000,
+			params,
+		);
+	}
+
+	public async revokeRoles(
+		coin: StableCoinCapabilities,
+		targetsId: HederaId[],
+		roles: StableCoinRole[],
+	): Promise<TransactionResponse> {
+		const params = new Params({
+			roles: roles,
+			targetsId: targetsId,
+		});
+		return this.performOperation(
+			coin,
+			Operation.ROLE_MANAGEMENT,
+			'revokeRoles',
+			4000000,
 			params,
 		);
 	}
@@ -821,6 +865,54 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 		);
 	}
 
+	public async transfers(
+		coin: StableCoinCapabilities,
+		amounts: BigDecimal[],
+		targetsId: HederaId[],
+		targetId: HederaId,
+	): Promise<TransactionResponse<any, Error>> {
+		const params = new Params({
+			targetId: targetId,
+			targetsId: targetsId,
+			amounts: amounts,
+		});
+		if (!coin.coin.tokenId)
+			throw new Error(
+				`StableCoin ${coin.coin.name} does not have an underlying token`,
+			);
+		return this.performHTSOperation(coin, Operation.TRANSFERS, params!);
+	}
+
+	public async update(
+		coin: StableCoinCapabilities,
+		kycKey: PublicKey | undefined,
+		freezeKey: PublicKey | undefined,
+		feeScheduleKey: PublicKey | undefined,
+		pauseKey: PublicKey | undefined,
+		wipeKey: PublicKey | undefined,
+		supplyKey: PublicKey | undefined,
+	): Promise<TransactionResponse<any, Error>> {
+		const params = new Params({
+			kycKey: kycKey,
+			freezeKey: freezeKey,
+			feeScheduleKey: feeScheduleKey,
+			pauseKey: pauseKey,
+			wipeKey: wipeKey,
+			supplyKey: supplyKey,
+		});
+		if (!coin.coin.tokenId)
+			throw new Error(
+				`StableCoin ${coin.coin.name} does not have an underlying token`,
+			);
+		return this.performOperation(
+			coin,
+			Operation.UPDATE,
+			'updateTokenKeys',
+			15000000,
+			params,
+		);
+	}
+
 	private async performOperation(
 		coin: StableCoinCapabilities,
 		operation: Operation,
@@ -894,22 +986,47 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 		transactionType: TransactionType = TransactionType.RECEIPT,
 		contractAbi: any = HederaERC20__factory.abi,
 	): Promise<TransactionResponse> {
-		const filteredContractParams: any[] =
-			params === undefined || params === null
-				? []
-				: Object.values(params!).filter((element) => {
-						return element !== undefined;
-				  });
-		for (let i = 0; i < filteredContractParams.length; i++) {
-			if (filteredContractParams[i] instanceof ContractId) {
-				filteredContractParams[i] = (
-					await this.contractToEvmAddress(filteredContractParams[i])
-				).toString();
-			} else if (filteredContractParams[i] instanceof HederaId) {
-				filteredContractParams[i] = (
-					await this.accountToEvmAddress(filteredContractParams[i])
-				).toString();
-			}
+		let filteredContractParams: any[] = [];
+
+		switch (operationName) {
+			case 'updateTokenKeys':
+				const providedKeys = [
+					undefined,
+					params?.kycKey,
+					params?.freezeKey,
+					params?.wipeKey,
+					params?.supplyKey,
+					params?.feeScheduleKey,
+					params?.pauseKey,
+				];
+				filteredContractParams[0] =
+					this.setKeysForSmartContract(providedKeys);
+				break;
+
+			default:
+				filteredContractParams =
+					params === undefined || params === null
+						? []
+						: Object.values(params!).filter((element) => {
+								return element !== undefined;
+						  });
+				for (let i = 0; i < filteredContractParams.length; i++) {
+					if (Array.isArray(filteredContractParams[i])) {
+						for (
+							let j = 0;
+							j < filteredContractParams[i].length;
+							j++
+						) {
+							filteredContractParams[i][j] =
+								await this.getEVMAddress(
+									filteredContractParams[i][j],
+								);
+						}
+					}
+					filteredContractParams[i] = await this.getEVMAddress(
+						filteredContractParams[i],
+					);
+				}
 		}
 		return await this.contractCall(
 			contractAddress,
@@ -919,6 +1036,15 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 			transactionType,
 			contractAbi,
 		);
+	}
+
+	private async getEVMAddress(parameter: any): Promise<any> {
+		if (parameter instanceof ContractId) {
+			return (await this.contractToEvmAddress(parameter)).toString();
+		} else if (parameter instanceof HederaId) {
+			return (await this.accountToEvmAddress(parameter)).toString();
+		}
+		return parameter;
 	}
 
 	private async performHTSOperation(
@@ -1038,6 +1164,65 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 				);
 				break;
 
+			case Operation.TRANSFERS:
+				const amountsLong: Long[] = [];
+				const targetsIdString: string[] = [];
+
+				for (let i = 0; i < params.amounts!.length; i++) {
+					amountsLong.push(params.amounts![i].toLong());
+					targetsIdString.push(params.targetsId![i].toString());
+				}
+
+				t = HTSTransactionBuilder.buildTransfersTransaction(
+					coin.coin.tokenId?.value!,
+					amountsLong,
+					params!.targetId!.toString(),
+					targetsIdString,
+				);
+				break;
+
+			case Operation.UPDATE:
+				t = HTSTransactionBuilder.buildUpdateTokenTransaction(
+					coin.coin.tokenId?.value!,
+					params.kycKey
+						? params.kycKey.key == PublicKey.NULL.key
+							? DelegateContractId.fromString(params.kycKey.key)
+							: HPublicKey.fromString(params.kycKey.key)
+						: undefined,
+					params.freezeKey
+						? params.freezeKey.key == PublicKey.NULL.key
+							? DelegateContractId.fromString(
+									params.freezeKey.key,
+							  )
+							: HPublicKey.fromString(params.freezeKey.key)
+						: undefined,
+					params.feeScheduleKey
+						? params.feeScheduleKey.key == PublicKey.NULL.key
+							? DelegateContractId.fromString(
+									params.feeScheduleKey.key,
+							  )
+							: HPublicKey.fromString(params.feeScheduleKey.key)
+						: undefined,
+					params.pauseKey
+						? params.pauseKey.key == PublicKey.NULL.key
+							? DelegateContractId.fromString(params.pauseKey.key)
+							: HPublicKey.fromString(params.pauseKey.key)
+						: undefined,
+					params.wipeKey
+						? params.wipeKey.key == PublicKey.NULL.key
+							? DelegateContractId.fromString(params.wipeKey.key)
+							: HPublicKey.fromString(params.wipeKey.key)
+						: undefined,
+					params.supplyKey
+						? params.supplyKey.key == PublicKey.NULL.key
+							? DelegateContractId.fromString(
+									params.supplyKey.key,
+							  )
+							: HPublicKey.fromString(params.supplyKey.key)
+						: undefined,
+				);
+				break;
+
 			default:
 				throw new Error(`Operation does not exist through HTS`);
 		}
@@ -1110,6 +1295,15 @@ class Params {
 	amount?: BigDecimal;
 	reserveAddress?: ContractId;
 	customFees?: HCustomFee[];
+	roles?: string[];
+	targetsId?: HederaId[];
+	amounts?: BigDecimal[];
+	kycKey?: PublicKey;
+	freezeKey?: PublicKey;
+	feeScheduleKey?: PublicKey;
+	pauseKey?: PublicKey;
+	wipeKey?: PublicKey;
+	supplyKey?: PublicKey;
 
 	constructor({
 		role,
@@ -1117,17 +1311,44 @@ class Params {
 		amount,
 		reserveAddress,
 		customFees,
+		roles,
+		targetsId,
+		amounts,
+		kycKey,
+		freezeKey,
+		feeScheduleKey,
+		pauseKey,
+		wipeKey,
+		supplyKey,
 	}: {
 		role?: string;
 		targetId?: HederaId;
 		amount?: BigDecimal;
 		reserveAddress?: ContractId;
 		customFees?: HCustomFee[];
+		roles?: string[];
+		targetsId?: HederaId[];
+		amounts?: BigDecimal[];
+		kycKey?: PublicKey;
+		freezeKey?: PublicKey;
+		feeScheduleKey?: PublicKey;
+		pauseKey?: PublicKey;
+		wipeKey?: PublicKey;
+		supplyKey?: PublicKey;
 	}) {
 		this.role = role;
 		this.targetId = targetId;
 		this.amount = amount;
 		this.reserveAddress = reserveAddress;
 		this.customFees = customFees;
+		this.roles = roles;
+		this.targetsId = targetsId;
+		this.amounts = amounts;
+		this.kycKey = kycKey;
+		this.freezeKey = freezeKey;
+		this.feeScheduleKey = feeScheduleKey;
+		this.pauseKey = pauseKey;
+		this.wipeKey = wipeKey;
+		this.supplyKey = supplyKey;
 	}
 }

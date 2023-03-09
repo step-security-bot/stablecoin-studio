@@ -348,6 +348,23 @@ export async function transferFrom(
     return response[0]
 }
 
+export async function updateTokenKeys(
+    proxyAddress: ContractId,
+    keys: any,
+    client: Client
+): Promise<boolean> {
+    const params = [keys]
+    const response = await contractCall(
+        proxyAddress,
+        'updateTokenKeys',
+        params,
+        client,
+        Gas1,
+        HederaERC20__factory.abi
+    )
+    return response[0]
+}
+
 // HederaERC20Proxy ///////////////////////////////////////////////////
 export async function upgradeTo(
     proxyAbi: any,
@@ -887,6 +904,65 @@ export async function getRoleId(
         HederaERC20__factory.abi
     )
     return result[0]
+}
+
+// Roles Management ///////////////////////////////////////////////////
+export async function grantRoles(
+    ROLES: string[],
+    proxyAddress: ContractId,
+    clientGrantingRoles: Client,
+    accountsToGrantRolesTo: string[],
+    cashInLimits: BigNumber[],
+    areE25519: boolean[]
+) {
+    const cashInLimits_Strings: string[] = []
+    cashInLimits.forEach((cashInLimit) => {
+        cashInLimits_Strings.push(cashInLimit.toString())
+    })
+
+    const accountsToGrantRolesTo_EVM: string[] = []
+    for (let i = 0; i < accountsToGrantRolesTo.length; i++) {
+        accountsToGrantRolesTo_EVM.push(
+            await toEvmAddress(accountsToGrantRolesTo[i], areE25519[i])
+        )
+    }
+
+    const params = [ROLES, accountsToGrantRolesTo_EVM, cashInLimits_Strings]
+
+    await contractCall(
+        proxyAddress,
+        'grantRoles',
+        params,
+        clientGrantingRoles,
+        Gas1,
+        HederaERC20__factory.abi
+    )
+}
+
+export async function revokeRoles(
+    ROLES: string[],
+    proxyAddress: ContractId,
+    clientRevokingRoles: Client,
+    accountsToRevokeRolesFrom: string[],
+    areE25519: boolean[]
+) {
+    const accountsToRevokeRolesFrom_EVM: string[] = []
+    for (let i = 0; i < accountsToRevokeRolesFrom.length; i++) {
+        accountsToRevokeRolesFrom_EVM.push(
+            await toEvmAddress(accountsToRevokeRolesFrom[i], areE25519[i])
+        )
+    }
+
+    const params = [ROLES, accountsToRevokeRolesFrom_EVM]
+
+    await contractCall(
+        proxyAddress,
+        'revokeRoles',
+        params,
+        clientRevokingRoles,
+        Gas1,
+        HederaERC20__factory.abi
+    )
 }
 
 // SupplierAdmin ///////////////////////////////////////////////////
