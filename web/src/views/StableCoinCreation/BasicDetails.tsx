@@ -3,7 +3,7 @@ import type { Control, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import InputController from '../../components/Form/InputController';
 import { useSelector } from 'react-redux';
-import { CreateRequest, Network, GetERC20ListRequest } from 'hedera-stable-coin-sdk';
+import { CreateRequest, Network, GetERC20ListRequest } from '@hashgraph-dev/stablecoin-npm-sdk';
 import { SELECTED_WALLET_PAIRED } from '../../store/slices/walletSlice';
 import { handleRequestValidation } from '../../utils/validationsHelper';
 import { propertyNotFound } from '../../constant';
