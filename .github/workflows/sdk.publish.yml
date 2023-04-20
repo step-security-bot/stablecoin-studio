@@ -42,4 +42,4 @@ jobs:
             //us-npm.pkg.dev/hedera-registry/stablecoin-npm/:always-auth=true
           EOF 
       - name: Publish SDK package
-        run: npm publish --production
+        run: npm install --omit=dev
