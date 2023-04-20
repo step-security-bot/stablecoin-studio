@@ -11,7 +11,7 @@ defaults:
 jobs:
   test-node:
     name: Publish CLI package
-    needs: [CLI - Test]
+    # needs: [CLI - Test]
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'

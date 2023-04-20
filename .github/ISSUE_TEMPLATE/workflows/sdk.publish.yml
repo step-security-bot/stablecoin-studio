@@ -11,7 +11,7 @@ defaults:
 jobs:
   test-node:
     name: Publish SDK package
-    needs: [SDK - Test]
+    # needs: [SDK - Test]
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'

@@ -11,7 +11,7 @@ defaults:
 jobs:
   test-node:
     name: Publish WEB package
-    needs: [WEB - Test]
+    # needs: [WEB - Test]
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'

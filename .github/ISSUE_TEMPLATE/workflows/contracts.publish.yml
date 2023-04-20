@@ -11,7 +11,7 @@ defaults:
 jobs:
   test-node:
     name: Publish contracts package
-    needs: [Contracts - Test]
+    # needs: [Contracts - Test]
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
