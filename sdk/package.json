@@ -68,7 +68,6 @@
 		"pre-commit": "npm run lint && npm run prettier",
 		"prettierCheck": "prettier --config .prettierrc --check",
 		"prepack": "npm run build"
-
 	},
 	"license": "Apache-2.0",
 	"dependencies": {
