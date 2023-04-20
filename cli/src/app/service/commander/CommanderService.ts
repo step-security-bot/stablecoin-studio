@@ -4,7 +4,7 @@ import Service from '../Service.js';
 import pkg from '../../../../package.json';
 import { utilsService, wizardService } from '../../../index.js';
 // import CreateStableCoinService from '../stablecoin/CreateStableCoinService.js';
-// import { CreateRequest } from 'hedera-stable-coin-sdk';
+// import { CreateRequest } from '@hashgraph-dev/stablecoin-npm-sdk';
 
 /**
  * Commander Service

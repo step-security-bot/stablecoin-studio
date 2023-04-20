@@ -15,7 +15,7 @@ import {
   DailyRotateFile,
   DefaultLoggerFormat,
   LogOptions,
-} from 'hedera-stable-coin-sdk';
+} from '@hashgraph-dev/stablecoin-npm-sdk';
 import { ILogConfig } from '../../../domain/configuration/interfaces/ILogConfig.js';
 import { IFactoryConfig } from '../../../domain/configuration/interfaces/IFactoryConfig.js';
 
