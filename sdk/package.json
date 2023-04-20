@@ -1,6 +1,6 @@
 {
 	"name": "@hashgraph-dev/stablecoin-npm-sdk",
-	"version": "1.0.3",
+	"version": "1.0.2",
 	"description": "",
 	"main": "./build/cjs/src/index.js",
 	"module": "./build/esm/src/index.js",
@@ -48,7 +48,6 @@
 		"typescript": "^4.9.4"
 	},
 	"scripts": {
-		"postinstall": "npm run build",
 		"start": "node build/src/index.js",
 		"clean": "rimraf coverage build",
 		"prebuild": "npm run lint",
