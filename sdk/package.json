@@ -1,6 +1,6 @@
 {
 	"name": "@hashgraph-dev/stablecoin-npm-sdk",
-	"version": "1.0.0",
+	"version": "0.1.1",
 	"description": "",
 	"main": "./build/cjs/src/index.js",
 	"module": "./build/esm/src/index.js",
@@ -67,7 +67,6 @@
 		"pre-commit": "npm run lint && npm run prettier",
 		"prettierCheck": "prettier --config .prettierrc --check",
 		"prepack": "npm run build"
-
 	},
 	"license": "Apache-2.0",
 	"dependencies": {
@@ -91,7 +90,7 @@
 		"web3": "^1.8.1",
 		"winston": "^3.8.2",
 		"winston-daily-rotate-file": "^4.7.1",
-		"@hashgraph-dev/stablecoin-npm-contracts": "^1.0.0"
+		"@hashgraph-dev/stablecoin-npm-contracts": "^0.1.0"
 	},
 	"volta": {
 		"node": "16.13.0"
