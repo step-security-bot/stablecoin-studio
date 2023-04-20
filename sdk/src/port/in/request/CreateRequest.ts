@@ -20,7 +20,6 @@
 
 import CheckNums from '../../../core/checks/numbers/CheckNums.js';
 import { OptionalField } from '../../../core/decorator/OptionalDecorator.js';
-import Injectable from '../../../core/Injectable.js';
 import { RESERVE_DECIMALS } from '../../../domain/context/reserve/Reserve.js';
 import BigDecimal from '../../../domain/context/shared/BigDecimal.js';
 import InvalidDecimalRange from '../../../domain/context/stablecoin/error/InvalidDecimalRange.js';
