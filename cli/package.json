@@ -51,6 +51,7 @@
     "tsutils": "~3.21"
   },
   "dependencies": {
+    "@hashgraph-dev/stablecoin-npm-sdk": "^1.0.6",
     "@iarna/toml": "^2.2.5",
     "big.js": "^6.2.1",
     "chalk": "^5.2.0",
@@ -59,7 +60,6 @@
     "commander": "^10.0.0",
     "figlet-promised": "^1.0.0",
     "fs-extra": "^11.1.0",
-    "@hashgraph-dev/stablecoin-npm-sdk": "^1.0.4",
     "inquirer": "^8.0.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
