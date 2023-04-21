@@ -1,7 +1,6 @@
 {
 	"name": "stablecoin-dapp",
 	"version": "1.0.0",
-	"private": true,
 	"publishConfig": {
 		"registry": "https://us-npm.pkg.dev/hedera-registry/stablecoin-npm/"
 	  },
