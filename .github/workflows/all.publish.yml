@@ -4,10 +4,10 @@ on:
   push:
     branches: [npm-gitflow-sprint15]
   paths:
-      - './**'
-defaults:
-  run:
-    working-directory: cli
+      - 'contracts/**'
+      - 'sdk/**'
+      - 'cli/**'
+      - 'web/**'
 jobs:
   ALL-publish:
     name: Publish ALL packages
