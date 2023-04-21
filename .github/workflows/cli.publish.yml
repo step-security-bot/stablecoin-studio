@@ -12,6 +12,7 @@ jobs:
   test-node:
     name: Publish CLI package
     # needs: [CLI - Test]
+    needs: [SDK Publish NPM]
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'

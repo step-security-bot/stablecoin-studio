@@ -12,6 +12,7 @@ jobs:
   test-node:
     name: Publish SDK package
     # needs: [SDK - Test]
+    needs: [Contracts Publish NPM]
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
