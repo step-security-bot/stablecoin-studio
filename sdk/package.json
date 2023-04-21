@@ -1,6 +1,6 @@
 {
 	"name": "@hashgraph-dev/stablecoin-npm-sdk",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "",
 	"main": "./build/cjs/src/index.js",
 	"module": "./build/esm/src/index.js",
@@ -66,7 +66,7 @@
 		"test:ci": "NODE_OPTIONS=--experimental-vm-modules npx jest --ci --json --coverage --forceExit --testLocationInResults --outputFile=report.json",
 		"pre-commit": "npm run lint && npm run prettier",
 		"prettierCheck": "prettier --config .prettierrc --check",
-		"prepack": "npm run build"
+		"prepack": "npm install"
 	},
 	"license": "Apache-2.0",
 	"dependencies": {
