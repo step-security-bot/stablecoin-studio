@@ -19,62 +19,56 @@ jobs:
           node-version: 16.x
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Create .npmrc
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: 'projects/101730247931/locations/global/workloadIdentityPools/registry-identity-pool/providers/gh-provider'
+          service_account: 'stablecoin-npm-publisher@hedera-registry.iam.gserviceaccount.com'
+          token_format: 'access_token'
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      - name: Install contracts dependencies 
+        run: npm run install:contracts
+      - name: Create .npmrc contracts
         run: |
-          cat << EOF > .npmrc
+          cd contracts && cat << EOF > .npmrc
             @hashgraph:registry=https://us-npm.pkg.dev/hedera-registry/stablecoin-npm/
             //us-npm.pkg.dev/hedera-registry/stablecoin-npm/:_authToken="${{ steps.auth.outputs.access_token }}"
             //us-npm.pkg.dev/hedera-registry/stablecoin-npm/:always-auth=true
           EOF 
-      - name: Install contracts dependencies 
-        run: npm run install:contracts
-      - name: Authenticate to Google Cloud
-        id: auth
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: 'projects/101730247931/locations/global/workloadIdentityPools/registry-identity-pool/providers/gh-provider'
-          service_account: 'stablecoin-npm-publisher@hedera-registry.iam.gserviceaccount.com'
-          token_format: 'access_token'
-      - name: Setup Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
       - name: Publish contracts package
         run: npm run publish:contracts
       - name: Install sdk dependencies 
         run: npm run install:sdk
-      - name: Authenticate to Google Cloud
-        id: auth
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: 'projects/101730247931/locations/global/workloadIdentityPools/registry-identity-pool/providers/gh-provider'
-          service_account: 'stablecoin-npm-publisher@hedera-registry.iam.gserviceaccount.com'
-          token_format: 'access_token'
-      - name: Setup Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
+      - name: Create .npmrc sdk
+        run: |
+          cd sdk && cat << EOF > .npmrc
+            @hashgraph:registry=https://us-npm.pkg.dev/hedera-registry/stablecoin-npm/
+            //us-npm.pkg.dev/hedera-registry/stablecoin-npm/:_authToken="${{ steps.auth.outputs.access_token }}"
+            //us-npm.pkg.dev/hedera-registry/stablecoin-npm/:always-auth=true
+          EOF 
       - name: Publish sdk package
         run: npm run publish:sdk
       - name: Install cli dependencies 
         run: npm run install:cli
-      - name: Authenticate to Google Cloud
-        id: auth
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: 'projects/101730247931/locations/global/workloadIdentityPools/registry-identity-pool/providers/gh-provider'
-          service_account: 'stablecoin-npm-publisher@hedera-registry.iam.gserviceaccount.com'
-          token_format: 'access_token'
-      - name: Setup Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
+      - name: Create .npmrc cli
+        run: |
+          cd cli && cat << EOF > .npmrc
+            @hashgraph:registry=https://us-npm.pkg.dev/hedera-registry/stablecoin-npm/
+            //us-npm.pkg.dev/hedera-registry/stablecoin-npm/:_authToken="${{ steps.auth.outputs.access_token }}"
+            //us-npm.pkg.dev/hedera-registry/stablecoin-npm/:always-auth=true
+          EOF 
       - name: Publish cli package
         run: npm run publish:cli
       - name: Install web dependencies 
         run: npm run install:web
-      - name: Authenticate to Google Cloud
-        id: auth
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: 'projects/101730247931/locations/global/workloadIdentityPools/registry-identity-pool/providers/gh-provider'
-          service_account: 'stablecoin-npm-publisher@hedera-registry.iam.gserviceaccount.com'
-          token_format: 'access_token'
-      - name: Setup Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
+      - name: Create .npmrc web
+        run: |
+          cd web && cat << EOF > .npmrc
+            @hashgraph:registry=https://us-npm.pkg.dev/hedera-registry/stablecoin-npm/
+            //us-npm.pkg.dev/hedera-registry/stablecoin-npm/:_authToken="${{ steps.auth.outputs.access_token }}"
+            //us-npm.pkg.dev/hedera-registry/stablecoin-npm/:always-auth=true
+          EOF 
       - name: Publish web package
         run: npm run publish:web
