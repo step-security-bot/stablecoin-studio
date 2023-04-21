@@ -3,8 +3,8 @@ on:
   workflow_dispatch:
   push:
     branches: [npm-gitflow-sprint15]
-  paths:
-      - './**'
+    paths:
+        - './**'
 jobs:
   ALL-publish:
     name: Publish ALL packages
