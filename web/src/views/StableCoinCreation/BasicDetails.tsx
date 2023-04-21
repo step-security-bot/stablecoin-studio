@@ -2,9 +2,11 @@ import { Heading, Stack, VStack } from '@chakra-ui/react';
 import type { Control, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import InputController from '../../components/Form/InputController';
-import { useSelector } from 'react-redux';
-import { CreateRequest, Network, GetERC20ListRequest } from '@hashgraph-dev/stablecoin-npm-sdk';
-import { SELECTED_WALLET_PAIRED } from '../../store/slices/walletSlice';
+import {
+	type CreateRequest,
+	Network,
+	GetERC20ListRequest,
+} from '@hashgraph-dev/stablecoin-npm-sdk';
 import { handleRequestValidation } from '../../utils/validationsHelper';
 import { propertyNotFound } from '../../constant';
 import { useEffect, useState } from 'react';
@@ -20,7 +22,6 @@ interface BasicDetailsProps {
 const BasicDetails = (props: BasicDetailsProps) => {
 	const { control } = props;
 	const { t } = useTranslation(['global', 'stableCoinCreation']);
-	const pairingData = useSelector(SELECTED_WALLET_PAIRED);
 	const [optionshederaERC20Addresses, setOptionsHederaERC20Addresses] = useState<Option[]>([]);
 
 	const { request } = props;

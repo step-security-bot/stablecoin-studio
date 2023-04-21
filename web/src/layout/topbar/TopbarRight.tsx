@@ -11,7 +11,7 @@ import METAMASK_LOGO from '../../assets/svg/MetaMask_Fox.svg';
 import TooltipCopy from '../../components/TooltipCopy';
 import { SupportedWallets } from '@hashgraph-dev/stablecoin-npm-sdk';
 import { Question } from 'phosphor-react';
-import { useEffect, type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 
 const TopbarRight = () => {
 	const initData = useSelector(SELECTED_WALLET_PAIRED);

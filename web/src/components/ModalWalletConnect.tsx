@@ -81,13 +81,12 @@ const ModalWalletConnect = ({ isOpen, onClose }: ModalWalletConnectProps) => {
 
 	const handleWalletConnect = async (wallet: SupportedWallets, network: string) => {
 		if (loading) return;
-		let result;
 		setLoading(wallet);
 		dispatch(walletActions.setLastWallet(wallet));
 		dispatch(walletActions.setNetwork(network));
 		dispatch(walletActions.setSelectedStableCoin(undefined));
 		try {
-			result = await SDKService.connectWallet(wallet, network);
+			await SDKService.connectWallet(wallet, network);
 		} catch (error: any) {
 			if ('errorCode' in error && error.errorCode === '40009') {
 				setRejected(true);
