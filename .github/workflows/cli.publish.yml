@@ -2,7 +2,7 @@ name: CLI Publish NPM
 on: 
   workflow_dispatch:
   push:
-    branches: [npm-gitflow-sprint15]
+    branches: [npm-gitflow-sprint15-NOT]
     paths:
       - 'cli/**'
 defaults:

@@ -2,7 +2,7 @@ name: WEB Publish NPM
 on: 
   workflow_dispatch:
   push:
-    branches: [npm-gitflow-sprint15]
+    branches: [npm-gitflow-sprint15-NOT]
     paths:
       - 'web/**'
 defaults:
