@@ -23,6 +23,8 @@ jobs:
           node-version: 16.x
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Cleaning the Cache
+        run: npm cache clean
       - name: Install dependencies 
         run: npm install
       - name: Build project
