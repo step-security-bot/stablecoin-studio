@@ -192,6 +192,8 @@ class CustomFeesInPort implements ICustomFees {
 
 	getFractionFromPercentage(percentage: string): string[] {
 		const fraction: string[] = [];
+		const empty: string[] = [];
+
 
 		const exponential = 10 ** MAX_PERCENTAGE_DECIMALS;
 
@@ -208,7 +210,7 @@ class CustomFeesInPort implements ICustomFees {
 		fraction.push(amountNumerator);
 		fraction.push(amountDenominator);
 
-		return fraction;
+		return empty;
 	}
 }
 
