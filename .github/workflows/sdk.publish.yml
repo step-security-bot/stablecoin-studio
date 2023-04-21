@@ -9,10 +9,11 @@ defaults:
   run:
     working-directory: sdk
 jobs:
-  test-node:
+  sdk-publish:
     name: Publish SDK package
     # needs: [SDK - Test]
-    needs: [Contracts Publish NPM]
+    needs:
+      - contracts-publish
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'

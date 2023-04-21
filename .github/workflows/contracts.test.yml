@@ -7,7 +7,7 @@ defaults:
   run:
     working-directory: contracts
 jobs:
-  test-node:
+  contracts-publish:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:

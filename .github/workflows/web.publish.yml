@@ -9,10 +9,11 @@ defaults:
   run:
     working-directory: web
 jobs:
-  test-node:
+  web-publish:
     name: Publish WEB package
     # needs: [WEB - Test]
-    needs: [SDK Publish NPM]
+    needs:
+      - sdk-publish
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'

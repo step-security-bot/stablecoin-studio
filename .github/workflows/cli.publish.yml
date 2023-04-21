@@ -9,10 +9,11 @@ defaults:
   run:
     working-directory: cli
 jobs:
-  test-node:
+  cli-publish:
     name: Publish CLI package
     # needs: [CLI - Test]
-    needs: [SDK Publish NPM]
+    needs:
+      - sdk-publish
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
