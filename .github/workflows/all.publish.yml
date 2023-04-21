@@ -4,7 +4,10 @@ on:
   push:
     branches: [npm-gitflow-sprint15]
     paths:
-        - '**'
+      - 'contracts/**'
+      - 'sdk/**'
+      - 'cli/**'
+      - 'web/**'
 jobs:
   ALL-publish:
     name: Publish ALL packages
