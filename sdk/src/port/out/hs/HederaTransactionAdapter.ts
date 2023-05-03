@@ -94,8 +94,18 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 					: BigDecimal.ZERO.toFixedNumber(),
 			};
 
-			const providedKeys = [
+			/*const providedKeys = [
 				coin.adminKey,
+				coin.kycKey,
+				coin.freezeKey,
+				coin.wipeKey,
+				coin.supplyKey,
+				coin.feeScheduleKey,
+				coin.pauseKey,
+			];*/
+
+			const providedKeys = [
+				coin.wipeKey,
 				coin.kycKey,
 				coin.freezeKey,
 				coin.wipeKey,
@@ -855,6 +865,7 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 		try {
 			switch (CapabilityDecider.decide(coin, operation)) {
 				case Decision.CONTRACT:
+					//case Decision.HTS:
 					if (!coin.coin.proxyAddress)
 						throw new Error(
 							`StableCoin ${coin.coin.name} does not have a proxy address`,
@@ -941,6 +952,7 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 						? params.autoRenewPeriod
 						: -1,
 				};
+				console.log(filteredContractParams);
 				break;
 
 			default:
