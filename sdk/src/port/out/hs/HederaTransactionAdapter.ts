@@ -865,7 +865,7 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 		try {
 			switch (CapabilityDecider.decide(coin, operation)) {
 				case Decision.CONTRACT:
-					//case Decision.HTS:
+				case Decision.HTS:
 					if (!coin.coin.proxyAddress)
 						throw new Error(
 							`StableCoin ${coin.coin.name} does not have a proxy address`,
@@ -879,12 +879,12 @@ export abstract class HederaTransactionAdapter extends TransactionAdapter {
 						contractAbi,
 					);
 
-				case Decision.HTS:
+				/*case Decision.HTS:
 					if (!coin.coin.tokenId)
 						throw new Error(
 							`StableCoin ${coin.coin.name} does not have an underlying token`,
 						);
-					return this.performHTSOperation(coin, operation, params!);
+					return this.performHTSOperation(coin, operation, params!);*/
 
 				default:
 					const tokenId = coin.coin.tokenId
