@@ -14,3 +14,5 @@ docker build -t rpc .
 ## Once built, to execute the container
 
 docker run rpc
+  
+#### So that the application goes against the rpc it is necessary to change the url of the same one in the sdk
