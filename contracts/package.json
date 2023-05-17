@@ -35,7 +35,7 @@
         "test:rescatable": "npx hardhat test test/rescatable.ts",
         "test:supplieradmin": "npx hardhat test test/supplieradmin.ts",
         "test:wipeable": "npx hardhat test test/wipeable.ts",
-        "test:hederaTokenManager": "npx hardhat test test/hederaTokenManager.ts",
+        "test:HederaTokenManager": "npx hardhat test test/HederaTokenManager.ts",
         "test:StableCoinFactory": "npx hardhat test test/StableCoinFactory.ts",
         "test:reserve": "npx hardhat test test/reserve.ts",
         "test:kyc": "npx hardhat test test/kyc.ts",

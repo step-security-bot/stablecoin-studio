@@ -253,7 +253,7 @@ contract HederaTokenManager is
         if (bytes(updatedToken.tokenSymbol).length > 0)
             hederaTokenInfo.symbol = updatedToken.tokenSymbol;
         hederaTokenInfo.tokenKeys = hederaKeys;
-        hederaTokenInfo.memo = _getTokenInfo(currentTokenAddress); // this is required because of an Hedera bug.
+        // hederaTokenInfo.memo = _getTokenInfo(currentTokenAddress); // this is required because of an Hedera bug.
         hederaTokenInfo.expiry = expiry;
 
         if (newTreasury != address(0)) hederaTokenInfo.treasury = newTreasury;
@@ -267,7 +267,7 @@ contract HederaTokenManager is
     }
 
     // This method is required because of an Hedera's bug, when keys are updated for a token, the memo gets removed.
-    function _getTokenInfo(
+    /* function _getTokenInfo(
         address tokenAddress
     ) private returns (string memory) {
         (
@@ -280,5 +280,5 @@ contract HederaTokenManager is
         _checkResponse(responseCode);
 
         return info.token.memo;
-    }
+    } */
 }
