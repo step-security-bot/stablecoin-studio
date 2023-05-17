@@ -24,7 +24,7 @@ import { BURN_ROLE } from '../../scripts/constants'
 import { Client, ContractId } from '@hashgraph/sdk'
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import { IHederaTokenService__factory } from '../../typechain-types/index.js'
+import { HederaERC20__factory } from '../../typechain-types/index'
 
 chai.use(chaiAsPromised)
 const expect = chai.expect
@@ -118,33 +118,40 @@ describe('Estimations', function () {
     })
 
     it('Estimations', async function () {
+        // const url = 'http://127.0.0.1:7546/api';
+        const url = `https://testnet.hashio.io/api`
+        const provider = new ethers.providers.JsonRpcProvider(url)
 
-        const url = 'http://127.0.0.1:7546/api';
-		const provider = new ethers.providers.JsonRpcProvider(url);
-        
+        const burnSignature = 'burn(int64)'
+        const pauseSignature = 'pause()'
+
+        const burnSelector = ethers.utils
+            .keccak256(ethers.utils.toUtf8Bytes(burnSignature))
+            .slice(0, 10)
+        const pauseSelector = ethers.utils
+            .keccak256(ethers.utils.toUtf8Bytes(pauseSignature))
+            .slice(0, 10)
+
+        const burnValue = ethers.BigNumber.from('1')
+        const burnEncodedValue = ethers.utils.defaultAbiCoder
+            .encode(['int64'], [burnValue])
+            .slice(2, 66)
 
         const estimationBurn = await provider.estimateGas({
-            // Wrapped ETH address
             to: proxyAddress.toSolidityAddress(),
-          
-            // `function burnToken(1)`
-            data: "0x5cd3a6080000000000000000000000000000000000000000000000000000000000000001",
-          });
 
-          const estimationPause = await provider.estimateGas({
-            // Wrapped ETH address
+            // burnToken(1)
+            data: burnSelector + burnEncodedValue,
+        })
+
+        const estimationPause = await provider.estimateGas({
             to: proxyAddress.toSolidityAddress(),
-          
-            // `function pause()`
-            data: "0x8456cb59",
-          });
 
+            // pause()
+            data: pauseSelector,
+        })
 
-         console.log("estimation Burn : " + estimationBurn.toString())
-         console.log("estimation Pause : " + estimationPause.toString())
-
-       
+        console.log('estimation Burn : ' + estimationBurn.toString())
+        console.log('estimation Pause : ' + estimationPause.toString())
     })
-
-  
 })
