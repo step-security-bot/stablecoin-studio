@@ -26,9 +26,11 @@ export const RoutesMappingUrl: Record<NamedRoutes, string> = {
 	[NamedRoutes.DangerZone]: '/operations/danger-zone',
 	[NamedRoutes.Freeze]: '/operations/freeze',
 	[NamedRoutes.Unfreeze]: '/operations/unfreeze',
+	[NamedRoutes.CheckFrozen]: '/operations/check-frozen',
 	[NamedRoutes.ProofOfReserve]: '/proofOfReserve',
 	[NamedRoutes.GrantKyc]: '/operations/grant-kyc',
 	[NamedRoutes.RevokeKyc]: '/operations/revoke-kyc',
 	[NamedRoutes.CheckKyc]: '/operations/check-kyc',
 	[NamedRoutes.FeesManagement]: '/feesManagement',
+	[NamedRoutes.Settings]: '/settings',
 };

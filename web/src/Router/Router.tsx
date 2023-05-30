@@ -12,6 +12,7 @@ import RescueHBAROperation from '../views/Operations/RescueHBAR';
 import WipeOperation from '../views/Operations/Wipe';
 import FreezeOperation from '../views/Operations/Freeze';
 import UnfreezeOperation from '../views/Operations/Unfreeze';
+import CheckFrozenOperation from '../views/Operations/CheckFrozen';
 import Dashboard from '../views/Dashboard';
 import HandleRoles from '../views/Roles/HandleRoles';
 import { actions } from '../views/Roles/constants';
@@ -45,6 +46,7 @@ import FeesManagement from '../views/FeesManagement';
 import GrantKycOperation from '../views/Operations/GrantKyc';
 import RevokeKycOperation from '../views/Operations/RevokeKyc';
 import CheckKycOperation from '../views/Operations/CheckKyc';
+import Settings from '../views/Settings';
 
 const LoginOverlayRoute = ({ show, loadingSC }: { show: boolean; loadingSC: boolean }) => {
 	return (
@@ -68,7 +70,11 @@ const Router = () => {
 
 	useEffect(() => {
 		instanceSDK();
-		localStorage.clear();
+		const items = { ...localStorage };
+		delete items.tokensAccount;
+		for (var item in items) {
+			localStorage.removeItem(item);
+		}
 	}, []);
 
 	const onLastWalletEvent = <T extends keyof WalletEvent>(
@@ -162,6 +168,7 @@ const Router = () => {
 								<Route path={RoutesMappingUrl.wipe} element={<WipeOperation />} />
 								<Route path={RoutesMappingUrl.freeze} element={<FreezeOperation />} />
 								<Route path={RoutesMappingUrl.unfreeze} element={<UnfreezeOperation />} />
+								<Route path={RoutesMappingUrl.checkFrozen} element={<CheckFrozenOperation />} />
 								<Route path={RoutesMappingUrl.dashboard} element={<Dashboard />} />
 								<Route
 									path={RoutesMappingUrl.editRole}
@@ -192,6 +199,7 @@ const Router = () => {
 								<Route path={RoutesMappingUrl.stableCoinDetails} element={<StableCoinDetails />} />
 								<Route path={RoutesMappingUrl.proofOfReserve} element={<StableCoinProof />} />
 								<Route path={RoutesMappingUrl.feesManagement} element={<FeesManagement />} />
+								<Route path={RoutesMappingUrl.settings} element={<Settings />} />
 							</>
 						)}
 						<Route path={RoutesMappingUrl.stableCoinCreation} element={<StableCoinCreation />} />
