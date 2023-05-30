@@ -282,6 +282,7 @@ contract HederaTokenManager is
         IHederaTokenService.TokenKey[] memory hederaKeys
     )
         private
+        pure
         returns (IHederaTokenService.HederaToken memory hederaTokenUpdated)
     {
         IHederaTokenService.Expiry memory expiry;
