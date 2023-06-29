@@ -58,6 +58,7 @@ contract StableCoinProxyAdmin is Ownable, ProxyAdmin, Ownable2Step, TimeDelay {
         _confirmDelayChange();
     }
 
+    // transfer ownership using Owner2Step
     function transferOwnership(
         address newOwner
     ) public override(Ownable, Ownable2Step) onlyOwner {
