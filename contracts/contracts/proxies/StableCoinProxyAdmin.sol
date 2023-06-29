@@ -88,9 +88,9 @@ contract StableCoinProxyAdmin is Ownable, ProxyAdmin, Ownable2Step, TimeDelay {
     function getPendingAdminChange()
         external
         view
-        returns (ITransparentUpgradeableProxy, address)
+        returns (ITransparentUpgradeableProxy, address, uint256)
     {
-        return (_pendingAdminProxy, _pendingAdmin);
+        return (_pendingAdminProxy, _pendingAdmin, _pendingAdminTimestamp);
     }
 
     function changeProxyAdmin(
@@ -132,13 +132,20 @@ contract StableCoinProxyAdmin is Ownable, ProxyAdmin, Ownable2Step, TimeDelay {
     function getPendingImplementationChange()
         external
         view
-        returns (ITransparentUpgradeableProxy, address, uint256, bytes memory)
+        returns (
+            ITransparentUpgradeableProxy,
+            address,
+            uint256,
+            bytes memory,
+            uint256
+        )
     {
         return (
             _pendingImplementationProxy,
             _pendingImplementation,
             _pendingImplementationValue,
-            _pendingImplementationData
+            _pendingImplementationData,
+            _pendingImplementationTimestamp
         );
     }
 
