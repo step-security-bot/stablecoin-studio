@@ -143,7 +143,8 @@ contract StableCoinFactory is
 
         // Deploy Proxy Admin
         StableCoinProxyAdmin stableCoinProxyAdmin = new StableCoinProxyAdmin(
-            msg.sender
+            msg.sender,
+            0
         );
 
         // Deploy Proxy
