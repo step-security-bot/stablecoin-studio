@@ -85,6 +85,7 @@ abstract contract TimeDelayGeneric {
 
     // Add and remove changes
     function _addChange(bytes32 pendingOp, bytes32 hash) internal {
+        _removeChange(pendingOp);
         _pendingOperations[pendingOp] = hash;
         _timestamps[hash] = block.timestamp;
     }
