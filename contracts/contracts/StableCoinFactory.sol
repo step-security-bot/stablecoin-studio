@@ -20,7 +20,9 @@ import {
     Initializable
 } from '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
 import {KeysLib} from './library/KeysLib.sol';
-import {StableCoinProxyAdmin} from './proxies/StableCoinProxyAdmin.sol';
+import {
+    StableCoinProxyAdminGeneric as StableCoinProxyAdmin
+} from './proxies/StableCoinProxyAdminGeneric.sol';
 
 contract StableCoinFactory is
     IStableCoinFactory,
