@@ -21,8 +21,8 @@ jobs:
         with:
           node-version: 18.x
       
-      - name: Config cli
-        run:  npm config set @hashgraph-dev:registry=https://us-npm.pkg.dev/hedera-registry/stablecoin-npm/  
+      #- name: Config cli
+      #  run:  npm config set @hashgraph-dev:registry=https://us-npm.pkg.dev/hedera-registry/stablecoin-npm/  
       
       - name: Install dependencies Hashconnect
         run: npm i
@@ -51,7 +51,7 @@ jobs:
         working-directory: web
       
       - name: node modelues web
-        run: ls node_modules
+        run: ls node_modules/
         working-directory: web
         
       - name: Create file
