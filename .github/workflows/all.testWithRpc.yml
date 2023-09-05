@@ -42,7 +42,11 @@ jobs:
       - name: Install dependencies web
         run: npm install
         working-directory: web
-   
+      
+      - name: node modelues web
+        run: ls node_modules
+        working-directory: web
+        
       - name: Create file
         run: |
           touch .env
