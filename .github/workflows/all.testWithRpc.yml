@@ -23,7 +23,10 @@ jobs:
       
       - name: Config cli
         run:  npm config set @hashgraph-dev:registry=https://us-npm.pkg.dev/hedera-registry/stablecoin-npm/  
-
+      
+      - name: Install dependencies Hashconnect
+        run: npm i
+        
       - name: Install dependencies Hashconnect
         run: npm install
         working-directory: hashconnect/lib
