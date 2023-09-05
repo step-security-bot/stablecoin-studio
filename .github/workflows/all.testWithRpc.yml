@@ -34,10 +34,14 @@ jobs:
         run: npm run build
         working-directory: hashconnect/lib
       - name: Install dependencies Contracts
-        run: npm install
+        run: |
+          npm install
+          npm run build
         working-directory: contracts
       - name: Install dependencies SDK
-        run: npm install
+        run: |
+          npm install
+          npm run build
         working-directory: sdk
       - name: Install dependencies Cli
         run: npm install
