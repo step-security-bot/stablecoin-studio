@@ -28,11 +28,11 @@ jobs:
         run: npm i
         
       - name: Install dependencies Hashconnect
-        run: npm install
+        run: |
+          npm install
+          npm run build
         working-directory: hashconnect/lib
-      - name: Build Hashconnect
-        run: npm run build
-        working-directory: hashconnect/lib
+      
       - name: Install dependencies Contracts
         run: |
           npm install
@@ -57,7 +57,9 @@ jobs:
       - name: node modelues web
         run: ls node_modules/
         working-directory: web
-        
+      - name: node modelues sdk
+        run: ls node_modules/
+        working-directory: sdk
       - name: Create file
         run: |
           touch .env
