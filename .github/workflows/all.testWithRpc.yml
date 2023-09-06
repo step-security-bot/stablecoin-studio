@@ -37,14 +37,18 @@ jobs:
         run: |
           npm install
           npm run build
+          npm install
         working-directory: contracts
       - name: Install dependencies SDK
         run: |
           npm install
           npm run build
+          npm install
         working-directory: sdk
       - name: Install dependencies Cli
-        run: npm install
+        run: | 
+          npm install
+          npm run build
         working-directory: cli
       - name: Install dependencies web
         run: npm install
