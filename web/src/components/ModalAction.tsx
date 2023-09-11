@@ -34,7 +34,7 @@ const ModalAction = (props: ModalActionProps) => {
 		onClose,
 		onConfirm,
 		title,
-		isDisabled = false
+		isDisabled = false,
 	} = props;
 
 	return (
@@ -74,7 +74,12 @@ const ModalAction = (props: ModalActionProps) => {
 						>
 							{cancelButtonLabel}
 						</Button>
-						<Button data-testid='modal-action-confirm-button' onClick={onConfirm} flex={1} isDisabled={isDisabled}>
+						<Button
+							data-testid='modal-action-confirm-button'
+							onClick={onConfirm}
+							flex={1}
+							isDisabled={isDisabled}
+						>
 							{confirmButtonLabel}
 						</Button>
 					</HStack>

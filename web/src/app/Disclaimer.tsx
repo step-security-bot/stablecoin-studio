@@ -1,5 +1,14 @@
 import ModalAction from '../components/ModalAction';
-import { Button, ChakraProvider, Flex, Link, Stack, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import {
+	Button,
+	ChakraProvider,
+	Flex,
+	Link,
+	Stack,
+	Text,
+	VStack,
+	useDisclosure,
+} from '@chakra-ui/react';
 import theme from '../theme/Theme';
 import { useEffect, useState } from 'react';
 import InputController from '../components/Form/InputController';
@@ -11,40 +20,76 @@ interface DisclaimerProps {
 }
 
 const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const {
+		isOpen: isDisclaimerOpen,
+		onOpen: onDisclaimerOpen,
+		onClose: onDisclaimerClose,
+	} = useDisclosure();
+	const { isOpen: isCookiesOpen, onOpen: onCookiesOpen, onClose: onCookiesClose } = useDisclosure();
 
-	const  { control,  formState } = useForm({
-		mode: 'onChange'
+	const { control, formState } = useForm({
+		mode: 'onChange',
 	});
 
 	const [firstName, setFirstName] = useState<String>('');
 	const [lastName, setLastName] = useState<String>('');
 	const [email, setEmail] = useState<String>('');
 	const [disclaimer, setDisclaimer] = useState<boolean>(false);
+	const [cookiesAccepted, setCookiesAccepted] = useState<boolean>(false);
 
 	useEffect(() => {
-		onOpen();
+		if (document.cookie.indexOf('cookiesAccepted=true') === -1) {
+			onCookiesOpen();
+		} else {
+			setCookiesAccepted(true);
+		}
+
+		if (document.cookie.indexOf('disclaimerAccepted=true') === -1) {
+			onDisclaimerOpen();
+		} else {
+			setAccepted(true);
+		}
 	}, []);
 
+	const handleCookiesAccept = () => {
+		document.cookie = 'cookiesAccepted=true; expires=Fri, 31 Dec 9999 23:59:59 GMT';
+		setCookiesAccepted(true);
+		onCookiesClose();
+	};
+
+	const handleCookiesDecline = () => {
+		setCookiesAccepted(false);
+		onCookiesClose();
+	};
+
 	const handleSubmit = () => {
-		fetch('https://api.hubapi.com/crm/v3/objects/contacts/batch/create', {
-			method: 'POST',
-			body: JSON.stringify({
-				properties: {
-					firstName,
-					lastName,
-					email,
-					disclaimer,
-					stablecoin_studio_signup: new Date().toISOString().slice(0, 10) + ""
-				},
-				associations: []
-			}),
-			headers: {
-				"accept": "application/json",
-				"content-type": "application/json",
-				"authorization": "Bearer pat-na1-6cb24f23-c329-424e-b501-572dec0b654e"
-			},
-		});
+		/*
+        fetch('https://api.hubapi.com/crm/v3/objects/contacts/batch/create', {
+            method: 'POST',
+            body: JSON.stringify({
+                properties: {
+                    firstName,
+                    lastName,
+                    email,
+                    disclaimer,
+                    stablecoin_studio_signup: new Date().toISOString().slice(0, 10) + ""
+                },
+                associations: []
+            }),
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json",
+                "authorization": "Bearer pat-na1-6cb24f23-c329-424e-b501-572dec0b654e"
+            }
+		}).then(() => {
+            document.cookie = 'disclaimerAccepted=true; expires=Fri, 31 Dec 9999 23:59:59 GMT';
+			setAccepted(true);
+			onDisclaimerClose();
+        });
+		*/
+		document.cookie = 'disclaimerAccepted=true; expires=Fri, 31 Dec 9999 23:59:59 GMT';
+		setAccepted(true);
+		onDisclaimerClose();
 	};
 
 	return (
@@ -60,10 +105,21 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 				gap={10}
 			>
 				<>
+					<ModalAction
+						data-testid='cookies'
+						title='Cookies'
+						isOpen={isCookiesOpen && !cookiesAccepted}
+						onClose={handleCookiesDecline}
+						onConfirm={handleCookiesAccept}
+						cancelButtonLabel='Decline'
+						confirmButtonLabel='Accept'
+					>
+						<Text>This website uses cookies to improve your experience.</Text>
+					</ModalAction>
 					<Button
 						data-testid='modal-term-conditions-button'
 						onClick={() => {
-							onOpen();
+							onDisclaimerOpen();
 						}}
 						variant='primary'
 						alignSelf={'center'}
@@ -73,11 +129,11 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 					<ModalAction
 						data-testid='disclaimer'
 						title='Terms & Conditions'
-						isOpen={isOpen}
-						onClose={onClose}
+						isOpen={isDisclaimerOpen && !isCookiesOpen}
+						onClose={onDisclaimerClose}
 						onConfirm={() => {
 							handleSubmit();
-							setAccepted(true);
+							// setAccepted(true);
 						}}
 						cancelButtonLabel='Cancel'
 						confirmButtonLabel='Accept'
@@ -87,7 +143,7 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 							<Stack as='form' spacing={4}>
 								<InputController
 									rules={{
-										required: "This field is required",
+										required: 'This field is required',
 										validate: {
 											validation: (value: string) => {
 												if (value === undefined || value.length > 20) {
@@ -107,7 +163,7 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 								/>
 								<InputController
 									rules={{
-										required: "This field is required",
+										required: 'This field is required',
 										validate: {
 											validation: (value: string) => {
 												if (value === undefined || value.length > 20) {
@@ -127,10 +183,13 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 								/>
 								<InputController
 									rules={{
-										required: "This field is required",
+										required: 'This field is required',
 										validate: {
 											validation: (value: string) => {
-												if (value === undefined || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+												if (
+													value === undefined ||
+													!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
+												) {
 													setEmail('');
 													return 'Invalid Email';
 												}
