@@ -31,9 +31,6 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 		mode: 'onChange',
 	});
 
-	const [firstName, setFirstName] = useState<String>('');
-	const [lastName, setLastName] = useState<String>('');
-	const [email, setEmail] = useState<String>('');
 	const [disclaimer, setDisclaimer] = useState<boolean>(false);
 	const [cookiesAccepted, setCookiesAccepted] = useState<boolean>(false);
 
@@ -63,30 +60,6 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 	};
 
 	const handleSubmit = () => {
-		/*
-        fetch('https://api.hubapi.com/crm/v3/objects/contacts/batch/create', {
-            method: 'POST',
-            body: JSON.stringify({
-                properties: {
-                    firstName,
-                    lastName,
-                    email,
-                    disclaimer,
-                    stablecoin_studio_signup: new Date().toISOString().slice(0, 10) + ""
-                },
-                associations: []
-            }),
-            headers: {
-                "accept": "application/json",
-                "content-type": "application/json",
-                "authorization": "Bearer pat-na1-6cb24f23-c329-424e-b501-572dec0b654e"
-            }
-		}).then(() => {
-            document.cookie = 'disclaimerAccepted=true; expires=Fri, 31 Dec 9999 23:59:59 GMT';
-			setAccepted(true);
-			onDisclaimerClose();
-        });
-		*/
 		document.cookie = 'disclaimerAccepted=true; expires=Fri, 31 Dec 9999 23:59:59 GMT';
 		setAccepted(true);
 		onDisclaimerClose();
@@ -133,7 +106,6 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 						onClose={onDisclaimerClose}
 						onConfirm={() => {
 							handleSubmit();
-							// setAccepted(true);
 						}}
 						cancelButtonLabel='Cancel'
 						confirmButtonLabel='Accept'
@@ -147,10 +119,8 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 										validate: {
 											validation: (value: string) => {
 												if (value === undefined || value.length > 20) {
-													setFirstName('');
 													return 'Invalid First Name';
 												}
-												setFirstName(value);
 												return true;
 											},
 										},
@@ -167,10 +137,8 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 										validate: {
 											validation: (value: string) => {
 												if (value === undefined || value.length > 20) {
-													setLastName('');
 													return 'Invalid Last Name';
 												}
-												setLastName(value);
 												return true;
 											},
 										},
@@ -190,10 +158,8 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 													value === undefined ||
 													!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
 												) {
-													setEmail('');
 													return 'Invalid Email';
 												}
-												setEmail(value);
 												return true;
 											},
 										},
