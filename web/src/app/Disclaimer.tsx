@@ -156,7 +156,7 @@ const Disclaimer = ({ setAccepted }: DisclaimerProps) => {
 											validation: (value: string) => {
 												if (
 													value === undefined ||
-													!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
+													!/^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z0-9.-]{2,63}$/i.test(value)
 												) {
 													return 'Invalid Email';
 												}
