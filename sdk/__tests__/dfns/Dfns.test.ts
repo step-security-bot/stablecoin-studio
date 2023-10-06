@@ -32,8 +32,6 @@ const ECDSA_ACCOUNT_PUBLIC_KEY =
 	'03b78a80a5fa270ec7f7c7a9e59684c2da303845af66f68d9162d84ce0bca40bb2';
 
 describe('🧪 DFNS test', () => {
-	beforeAll(async () => {});
-
 	it('Create a transaction, sign it with DFNS and send it to Hedera', async () => {
 		const transaction: TokenCreateTransaction = new TokenCreateTransaction()
 			.setTokenName('Mamorales Token')
