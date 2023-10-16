@@ -123,7 +123,7 @@ describe('🧪 DFNS test', () => {
 
 		const transaction: TransactionRequest = {
 			to: stableCoinProxyEvmAddress,
-			nonce: 11,
+			nonce: 12,
 			gasLimit: gasLimit,
 			gasPrice: gasPrice,
 			data: data,
