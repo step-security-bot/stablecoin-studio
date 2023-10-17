@@ -22,38 +22,37 @@ import { DfnsWallet, DfnsWalletOptions } from './dfnsWallet';
 import { DfnsApiClient } from '@dfns/sdk';
 import type { DfnsApiClientOptions } from '@dfns/sdk';
 import { AsymmetricKeySigner } from '@dfns/sdk-keysigner';
+import { SignatureKind } from '@dfns/sdk/codegen/datamodel/Wallets';
 import {
-	AccountCreateTransaction,
 	AccountId,
 	Client,
-	Hbar,
-	KeyList,
-	LocalProvider,
-	PrivateKey,
-	PublicKey,
-	TokenCreateTransaction,
-	TokenSupplyType,
-	TokenType,
 	TokenWipeTransaction,
-	Wallet,
+	Transaction,
 } from '@hashgraph/sdk';
 import {
 	CLIENT_ACCOUNT_ID_ECDSA,
 	CLIENT_ACCOUNT_ID_ED25519,
 	CLIENT_PRIVATE_KEY_ECDSA,
 	CLIENT_PRIVATE_KEY_ED25519,
-	CLIENT_PUBLIC_KEY_ECDSA,
-	CLIENT_PUBLIC_KEY_ED25519,
 } from '../config.js';
 import { ethers } from 'ethers';
 import { HederaTokenManager__factory } from '@hashgraph/stablecoin-npm-contracts';
 import BigDecimal from '../../src/domain/context/shared/BigDecimal';
 import Web3 from 'web3';
+import { keccak256 } from '@ethersproject/keccak256';
+import {
+	SignatureLike,
+	hexlify,
+	arrayify,
+	stripZeros,
+	isBytesLike,
+	splitSignature,
+} from '@ethersproject/bytes';
+import { defineReadOnly, resolveProperties } from '@ethersproject/properties';
+import { RLP, checkProperties } from 'ethers/lib/utils';
 
 const stableCoinProxyEvmAddress = '0xcec42855b3151c090866403f682af006354ed101';
 const targetAccountEvmAddress = '0x0000000000000000000000000000000000004719';
-const gasLimit = 15000000;
-const gasPrice = 1820000000000;
 const tokenDecimals = 6;
 const wipeAmount = 1;
 const jsonRpcRelayUrl = 'http://127.0.0.1:7546';
@@ -72,7 +71,7 @@ const targetAccountId = '0.0.18201';
 const tokenId = '0.0.5700082';
 
 const client = Client.forTestnet();
-client.setOperator(CLIENT_ACCOUNT_ID_ECDSA, CLIENT_PRIVATE_KEY_ECDSA.key);
+client.setOperator(CLIENT_ACCOUNT_ID_ED25519, CLIENT_PRIVATE_KEY_ED25519.key);
 
 console.log(CLIENT_ACCOUNT_ID_ECDSA);
 console.log(CLIENT_PRIVATE_KEY_ECDSA.key);
@@ -135,91 +134,25 @@ describe('🧪 DFNS signing test with a Hedera native transaction', () => {
 			.setTokenId(tokenId)
 			.setAmount(wipeAmount)
 			.freezeWith(client);
+		console.log('transaction: ' + JSON.stringify(transaction));
 
-		// const key1 = PrivateKey.generateED25519();
-		const privateKey = PrivateKey.fromString(
-			'302e020100300506032b657004220420f6392a8242bce3be5bf69fc607a153e65c99bf4b39126f1d41059b00c49ee318',
-		);
-		const signature = privateKey.signTransaction(transaction);
+		const res = await dfnsApiClient.wallets.generateSignature({
+			walletId: dfnsWalletId,
+			body: {
+				kind: SignatureKind.Hash,
+				hash: keccak256(serialize(transaction)),
+			},
+		});
+		const signature = await dfnsWallet.waitForSignature(res.id);
 		console.log('signature: ' + signature);
-		const signedTransaction = transaction.addSignature(
-			PublicKey.fromString(
-				'b547baa785fe8c9a89c0a494d7ee65ac1bd0529020f985a4c31c3d09eb99142d',
-			),
-			signature,
-		);
 
-		// Sign the transaction
-		// const signedTransaction = await transaction
-		//    .sign(PrivateKey.fromString("302e020100300506032b657004220420f6392a8242bce3be5bf69fc607a153e65c99bf4b39126f1d41059b00c49ee318"));
+		const serializedSignedTransaction = serialize(transaction, signature);
+		console.log('signed transaction: ' + serializedSignedTransaction);
 
-		// Submit the transaction
+		const txtBuffer = Buffer.from(serializedSignedTransaction);
+		const signedTransaction = Transaction.fromBytes(txtBuffer);
+
 		await signedTransaction.execute(client);
-
-		//Print all public keys that signed the transaction
-		console.log(
-			'The public keys that signed the transaction  ' +
-				signedTransaction.getSignatures(),
-		);
-
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		/*const randomKey = PrivateKey.generateED25519();
-const treasuryKey = PrivateKey.generateED25519();
-const key1 = PrivateKey.generateED25519();
-const key2 = PrivateKey.generateED25519();
-
-const nodeId = [];
-nodeId.push(new AccountId(3));
-
-// Create keylist
-console.log(`- Generating keylist...`);
-const keyList = new KeyList([key1.publicKey, key2.publicKey], 2); // 2-out-of-2
-console.log("0");		 
-const response = await new AccountCreateTransaction()
-		  .setInitialBalance(new Hbar(3))
-		  .setKey(PublicKey.fromString("b547baa785fe8c9a89c0a494d7ee65ac1bd0529020f985a4c31c3d09eb99142d"))
-		  .execute(client);
-console.log("1");		  
-const receipt = await response.getReceipt(client);
-console.log("2");
-const treasuryId = receipt.accountId!;
-console.log(`- Created treasury account ${treasuryId} that has a balance of 3ℏ`);
-
-// Create NFT
-console.log(`\n- Creating NFT (with all token keys set)`);
-let nftCreate = await new TokenCreateTransaction()
-  .setNodeAccountIds(nodeId)
-  .setTokenName("Fall Collection")
-  .setTokenSymbol("LEAF")
-  .setTokenType(TokenType.NonFungibleUnique)
-  .setDecimals(0)
-  .setInitialSupply(0)
-  .setTreasuryAccountId(treasuryId) // needs to sign
-  .setSupplyType(TokenSupplyType.Finite)
-  .setMaxSupply(5)
-  // Set keys
-  .setAdminKey(keyList) // multisig (keylist)
-  .setFreezeKey(randomKey)
-  .setKycKey(randomKey)
-  .setWipeKey(randomKey)
-  .setSupplyKey(randomKey)
-  .setPauseKey(randomKey)
-  .setFeeScheduleKey(randomKey)
-  .freezeWith(client)
-  .sign(treasuryKey);
-
-// Adding multisig signatures
-const sig1 = key1.signTransaction(nftCreate);
-const sig2 = key2.signTransaction(nftCreate);
-const nftCreateTxSign = nftCreate.addSignature(key1.publicKey, sig1).addSignature(key2.publicKey, sig2);
-
-let nftCreateSubmit = await nftCreateTxSign.execute(client);
-let nftCreateRx = await nftCreateSubmit.getReceipt(client);
-let tokenId = nftCreateRx.tokenId;
-console.log(`- Created NFT with Token ID: ${tokenId}`);*/
-
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		const afterBalance = await contract.balanceOf(targetAccountEvmAddress);
 		const bdAfterBalance: BigDecimal = BigDecimal.fromStringFixed(
@@ -233,16 +166,112 @@ console.log(`- Created NFT with Token ID: ${tokenId}`);*/
 				._value,
 		);
 	}, 200000);
-
-	/*async function accountCreatorFcn(
-		pvKey: any,
-		iBal: any,
-	): Promise<AccountId> {
-		const response = await new AccountCreateTransaction()
-			.setInitialBalance(new Hbar(iBal))
-			.setKey(pvKey.publicKey)
-			.execute(client);
-		const receipt = await response.getReceipt(client);
-		return receipt.accountId!;
-	}*/
 });
+
+function serialize(
+	transaction: Transaction,
+	signature?: SignatureLike,
+): string {
+	checkProperties(transaction, allowedTransactionKeys);
+
+	const raw: Array<string | Uint8Array> = [];
+
+	transactionFields.forEach(function (fieldInfo) {
+		let value = (<any>transaction)[fieldInfo.name] || [];
+		const options: DataOptions = {};
+		if (fieldInfo.numeric) {
+			options.hexPad = 'left';
+		}
+		value = arrayify(hexlify(value, options));
+
+		// Fixed-width field
+		if (
+			fieldInfo.length &&
+			value.length !== fieldInfo.length &&
+			value.length > 0
+		) {
+			console.log(
+				'invalid length for ' + fieldInfo.name,
+				'transaction:' + fieldInfo.name,
+				value,
+			);
+		}
+
+		// Variable-width (with a maximum)
+		if (fieldInfo.maxLength) {
+			value = stripZeros(value);
+			if (value.length > fieldInfo.maxLength) {
+				console.log(
+					'invalid length for ' + fieldInfo.name,
+					'transaction:' + fieldInfo.name,
+					value,
+				);
+			}
+		}
+
+		raw.push(hexlify(value));
+	});
+
+	let chainId = 0;
+	if (transaction.chainId != null) {
+		// A chainId was provided; if non-zero we'll use EIP-155
+		chainId = transaction.chainId;
+
+		if (typeof chainId !== 'number') {
+			console.log(
+				'invalid transaction.chainId',
+				'transaction',
+				transaction,
+			);
+		}
+	} else if (signature && !isBytesLike(signature) && signature.v > 28) {
+		// No chainId provided, but the signature is signing with EIP-155; derive chainId
+		chainId = Math.floor((signature.v - 35) / 2);
+	}
+
+	// We have an EIP-155 transaction (chainId was specified and non-zero)
+	if (chainId !== 0) {
+		raw.push(hexlify(chainId)); // @TODO: hexValue?
+		raw.push('0x');
+		raw.push('0x');
+	}
+
+	// Requesting an unsigned transaction
+	if (!signature) {
+		return RLP.encode(raw);
+	}
+
+	// The splitSignature will ensure the transaction has a recoveryParam in the
+	// case that the signTransaction function only adds a v.
+	const sig = splitSignature(signature);
+
+	// We pushed a chainId and null r, s on for hashing only; remove those
+	let v = 27 + sig.recoveryParam;
+	if (chainId !== 0) {
+		raw.pop();
+		raw.pop();
+		raw.pop();
+		v += chainId * 2 + 8;
+
+		// If an EIP-155 v (directly or indirectly; maybe _vs) was provided, check it!
+		if (sig.v > 28 && sig.v !== v) {
+			console.log(
+				'transaction.chainId/signature.v mismatch',
+				'signature',
+				signature,
+			);
+		}
+	} else if (sig.v !== v) {
+		console.log(
+			'transaction.chainId/signature.v mismatch',
+			'signature',
+			signature,
+		);
+	}
+
+	raw.push(hexlify(v));
+	raw.push(stripZeros(arrayify(sig.r)));
+	raw.push(stripZeros(arrayify(sig.s)));
+
+	return RLP.encode(raw);
+}
