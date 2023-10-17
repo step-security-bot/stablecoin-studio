@@ -23,11 +23,6 @@ import { DfnsApiClient } from '@dfns/sdk';
 import type { DfnsApiClientOptions } from '@dfns/sdk';
 import { AsymmetricKeySigner } from '@dfns/sdk-keysigner';
 import { TransactionRequest } from '@ethersproject/abstract-provider';
-import { Client } from '@hashgraph/sdk';
-import {
-	CLIENT_ACCOUNT_ID_ECDSA,
-	CLIENT_PRIVATE_KEY_ECDSA,
-} from '../config.js';
 import { ethers } from 'ethers';
 import { HederaTokenManager__factory } from '@hashgraph/stablecoin-npm-contracts';
 import BigDecimal from '../../src/domain/context/shared/BigDecimal';
@@ -40,7 +35,7 @@ const tokenDecimals = 18;
 const wipeAmount = '0.1';
 const hederaTestnetChainId = 0x128;
 const jsonRpcRelayUrl = 'http://127.0.0.1:7546';
-const dfnsWalletId = 'wa-5phef-ico8c-9smr47d6ton6r8c2';
+const dfnsWalletId = 'wa-5phef-ico8c-9smr47d6ton6r8c2'; // Wallet ECDSA 2
 const dfnsTestUrl = 'https://api.dfns.ninja';
 const dfnsAppId = 'ap-b6uj2-95t58-55o0cprm1lqqkpn';
 const dfnsAppOrigin = 'http://stablecoin.es';
@@ -51,11 +46,8 @@ const dfnsEcdsaServiceaccountCredentialId =
 const privateKeyToCreateECDSAServiceAccount =
 	'-----BEGIN EC PRIVATE KEY-----\nMHcCAQEEIKrGoR4v2XoJzaTlNDhQ0hbd4gOvlGFiEEroqCj8CuCCoAoGCCqGSM49AwEHoUQDQgAEsSDhu7Jwx3hJEH9jyAQcKd0XNIW9Sq7CG8DQA7nQrPUfpIsubyWbMv7MRe5M92uRtgCvbPttPmph0uvPh2sAyg==\n-----END EC PRIVATE KEY-----';
 
-const client = Client.forTestnet();
-client.setOperator(CLIENT_ACCOUNT_ID_ECDSA, CLIENT_PRIVATE_KEY_ECDSA.key);
-
-describe('🧪 DFNS test', () => {
-	it('Create a transaction, sign it with DFNS and send it to Hedera', async () => {
+describe('🧪 DFNS signing test with an ethers transaction', () => {
+	it('Create an ethers transaction, sign it with DFNS using an ECDSA wallet and send it to Hedera through JSON-RPC relay', async () => {
 		const signer = new AsymmetricKeySigner({
 			privateKey: privateKeyToCreateECDSAServiceAccount,
 			credId: dfnsEcdsaServiceaccountCredentialId,
@@ -74,8 +66,7 @@ describe('🧪 DFNS test', () => {
 		);
 
 		const dfnsWalletOptions: DfnsWalletOptions = {
-			// walletId: 'wa-5nclj-99leh-87epm4jjg9vmckie', // Wallet ECDSA
-			walletId: dfnsWalletId, // Wallet ECDSA 2
+			walletId: dfnsWalletId,
 			dfnsClient: dfnsApiClient,
 			maxRetries: 6,
 			retryInterval: 2000,
@@ -101,12 +92,12 @@ describe('🧪 DFNS test', () => {
 		);
 
 		// Get the account balance
-		const beforeBalance = await contract.balanceOf(targetAccountEvmAddress);
-		const sbdBalanceBefore = BigDecimal.fromStringFixed(
-			beforeBalance.toString(),
+		const balanceBefore = await contract.balanceOf(targetAccountEvmAddress);
+		const bdBalanceBefore = BigDecimal.fromStringFixed(
+			balanceBefore.toString(),
 			tokenDecimals,
 		);
-		console.log('balance before: ' + sbdBalanceBefore._value);
+		console.log('balance before: ' + bdBalanceBefore._value);
 
 		// Specify the function and its parameters
 		const functionName = 'wipe';
@@ -123,7 +114,7 @@ describe('🧪 DFNS test', () => {
 
 		const transaction: TransactionRequest = {
 			to: stableCoinProxyEvmAddress,
-			nonce: 12,
+			nonce: 15,
 			gasLimit: gasLimit,
 			gasPrice: gasPrice,
 			data: data,
@@ -148,7 +139,7 @@ describe('🧪 DFNS test', () => {
 		console.log('balance after: ' + balanceAfter._value);
 
 		expect(bdBalanceAfter._value).toEqual(
-			sbdBalanceBefore.subUnsafe(new BigDecimal('0.1'))._value,
+			bdBalanceBefore.subUnsafe(new BigDecimal(wipeAmount))._value,
 		);
 	}, 200000);
 });
