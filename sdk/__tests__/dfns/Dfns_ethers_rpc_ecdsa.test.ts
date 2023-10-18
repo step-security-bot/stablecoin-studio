@@ -114,7 +114,7 @@ describe('🧪 DFNS signing test with an ethers transaction', () => {
 
 		const transaction: TransactionRequest = {
 			to: stableCoinProxyEvmAddress,
-			nonce: 23,
+			nonce: 24,
 			gasLimit: gasLimit,
 			gasPrice: gasPrice,
 			data: data,
