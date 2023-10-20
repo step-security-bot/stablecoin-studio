@@ -87,7 +87,9 @@
 		"web3": "^1.8.1",
 		"winston": "^3.8.2",
 		"winston-daily-rotate-file": "^4.7.1",
-		"@hashgraph/stablecoin-npm-contracts": "file:./../contracts"
+		"@hashgraph/stablecoin-npm-contracts": "file:./../contracts",
+		"fireblocks-sdk": "^5.9.0",
+		"@fireblocks/fireblocks-web3-provider": "^1.2.5"
 	},
 	"volta": {
 		"node": "16.13.0"
