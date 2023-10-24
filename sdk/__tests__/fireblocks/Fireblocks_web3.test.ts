@@ -22,10 +22,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import {
-	FireblocksWeb3Provider,
-	ChainId,
-} from '@fireblocks/fireblocks-web3-provider';
+import { FireblocksWeb3Provider } from '@fireblocks/fireblocks-web3-provider';
 
 describe('🧪 Signing a Hedera transaction using the Fireblocks web3 integration', () => {
 	const apiSecretKey = fs.readFileSync(
