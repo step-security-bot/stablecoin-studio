@@ -31,8 +31,8 @@ import {
 } from 'fireblocks-sdk';
 import { HederaTokenManager__factory } from '@hashgraph/stablecoin-npm-contracts';
 import Web3 from 'web3';
-import { SDK, LoggerTransports, BigDecimal } from '../../src/index.js';
-import { Client, ContractExecuteTransaction } from '@hashgraph/sdk';
+import { BigDecimal } from '../../src/index.js';
+import { Client, ContractExecuteTransaction, PrivateKey } from '@hashgraph/sdk';
 import { WIPE_GAS } from '../../src/core/Constants.js';
 
 // SDK.log = { level: 'ERROR', transports: new LoggerTransports.Console() };
@@ -45,13 +45,16 @@ describe('🧪 Firebocks signing a Hedera transaction', () => {
 		'0.0.18201',
 		'302e020100300506032b657004220420f6392a8242bce3be5bf69fc607a153e65c99bf4b39126f1d41059b00c49ee318',
 	);
-	const vaultAccountId = '0.0.57129040';
+	const vaultAccountId = '0.0.5712904';
+	//const vaultAccountId = '0.0.5745254';
 
 	const apiSecretKey = fs.readFileSync(
-		path.resolve('/home/mamorales/Downloads/fireblocks_secret.key'),
+		path.resolve('/home/mamorales/fireblocks_dario/fireblocks_secret.key'),
+		//path.resolve('/home/mamorales/fireblocks/fireblocks_secret.key'),
 		'utf8',
 	);
 	const apiKey = '652415d5-e004-4dfd-9b3b-d93e8fc939d7';
+	//const apiKey = '';
 	const baseUrl = 'https://api.fireblocks.io';
 	const fireblocks: FireblocksSDK = new FireblocksSDK(
 		apiSecretKey,
@@ -65,7 +68,7 @@ describe('🧪 Firebocks signing a Hedera transaction', () => {
 	const contractId = '0.0.4539400';
 
 	// eslint-disable-next-line jest/expect-expect
-	it('Triggers errors', async () => {
+	it('Signing a raw transaction', async () => {
 		const functionName = 'wipe';
 		const parameters = [targetAccountEvmAddress, amountToWipe];
 
@@ -81,19 +84,31 @@ describe('🧪 Firebocks signing a Hedera transaction', () => {
 			.setFunctionParameters(functionCallParameters)
 			.setGas(WIPE_GAS)
 			.freezeWith(client);
-		// console.log("transaction: " + JSON.stringify(transaction));
+		console.log('transaction: ' + JSON.stringify(transaction));
+
+		///////////////////////////////////////////////////
+		const signedTransaction = await transaction.sign(
+			PrivateKey.fromString(
+				'302e020100300506032b657004220420f6392a8242bce3be5bf69fc607a153e65c99bf4b39126f1d41059b00c49ee318',
+			),
+		);
+		console.log('signed transaction: ' + JSON.stringify(signedTransaction));
+		///////////////////////////////////////////////////
 
 		const serializedTransaction = Buffer.from(
 			transaction.toBytes(),
 		).toString('base64');
-		console.log('serializedTransactions: ' + serializedTransaction);
+		// console.log('serializedTransactions: ' + serializedTransaction);
 
-		signArbitraryMessage(fireblocks, vaultAccountId, 'INSERT TEXT HERE')
+		await signArbitraryMessage(
+			fireblocks,
+			vaultAccountId,
+			serializedTransaction,
+		)
 			.then(console.log)
 			.catch(console.log);
-
 		// await transaction.execute(client);
-	}, 30000);
+	}, 90_000);
 
 	function encodeFunctionCall(
 		functionName: string,

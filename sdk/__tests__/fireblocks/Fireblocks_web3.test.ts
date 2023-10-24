@@ -29,7 +29,7 @@ import {
 
 describe('🧪 Signing a Hedera transaction using the Fireblocks web3 integration', () => {
 	const apiSecretKey = fs.readFileSync(
-		path.resolve('/home/mamorales/Downloads/fireblocks_secret.key'),
+		path.resolve('/home/mamorales/fireblocks_dario/fireblocks_secret.key'),
 		'utf8',
 	);
 	const apiKey = '652415d5-e004-4dfd-9b3b-d93e8fc939d7';
@@ -42,9 +42,8 @@ describe('🧪 Signing a Hedera transaction using the Fireblocks web3 integratio
 			privateKey: apiSecretKey,
 			apiKey: apiKey,
 			vaultAccountIds: process.env.FIREBLOCKS_VAULT_ACCOUNT_IDS,
-			chainId: ChainId.GOERLI,
-
-			logTransactionStatusChanges: true, // Verbose logging
+			rpcUrl: 'http://127.0.0.1:7546/api',
+			logTransactionStatusChanges: true,
 		});
 		console.log(
 			'Fireblocks web3 provider: ' + JSON.stringify(eip1193Provider),
