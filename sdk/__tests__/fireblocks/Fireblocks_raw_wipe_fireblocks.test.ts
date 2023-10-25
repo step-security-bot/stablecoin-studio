@@ -29,32 +29,33 @@ import {
 	TransactionOperation,
 	TransactionStatus,
 } from 'fireblocks-sdk';
-import { HederaTokenManager__factory } from '@hashgraph/stablecoin-npm-contracts';
-import Web3 from 'web3';
 import { BigDecimal } from '../../src/index.js';
-import { Client, ContractExecuteTransaction, PrivateKey } from '@hashgraph/sdk';
-import { WIPE_GAS } from '../../src/core/Constants.js';
-
-// SDK.log = { level: 'ERROR', transports: new LoggerTransports.Console() };
+import {
+	Client,
+	TokenId,
+	PublicKey,
+	AccountId,
+	TokenWipeTransaction,
+} from '@hashgraph/sdk';
 
 describe('🧪 Firebocks signing a Hedera transaction', () => {
-	const web3 = new Web3();
+	const operatorAccountHederaId = '0.0.18201';
+	const operatorPrivateKey =
+		'302e020100300506032b657004220420f6392a8242bce3be5bf69fc607a153e65c99bf4b39126f1d41059b00c49ee318';
+
+	// const signerPublicKey = '04eb152576e3af4dccbabda7026b85d8fdc0ad3f18f26540e42ac71a08e21623';
+	const signerPublicKey =
+		'c766a82cfd6edbb677fbd511019c7b202236135af292b862257e30794a1bccae';
 
 	const client = Client.forTestnet();
-	client.setOperator(
-		'0.0.18201',
-		'302e020100300506032b657004220420f6392a8242bce3be5bf69fc607a153e65c99bf4b39126f1d41059b00c49ee318',
-	);
+	client.setOperator(operatorAccountHederaId, operatorPrivateKey);
 	const vaultAccountId = '0.0.5712904';
-	//const vaultAccountId = '0.0.5745254';
 
 	const apiSecretKey = fs.readFileSync(
 		path.resolve('/home/mamorales/fireblocks_dario/fireblocks_secret.key'),
-		//path.resolve('/home/mamorales/fireblocks/fireblocks_secret.key'),
 		'utf8',
 	);
 	const apiKey = '652415d5-e004-4dfd-9b3b-d93e8fc939d7';
-	//const apiKey = '';
 	const baseUrl = 'https://api.fireblocks.io';
 	const fireblocks: FireblocksSDK = new FireblocksSDK(
 		apiSecretKey,
@@ -62,88 +63,68 @@ describe('🧪 Firebocks signing a Hedera transaction', () => {
 		baseUrl,
 	);
 
-	const targetAccountEvmAddress =
-		'0x0000000000000000000000000000000000004719';
+	const tokenHederaId = '0.0.5759338';
+	const tokenId = TokenId.fromString(tokenHederaId);
+	const targetAccountHederaId = '0.0.18201';
+	const targetAccountId = AccountId.fromString(targetAccountHederaId);
 	const amountToWipe = new BigDecimal('0.1');
-	const contractId = '0.0.4539400';
 
-	// eslint-disable-next-line jest/expect-expect
+	const nodeId = [];
+	nodeId.push(new AccountId(3));
+
+	const transaction = new TokenWipeTransaction()
+		.setNodeAccountIds(nodeId)
+		.setAccountId(targetAccountId)
+		.setTokenId(tokenId)
+		.setAmount(amountToWipe.toLong())
+		.freezeWith(client);
+
 	it('Signing a raw transaction', async () => {
-		const functionName = 'wipe';
-		const parameters = [targetAccountEvmAddress, amountToWipe];
-
-		const functionCallParameters = encodeFunctionCall(
-			functionName,
-			parameters,
-			HederaTokenManager__factory.abi,
-		);
-		// console.log("functionCallParameters: " + JSON.stringify(functionCallParameters));
-
-		const transaction = new ContractExecuteTransaction()
-			.setContractId(contractId)
-			.setFunctionParameters(functionCallParameters)
-			.setGas(WIPE_GAS)
-			.freezeWith(client);
-		console.log('transaction: ' + JSON.stringify(transaction));
-
-		///////////////////////////////////////////////////
-		const signedTransaction = await transaction.sign(
-			PrivateKey.fromString(
-				'302e020100300506032b657004220420f6392a8242bce3be5bf69fc607a153e65c99bf4b39126f1d41059b00c49ee318',
-			),
-		);
-		console.log('signed transaction: ' + JSON.stringify(signedTransaction));
-		///////////////////////////////////////////////////
-
 		const serializedTransaction = Buffer.from(
 			transaction.toBytes(),
-		).toString('base64');
-		// console.log('serializedTransactions: ' + serializedTransaction);
+		).toString('hex');
 
-		await signArbitraryMessage(
+		const signatureHex = await signArbitraryMessage(
 			fireblocks,
 			vaultAccountId,
 			serializedTransaction,
-		)
-			.then(console.log)
-			.catch(console.log);
-		// await transaction.execute(client);
-	}, 90_000);
-
-	function encodeFunctionCall(
-		functionName: string,
-		parameters: any[],
-		abi: any,
-	): Uint8Array {
-		const functionAbi = abi.find(
-			(func: { name: any; type: string }) =>
-				func.name === functionName && func.type === 'function',
 		);
-		if (!functionAbi) {
-			const message = `Contract function ${functionName} not found in ABI, are you using the right version?`;
-			throw new Error(message);
-		}
-		const encodedParametersHex = web3.eth.abi
-			.encodeFunctionCall(functionAbi, parameters)
-			.slice(2);
 
-		return Buffer.from(encodedParametersHex, 'hex');
-	}
+		const signature = hexStringToUint8Array(signatureHex);
+
+		const publicKey = PublicKey.fromString(signerPublicKey);
+		const signedTransaction = transaction.addSignature(
+			publicKey,
+			signature,
+		);
+
+		await signedTransaction.execute(client);
+	}, 90_000);
 });
+
+function hexStringToUint8Array(hexString: string): Uint8Array {
+	const uint8Array = new Uint8Array(hexString.length / 2);
+
+	for (let i = 0; i < hexString.length; i += 2) {
+		const byte = parseInt(hexString.substr(i, 2), 16);
+		uint8Array[i / 2] = byte;
+	}
+
+	return uint8Array;
+}
 
 async function signArbitraryMessage(
 	fireblocks: FireblocksSDK,
 	vaultAccountId: string,
 	message: string,
 	bip44addressIndex = 0,
-) {
+): Promise<string> {
 	const wrappedMessage =
 		'\x18Bitcoin Signed Message:\n' +
 		String.fromCharCode(message.length) +
 		message;
 
 	const hash = createHash('sha256').update(wrappedMessage, 'utf8').digest();
-
 	const content = createHash('sha256').update(hash).digest('hex');
 
 	const { status, id } = await fireblocks.createTransaction({
@@ -186,13 +167,6 @@ async function signArbitraryMessage(
 	}
 
 	const signature = txInfo.signedMessages[0].signature;
-	console.log('signature: ' + JSON.stringify(signature));
-
-	const encodedSig =
-		Buffer.from([Number.parseInt(signature.v, 16) + 31]).toString('hex') +
-		signature.fullSig;
-	console.log(
-		'Encoded Signature:',
-		Buffer.from(encodedSig, 'hex').toString('base64'),
-	);
+	console.log('signed message: ' + JSON.stringify(txInfo.signedMessages[0]));
+	return signature.fullSig;
 }
