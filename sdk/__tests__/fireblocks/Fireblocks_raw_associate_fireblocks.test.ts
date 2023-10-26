@@ -29,13 +29,12 @@ import {
 	TransactionOperation,
 	TransactionStatus,
 } from 'fireblocks-sdk';
-import { BigDecimal } from '../../src/index.js';
 import {
 	Client,
 	TokenId,
 	PublicKey,
 	AccountId,
-	TokenWipeTransaction,
+	TokenAssociateTransaction,
 } from '@hashgraph/sdk';
 
 describe('🧪 Firebocks signing a Hedera transaction', () => {
@@ -43,13 +42,13 @@ describe('🧪 Firebocks signing a Hedera transaction', () => {
 	const operatorPrivateKey =
 		'302e020100300506032b657004220420f6392a8242bce3be5bf69fc607a153e65c99bf4b39126f1d41059b00c49ee318';
 
-	// const signerPublicKey = '04eb152576e3af4dccbabda7026b85d8fdc0ad3f18f26540e42ac71a08e21623';
 	const signerPublicKey =
-		'c766a82cfd6edbb677fbd511019c7b202236135af292b862257e30794a1bccae';
+		'04eb152576e3af4dccbabda7026b85d8fdc0ad3f18f26540e42ac71a08e21623';
 
 	const client = Client.forTestnet();
 	client.setOperator(operatorAccountHederaId, operatorPrivateKey);
-	const vaultAccountId = '0.0.5712904';
+	const accountId = '0.0.5712904';
+	const vaultAccountId = '2';
 
 	const apiSecretKey = fs.readFileSync(
 		path.resolve('/home/mamorales/fireblocks_dario/fireblocks_secret.key'),
@@ -65,18 +64,14 @@ describe('🧪 Firebocks signing a Hedera transaction', () => {
 
 	const tokenHederaId = '0.0.5759338';
 	const tokenId = TokenId.fromString(tokenHederaId);
-	const targetAccountHederaId = '0.0.18201';
-	const targetAccountId = AccountId.fromString(targetAccountHederaId);
-	const amountToWipe = new BigDecimal('0.1');
 
 	const nodeId = [];
 	nodeId.push(new AccountId(3));
 
-	const transaction = new TokenWipeTransaction()
+	const transaction = new TokenAssociateTransaction()
 		.setNodeAccountIds(nodeId)
-		.setAccountId(targetAccountId)
-		.setTokenId(tokenId)
-		.setAmount(amountToWipe.toLong())
+		.setAccountId(accountId)
+		.setTokenIds([tokenId])
 		.freezeWith(client);
 
 	it('Signing a raw transaction', async () => {
@@ -119,12 +114,7 @@ async function signArbitraryMessage(
 	message: string,
 	bip44addressIndex = 0,
 ): Promise<string> {
-	const wrappedMessage =
-		'\x18Bitcoin Signed Message:\n' +
-		String.fromCharCode(message.length) +
-		message;
-
-	const hash = createHash('sha256').update(wrappedMessage, 'utf8').digest();
+	const hash = createHash('sha256').update(message, 'utf8').digest();
 	const content = createHash('sha256').update(hash).digest('hex');
 
 	const { status, id } = await fireblocks.createTransaction({
@@ -134,7 +124,6 @@ async function signArbitraryMessage(
 			type: PeerType.VAULT_ACCOUNT,
 			id: vaultAccountId,
 		},
-		//note: `BTC Message: ${message}`,
 		extraParameters: {
 			rawMessageData: {
 				messages: [
