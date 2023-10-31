@@ -112,7 +112,6 @@ async function signArbitraryMessage(
 	fireblocks: FireblocksSDK,
 	vaultAccountId: string,
 	message: string,
-	bip44addressIndex = 0,
 ): Promise<string> {
 	const hash = createHash('sha256').update(message, 'utf8').digest();
 	const content = createHash('sha256').update(hash).digest('hex');
@@ -129,7 +128,6 @@ async function signArbitraryMessage(
 				messages: [
 					{
 						content,
-						bip44addressIndex,
 					},
 				],
 			},
