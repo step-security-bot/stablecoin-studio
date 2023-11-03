@@ -29,12 +29,7 @@ import {
 	TransactionStatus,
 } from 'fireblocks-sdk';
 import Web3 from 'web3';
-import {
-	Client,
-	TokenId,
-	AccountId,
-	ContractExecuteTransaction,
-} from '@hashgraph/sdk';
+import { Client, AccountId, ContractExecuteTransaction } from '@hashgraph/sdk';
 import { HederaTokenManager__factory } from '@hashgraph/stablecoin-npm-contracts';
 import BigDecimal from '../../src/domain/context/shared/BigDecimal';
 
