@@ -31,6 +31,7 @@ import {
 	SignatureStatus,
 } from '@dfns/sdk/codegen/datamodel/Wallets';
 import { joinSignature } from '@ethersproject/bytes';
+import { concat, hexlify } from '@hashgraph/hethers/lib/utils';
 
 const dfnsWalletId = 'wa-5phef-ico8c-9smr47d6ton6r8c2'; // Wallet ECDSA
 const dfnsTestUrl = 'https://api.dfns.ninja';
@@ -99,6 +100,8 @@ async function signingService(
 	console.log(
 		'xxx signatureToUint8Array.substring(2): ' + signature.substring(2),
 	);
+	const signatureToUint8Array1 = hexStringToUint8Array(signature);
+	console.log('xxx signatureToUint8Array1: ' + signatureToUint8Array1);
 	const signatureToUint8Array = hexStringToUint8Array(signature.substring(2));
 	console.log('xxx signatureToUint8Array: ' + signatureToUint8Array);
 	return signatureToUint8Array;
@@ -133,6 +136,13 @@ async function waitForSignature(signatureId: string): Promise<string> {
 				'xxx signature before joining: ' +
 					JSON.stringify(res.signature),
 			);
+
+			const joiningSignature = hexlify(
+				concat([res.signature.r, res.signature.s, '0x1b']),
+			);
+
+			console.log('xxx joining: ' + joiningSignature);
+
 			return joinSignature({
 				r: res.signature.r,
 				s: res.signature.s,
