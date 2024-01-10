@@ -9,7 +9,7 @@ import {
 } from '../../../index.js';
 import Service from '../Service.js';
 import fs from 'fs-extra';
-import { IAccountConfig } from '../../../domain/configuration/interfaces/IAccountConfig.js';
+import { AccountConfig } from '../../../domain/configuration/interfaces/IAccountConfig.js';
 import { IConsensusNodeConfig } from '../../../domain/configuration/interfaces/IConsensusNodeConfig.js';
 import { INetworkConfig } from '../../../domain/configuration/interfaces/INetworkConfig.js';
 import { IMirrorsConfig } from 'domain/configuration/interfaces/IMirrorsConfig.js';
@@ -167,9 +167,9 @@ export default class SetConfigurationService extends Service {
    *
    * @returns Accounts
    */
-  public async configureAccounts(): Promise<IAccountConfig[]> {
+  public async configureAccounts(): Promise<AccountConfig[]> {
     const configuration = configurationService.getConfiguration();
-    let accounts: IAccountConfig[] = configuration?.accounts || [];
+    let accounts: AccountConfig[] = configuration?.accounts || [];
     if (accounts.length === 1 && accounts[0].privateKey.key === '') {
       accounts = [];
     }
