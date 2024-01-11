@@ -24,6 +24,6 @@
     "strictNullChecks": false,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", "__tests__/**/*"],
+  "include": ["src/**/*", "__tests__/**/*", "../multikey/multikey.test.ts"],
   "exclude": ["node_modules/**/*", "build/**/*"]
 }
