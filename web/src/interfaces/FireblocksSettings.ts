@@ -1,4 +1,4 @@
-import { FireblocksFormValues } from '../components/Form/FireblocksFormModal';
+import type { FireblocksFormValues } from '../components/Form/FireblocksFormModal';
 
 export class FireblocksSettings {
 	public secretKey: string;

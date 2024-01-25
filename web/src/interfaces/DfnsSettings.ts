@@ -1,4 +1,4 @@
-import { DfnsFormValues } from '../components/Form/DfnsFormModal';
+import type { DfnsFormValues } from '../components/Form/DfnsFormModal';
 
 export class DfnsSettings {
 	public serviceAccountSecretKey: string;

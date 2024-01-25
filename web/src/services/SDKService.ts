@@ -69,7 +69,7 @@ import type {
 	CustodialSettings as CustodialSettingsSDK,
 } from '@hashgraph/stablecoin-npm-sdk';
 import { type IMirrorRPCNode } from '../interfaces/IMirrorRPCNode';
-import { CustodialSettings } from '../interfaces/ICustodialSettings';
+import type { CustodialSettings } from '../interfaces/ICustodialSettings';
 import { FireblocksSettings } from '../interfaces/FireblocksSettings';
 import { DfnsSettings } from '../interfaces/DfnsSettings';
 
@@ -117,7 +117,7 @@ export class SDKService {
 				network: connectNetwork,
 				mirrorNode: _mirrorNode,
 				rpcNode: _rpcNode,
-				wallet: wallet,
+				wallet,
 				custodialWalletSettings: SDKService.custodialSettingsAdapt(custodialSettings),
 			}),
 		);

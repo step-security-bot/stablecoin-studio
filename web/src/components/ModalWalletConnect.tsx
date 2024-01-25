@@ -21,7 +21,7 @@ import {
 } from '@hashgraph/stablecoin-npm-sdk';
 import type { StableCoinListViewModel } from '@hashgraph/stablecoin-npm-sdk';
 import type { FC, ReactNode } from 'react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import BLADE_LOGO_PNG from '../assets/png/bladeLogo.png';
@@ -43,9 +43,10 @@ import { useForm } from 'react-hook-form';
 import type { IMirrorRPCNode } from '../interfaces/IMirrorRPCNode';
 import type { FireblocksFormValues } from './Form/FireblocksFormModal';
 import FireblocksFormModal from './Form/FireblocksFormModal';
-import { CustodialSettings } from '../interfaces/ICustodialSettings';
+import type { CustodialSettings } from '../interfaces/ICustodialSettings';
 import { FireblocksSettings } from '../interfaces/FireblocksSettings';
-import DfnsFormModal, { DfnsFormValues } from './Form/DfnsFormModal';
+import DfnsFormModal from './Form/DfnsFormModal';
+import type { DfnsFormValues } from './Form/DfnsFormModal';
 import { DfnsSettings } from '../interfaces/DfnsSettings';
 
 const ModalWalletConnect = () => {
@@ -53,8 +54,8 @@ const ModalWalletConnect = () => {
 	const dispatch = useDispatch();
 
 	const {
-		isOpen: isWalletSelectOpen,
-		onOpen: onWalletSelectOpen,
+		// isOpen: isWalletSelectOpen,
+		// onOpen: onWalletSelectOpen,
 		onClose: onWalletSelectClose,
 	} = useDisclosure({ defaultIsOpen: true });
 
