@@ -132,7 +132,7 @@ const DfnsFormModal = (props: DfnsFormModalProps) => {
 							</FormControl>
 							<FormControl isInvalid={!!errors.serviceAccountSecretKeyFileInput}>
 								<FormLabel htmlFor='serviceAccountSecretKeyFileInput'>
-									SecretKey (File with extension ".key")
+									SecretKey (File with extension &quot;.key&quot;)
 								</FormLabel>
 								<Input
 									id='serviceAccountSecretKeyFileInput'
