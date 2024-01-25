@@ -65,13 +65,13 @@ const DfnsFormModal = (props: DfnsFormModalProps) => {
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			size={'xl'}
+			size={'xxl'}
 			isCentered
 			closeOnEsc={false}
 			closeOnOverlayClick={false}
 		>
 			<ModalOverlay />
-			<ModalContent p='50' w='500px'>
+			<ModalContent p='50' w='1000px'>
 				<ModalCloseButton />
 				<ModalHeader>
 					<Text fontSize='19px' fontWeight={700} lineHeight='16px' color='brand.black'>
@@ -80,70 +80,84 @@ const DfnsFormModal = (props: DfnsFormModalProps) => {
 				</ModalHeader>
 				<ModalBody textAlign='center' pt='14px'>
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<VStack spacing={4}>
-							<FormControl isInvalid={!!errors.serviceAccountCredentialId}>
-								<FormLabel htmlFor='serviceAccountCredentialId'>
-									Service Account Credential ID
-								</FormLabel>
-								<Input
-									id='serviceAccountCredentialId'
-									{...register('serviceAccountCredentialId', { required: true })}
-								/>
-							</FormControl>
-							<FormControl isInvalid={!!errors.serviceAccountAuthToken}>
-								<FormLabel htmlFor='serviceAccountAuthToken'>Service Account Auth Token</FormLabel>
-								<Input
-									id='serviceAccountAuthToken'
-									{...register('serviceAccountAuthToken', { required: true })}
-								/>
-							</FormControl>
-							<FormControl isInvalid={!!errors.appOrigin}>
-								<FormLabel htmlFor='appOrigin'>App Origin</FormLabel>
-								<Input id='appOrigin' {...register('appOrigin', { required: true })} />
-							</FormControl>
-							<FormControl isInvalid={!!errors.appId}>
-								<FormLabel htmlFor='appId'>App ID</FormLabel>
-								<Input id='appId' {...register('appId', { required: true })} />
-							</FormControl>
-							<FormControl isInvalid={!!errors.baseUrl}>
-								<FormLabel htmlFor='baseUrl'>Base URL</FormLabel>
-								<Input
-									id='baseUrl'
-									{...register('baseUrl', { required: true })}
-									defaultValue='https://api.Dfns.io'
-								/>
-							</FormControl>
-							<FormControl isInvalid={!!errors.walletId}>
-								<FormLabel htmlFor='walletId'>Wallet ID</FormLabel>
-								<Input id='walletId' {...register('walletId', { required: true })} />
-							</FormControl>
-							<FormControl isInvalid={!!errors.hederaAccountId}>
-								<FormLabel htmlFor='hederaAccountId'>Hedera Account ID</FormLabel>
-								<Input id='hederaAccountId' {...register('hederaAccountId', { required: true })} />
-							</FormControl>
-							<FormControl isInvalid={!!errors.hederaAccountPublicKey}>
-								<FormLabel htmlFor='hederaAccountPublicKey'>
-									Hedera Account Public Key(format)
-								</FormLabel>
-								<Input
-									id='hederaAccountPublicKey'
-									{...register('hederaAccountPublicKey', { required: true })}
-								/>
-							</FormControl>
-							<FormControl isInvalid={!!errors.serviceAccountSecretKeyFileInput}>
-								<FormLabel htmlFor='serviceAccountSecretKeyFileInput'>
-									SecretKey (File with extension &quot;.key&quot;)
-								</FormLabel>
-								<Input
-									id='serviceAccountSecretKeyFileInput'
-									type='file'
-									{...register('serviceAccountSecretKeyFileInput', { required: true })}
-								/>
-								{errors.serviceAccountSecretKeyFileInput && (
-									<FormErrorMessage>.key is mandatory</FormErrorMessage>
-								)}
-							</FormControl>
-						</VStack>
+						<HStack spacing={8}>
+							<VStack spacing={4} flex={1}>
+								<FormControl isInvalid={!!errors.serviceAccountCredentialId}>
+									<FormLabel htmlFor='serviceAccountCredentialId'>
+										Service Account Credential ID
+									</FormLabel>
+									<Input
+										id='serviceAccountCredentialId'
+										{...register('serviceAccountCredentialId', { required: true })}
+									/>
+								</FormControl>
+								<FormControl isInvalid={!!errors.serviceAccountAuthToken}>
+									<FormLabel htmlFor='serviceAccountAuthToken'>
+										Service Account Auth Token
+									</FormLabel>
+									<Input
+										id='serviceAccountAuthToken'
+										{...register('serviceAccountAuthToken', { required: true })}
+									/>
+								</FormControl>
+								<FormControl isInvalid={!!errors.appOrigin}>
+									<FormLabel htmlFor='appOrigin'>App Origin</FormLabel>
+									<Input
+										id='appOrigin'
+										{...register('appOrigin', { required: true })}
+										defaultValue='http://stablecoin.es'
+									/>
+								</FormControl>
+								<FormControl isInvalid={!!errors.appId}>
+									<FormLabel htmlFor='appId'>App ID</FormLabel>
+									<Input id='appId' {...register('appId', { required: true })} />
+								</FormControl>
+							</VStack>
+							<VStack spacing={4} flex={1}>
+								<FormControl isInvalid={!!errors.baseUrl}>
+									<FormLabel htmlFor='baseUrl'>Base URL</FormLabel>
+									<Input
+										id='baseUrl'
+										{...register('baseUrl', { required: true })}
+										defaultValue='https://api.dfns.ninja'
+									/>
+								</FormControl>
+								<FormControl isInvalid={!!errors.walletId}>
+									<FormLabel htmlFor='walletId'>Wallet ID</FormLabel>
+									<Input id='walletId' {...register('walletId', { required: true })} />
+								</FormControl>
+								<FormControl isInvalid={!!errors.hederaAccountId}>
+									<FormLabel htmlFor='hederaAccountId'>Hedera Account ID</FormLabel>
+									<Input
+										id='hederaAccountId'
+										{...register('hederaAccountId', { required: true })}
+									/>
+								</FormControl>
+								<FormControl isInvalid={!!errors.hederaAccountPublicKey}>
+									<FormLabel htmlFor='hederaAccountPublicKey'>
+										Hedera Account Public Key(format)
+									</FormLabel>
+									<Input
+										id='hederaAccountPublicKey'
+										{...register('hederaAccountPublicKey', { required: true })}
+									/>
+								</FormControl>
+							</VStack>
+						</HStack>
+						<FormControl isInvalid={!!errors.serviceAccountSecretKeyFileInput}>
+							<FormLabel paddingTop={3} htmlFor='serviceAccountSecretKeyFileInput'>
+								SecretKey (File with extension &quot;.key&quot;)
+							</FormLabel>
+							<Input
+								padding={1.5}
+								id='serviceAccountSecretKeyFileInput'
+								type='file'
+								{...register('serviceAccountSecretKeyFileInput', { required: true })}
+							/>
+							{errors.serviceAccountSecretKeyFileInput && (
+								<FormErrorMessage>.key is mandatory</FormErrorMessage>
+							)}
+						</FormControl>
 						<ModalFooter justifyContent='center' pt={4}>
 							<HStack spacing={6} w='full'>
 								<Button onClick={onClose} variant='secondary' flex={1}>
