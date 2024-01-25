@@ -66,8 +66,12 @@ import type {
 	UpgradeFactoryImplementationRequest,
 	AcceptProxyOwnerRequest,
 	AcceptFactoryProxyOwnerRequest,
+	CustodialSettings as CustodialSettingsSDK,
 } from '@hashgraph/stablecoin-npm-sdk';
 import { type IMirrorRPCNode } from '../interfaces/IMirrorRPCNode';
+import { CustodialSettings } from '../interfaces/ICustodialSettings';
+import { FireblocksSettings } from '../interfaces/FireblocksSettings';
+import { DfnsSettings } from '../interfaces/DfnsSettings';
 
 export type StableCoinListRaw = Array<Record<'id' | 'symbol', string>>;
 
@@ -84,6 +88,7 @@ export class SDKService {
 		connectNetwork: string,
 		selectedMirror?: IMirrorRPCNode,
 		selectedRPC?: IMirrorRPCNode,
+		custodialSettings?: CustodialSettings,
 	) {
 		const networkConfig = await this.setNetwork(connectNetwork, selectedMirror, selectedRPC);
 		const _mirrorNode = networkConfig[0];
@@ -112,7 +117,8 @@ export class SDKService {
 				network: connectNetwork,
 				mirrorNode: _mirrorNode,
 				rpcNode: _rpcNode,
-				wallet,
+				wallet: wallet,
+				custodialWalletSettings: SDKService.custodialSettingsAdapt(custodialSettings),
 			}),
 		);
 
@@ -518,6 +524,37 @@ export class SDKService {
 
 	public static async getHederaTokenManagerList(data: GetTokenManagerListRequest) {
 		return await Factory.getHederaTokenManagerList(data);
+	}
+
+	public static custodialSettingsAdapt(
+		custodialSettings?: CustodialSettings,
+	): CustodialSettingsSDK | undefined {
+		if (!custodialSettings) return undefined;
+		if (custodialSettings instanceof FireblocksSettings) {
+			return {
+				apiSecretKey: custodialSettings.secretKey,
+				apiKey: custodialSettings.apiKey,
+				baseUrl: custodialSettings.baseUrl,
+				vaultAccountId: custodialSettings.vaultAccountId,
+				assetId: custodialSettings.assetId,
+				hederaAccountId: custodialSettings.hederaAccountId,
+				hederaAccountPublicKey: custodialSettings.hederaAccountPublicKey,
+			};
+		} else if (custodialSettings instanceof DfnsSettings) {
+			return {
+				authorizationToken: custodialSettings.serviceAccountAuthToken,
+				credentialId: custodialSettings.serviceAccountCredentialId,
+				serviceAccountPrivateKey: custodialSettings.serviceAccountSecretKey,
+				urlApplicationOrigin: custodialSettings.appOrigin,
+				applicationId: custodialSettings.appId,
+				testUrl: custodialSettings.baseUrl,
+				walletId: custodialSettings.walletId,
+				hederaAccountId: custodialSettings.hederaAccountId,
+				hederaAccountPublicKey: custodialSettings.hederaAccountPublicKey,
+			};
+		} else {
+			throw new Error('Unrecognized custodial settings type');
+		}
 	}
 }
 

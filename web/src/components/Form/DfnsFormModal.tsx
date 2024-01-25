@@ -18,31 +18,33 @@ import {
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 
-export interface FireblocksFormValues {
-	secretKeyFileInput: string;
-	apiKey: string;
+export interface DfnsFormValues {
+	serviceAccountSecretKeyFileInput: string;
+	serviceAccountCredentialId: string;
+	serviceAccountAuthToken: string;
+	appOrigin: string;
+	appId: string;
 	baseUrl: string;
-	assetId: string;
-	vaultAccountId: string;
+	walletId: string;
 	hederaAccountId: string;
 	hederaAccountPublicKey: string;
 }
 
-interface FireblocksFormModalProps {
+interface DfnsFormModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onConfirm: (data: FireblocksFormValues) => void;
+	onConfirm: (data: DfnsFormValues) => void;
 }
 
-const FireblocksFormModal = (props: FireblocksFormModalProps) => {
+const DfnsFormModal = (props: DfnsFormModalProps) => {
 	const { isOpen, onClose, onConfirm } = props;
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<FireblocksFormValues>();
+	} = useForm<DfnsFormValues>();
 
-	const onSubmit: SubmitHandler<FireblocksFormValues> = (data, event) => {
+	const onSubmit: SubmitHandler<DfnsFormValues> = (data, event) => {
 		const fileInput = event?.target[3].files[0];
 
 		if (fileInput) {
@@ -50,7 +52,7 @@ const FireblocksFormModal = (props: FireblocksFormModalProps) => {
 			reader.onload = (e) => {
 				if (e.target) {
 					const fileContent = e.target.result as string;
-					onConfirm({ ...data, secretKeyFileInput: fileContent });
+					onConfirm({ ...data, serviceAccountSecretKeyFileInput: fileContent });
 				}
 			};
 			reader.readAsText(fileInput);
@@ -73,31 +75,47 @@ const FireblocksFormModal = (props: FireblocksFormModalProps) => {
 				<ModalCloseButton />
 				<ModalHeader>
 					<Text fontSize='19px' fontWeight={700} lineHeight='16px' color='brand.black'>
-						Fireblocks settings
+						Dfns settings
 					</Text>
 				</ModalHeader>
 				<ModalBody textAlign='center' pt='14px'>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<VStack spacing={4}>
-							<FormControl isInvalid={!!errors.apiKey}>
-								<FormLabel htmlFor='apiKey'>API Key</FormLabel>
-								<Input id='apiKey' {...register('apiKey', { required: true })} />
+							<FormControl isInvalid={!!errors.serviceAccountCredentialId}>
+								<FormLabel htmlFor='serviceAccountCredentialId'>
+									Service Account Credential ID
+								</FormLabel>
+								<Input
+									id='serviceAccountCredentialId'
+									{...register('serviceAccountCredentialId', { required: true })}
+								/>
+							</FormControl>
+							<FormControl isInvalid={!!errors.serviceAccountAuthToken}>
+								<FormLabel htmlFor='serviceAccountAuthToken'>Service Account Auth Token</FormLabel>
+								<Input
+									id='serviceAccountAuthToken'
+									{...register('serviceAccountAuthToken', { required: true })}
+								/>
+							</FormControl>
+							<FormControl isInvalid={!!errors.appOrigin}>
+								<FormLabel htmlFor='appOrigin'>App Origin</FormLabel>
+								<Input id='appOrigin' {...register('appOrigin', { required: true })} />
+							</FormControl>
+							<FormControl isInvalid={!!errors.appId}>
+								<FormLabel htmlFor='appId'>App ID</FormLabel>
+								<Input id='appId' {...register('appId', { required: true })} />
 							</FormControl>
 							<FormControl isInvalid={!!errors.baseUrl}>
 								<FormLabel htmlFor='baseUrl'>Base URL</FormLabel>
 								<Input
 									id='baseUrl'
 									{...register('baseUrl', { required: true })}
-									defaultValue='https://api.fireblocks.io'
+									defaultValue='https://api.Dfns.io'
 								/>
 							</FormControl>
-							<FormControl isInvalid={!!errors.assetId}>
-								<FormLabel htmlFor='assetId'>Asset ID</FormLabel>
-								<Input id='assetId' {...register('assetId', { required: true })} />
-							</FormControl>
-							<FormControl isInvalid={!!errors.vaultAccountId}>
-								<FormLabel htmlFor='vaultAccountId'>Vault Account ID</FormLabel>
-								<Input id='vaultAccountId' {...register('vaultAccountId', { required: true })} />
+							<FormControl isInvalid={!!errors.walletId}>
+								<FormLabel htmlFor='walletId'>Wallet ID</FormLabel>
+								<Input id='walletId' {...register('walletId', { required: true })} />
 							</FormControl>
 							<FormControl isInvalid={!!errors.hederaAccountId}>
 								<FormLabel htmlFor='hederaAccountId'>Hedera Account ID</FormLabel>
@@ -112,16 +130,16 @@ const FireblocksFormModal = (props: FireblocksFormModalProps) => {
 									{...register('hederaAccountPublicKey', { required: true })}
 								/>
 							</FormControl>
-							<FormControl isInvalid={!!errors.secretKeyFileInput}>
-								<FormLabel htmlFor='secretKeyFileInput'>
+							<FormControl isInvalid={!!errors.serviceAccountSecretKeyFileInput}>
+								<FormLabel htmlFor='serviceAccountSecretKeyFileInput'>
 									SecretKey (File with extension ".key")
 								</FormLabel>
 								<Input
-									id='secretKeyFileInput'
+									id='serviceAccountSecretKeyFileInput'
 									type='file'
-									{...register('secretKeyFileInput', { required: true })}
+									{...register('serviceAccountSecretKeyFileInput', { required: true })}
 								/>
-								{errors.secretKeyFileInput && (
+								{errors.serviceAccountSecretKeyFileInput && (
 									<FormErrorMessage>.key is mandatory</FormErrorMessage>
 								)}
 							</FormControl>
@@ -143,4 +161,4 @@ const FireblocksFormModal = (props: FireblocksFormModalProps) => {
 	);
 };
 
-export default FireblocksFormModal;
+export default DfnsFormModal;

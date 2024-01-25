@@ -41,8 +41,12 @@ import ERROR_ICON from '../assets/svg/error.svg';
 import { SelectController } from './Form/SelectController';
 import { useForm } from 'react-hook-form';
 import type { IMirrorRPCNode } from '../interfaces/IMirrorRPCNode';
-import type {FireblocksFormValues} from "./Form/FireblocksFormModal";
-import FireblocksFormModal from "./Form/FireblocksFormModal";
+import type { FireblocksFormValues } from './Form/FireblocksFormModal';
+import FireblocksFormModal from './Form/FireblocksFormModal';
+import { CustodialSettings } from '../interfaces/ICustodialSettings';
+import { FireblocksSettings } from '../interfaces/FireblocksSettings';
+import DfnsFormModal, { DfnsFormValues } from './Form/DfnsFormModal';
+import { DfnsSettings } from '../interfaces/DfnsSettings';
 
 const ModalWalletConnect = () => {
 	const { t } = useTranslation('global');
@@ -60,6 +64,11 @@ const ModalWalletConnect = () => {
 		onClose: onFireblocksFormClose,
 	} = useDisclosure();
 
+	const {
+		isOpen: isDfnsFormOpen,
+		onOpen: onDfnsFormOpen,
+		onClose: onDfnsFormClose,
+	} = useDisclosure();
 
 	const styles = {
 		providerStyle: {
@@ -100,12 +109,15 @@ const ModalWalletConnect = () => {
 	const selectedMirrors: IMirrorRPCNode[] = useSelector(SELECTED_MIRRORS);
 	const selectedRPCs: IMirrorRPCNode[] = useSelector(SELECTED_RPCS);
 
-
 	const { control, getValues } = useForm({
 		mode: 'onChange',
 	});
 
-	const handleWalletConnect = async (wallet: SupportedWallets, network: string) => {
+	const handleWalletConnect = async (
+		wallet: SupportedWallets,
+		network: string,
+		custodialSettings?: CustodialSettings,
+	) => {
 		if (loading) return;
 		setLoading(wallet);
 		dispatch(walletActions.setLastWallet(wallet));
@@ -135,7 +147,13 @@ const ModalWalletConnect = () => {
 				if (listRPCs) rpcNode = listRPCs[0];
 			}
 
-			const result = await SDKService.connectWallet(wallet, network, mirrorNode, rpcNode);
+			const result = await SDKService.connectWallet(
+				wallet,
+				network,
+				mirrorNode,
+				rpcNode,
+				custodialSettings,
+			);
 
 			const newselectedMirrors: IMirrorRPCNode[] = [];
 
@@ -227,20 +245,6 @@ const ModalWalletConnect = () => {
 		handleWalletConnect(SupportedWallets.METAMASK, '-');
 	};
 
-	const handleConnectFireblocks = () => {
-		// handleCustodialWalletConnect(SupportedWallets.FIREBLOCKS, '-');
-		onWalletSelectClose(); // Cierra el modal de selección de wallet
-		onFireblocksFormOpen(); // Abre el modal del formulario
-	};
-
-	const handleFireblocksFormConfirm = (formData: FireblocksFormValues) => {
-		console.log("Datos del formulario:", formData);
-
-		onFireblocksFormClose();
-		// handleWalletConnect(SupportedWallets.FIREBLOCKS, '-');
-
-	};
-
 	const handleConnectBladeWallet = () => {
 		setBladeSelected(true);
 	};
@@ -253,6 +257,33 @@ const ModalWalletConnect = () => {
 	const handleConnectBladeWalletConfirmed = () => {
 		const values = getValues();
 		handleWalletConnect(SupportedWallets.BLADE, values.networkBlade.value);
+	};
+	//* Custodial
+	// Fireblocks
+	const handleConnectFireblocks = () => {
+		onWalletSelectClose(); // Cierra el modal de selección de wallet
+		onFireblocksFormOpen(); // Abre el modal del formulario
+	};
+
+	const handleFireblocksFormConfirm = (formData: FireblocksFormValues) => {
+		// TODO: Remove this
+		console.log('Datos del formulario:', formData);
+		onFireblocksFormClose();
+		handleWalletConnect(SupportedWallets.FIREBLOCKS, '-', FireblocksSettings.fromForm(formData));
+	};
+
+	// Dfns
+	const handleConnectDfns = () => {
+		onWalletSelectClose(); // Cierra el modal de selección de wallet
+		onDfnsFormOpen(); // Abre el modal del formulario
+	};
+
+	const handleDfnsFormConfirm = (formData: DfnsFormValues) => {
+		// TODO: Remove this
+		console.log('Datos del formulario:', formData);
+
+		onDfnsFormClose();
+		handleWalletConnect(SupportedWallets.DFNS, '-', DfnsSettings.fromForm(formData));
 	};
 
 	const PairingSpinner: FC<{ wallet: SupportedWallets; children?: ReactNode }> = ({
@@ -293,7 +324,7 @@ const ModalWalletConnect = () => {
 				closeOnOverlayClick={false}
 			>
 				<ModalOverlay />
-				<ModalContent data-testid='modal-action-content' p='50' maxW="960px">
+				<ModalContent data-testid='modal-action-content' p='50' maxW='960px'>
 					{!error && !rejected && !hashpackSelected && !bladeSelected && (
 						<>
 							<ModalHeader p='0' justifyContent='center'>
@@ -407,7 +438,7 @@ const ModalWalletConnect = () => {
 										data-testid='Dfns'
 										{...styles.providerStyle}
 										shouldWrapChildren
-										onClick={handleConnectFireblocks}
+										onClick={handleConnectDfns}
 									>
 										<PairingSpinner wallet={SupportedWallets.DFNS}>
 											<Image src={DFNS_LOGO_PNG} w={20} />
@@ -550,6 +581,11 @@ const ModalWalletConnect = () => {
 				isOpen={isFireblocksFormOpen}
 				onClose={onFireblocksFormClose}
 				onConfirm={handleFireblocksFormConfirm}
+			/>
+			<DfnsFormModal
+				isOpen={isDfnsFormOpen}
+				onClose={onDfnsFormClose}
+				onConfirm={handleDfnsFormConfirm}
 			/>
 		</>
 	);
