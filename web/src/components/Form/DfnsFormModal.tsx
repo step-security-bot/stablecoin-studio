@@ -19,7 +19,7 @@ import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 
 export interface DfnsFormValues {
-	serviceAccountSecretKeyFileInput: string;
+	serviceAccountSecretKey: string;
 	serviceAccountCredentialId: string;
 	serviceAccountAuthToken: string;
 	appOrigin: string;
@@ -28,6 +28,10 @@ export interface DfnsFormValues {
 	walletId: string;
 	hederaAccountId: string;
 	hederaAccountPublicKey: string;
+}
+
+interface DfnsFormRawValues extends Omit<DfnsFormValues, 'serviceAccountSecretKey'> {
+	serviceAccountSecretKeyFileInput: FileList;
 }
 
 interface DfnsFormModalProps {
@@ -42,23 +46,38 @@ const DfnsFormModal = (props: DfnsFormModalProps) => {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<DfnsFormValues>();
+	} = useForm<DfnsFormRawValues>();
 
-	const onSubmit: SubmitHandler<DfnsFormValues> = (data, event) => {
-		const fileInput = event?.target[3].files[0];
+	const onSubmit: SubmitHandler<DfnsFormRawValues> = async (data) => {
+		try {
+			const { serviceAccountSecretKeyFileInput, ...commonData } = data;
+			const fileInput = serviceAccountSecretKeyFileInput[0];
 
-		if (fileInput) {
+			if (fileInput) {
+				const fileContent = await readFileAsText(fileInput);
+				onConfirm({ ...commonData, serviceAccountSecretKey: fileContent });
+			} else {
+				console.error('Archivo no seleccionado');
+			}
+		} catch (error) {
+			console.error('Error al leer el archivo:', error);
+		}
+	};
+
+	const readFileAsText = (file: File): Promise<string> => {
+		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.onload = (e) => {
 				if (e.target) {
 					const fileContent = e.target.result as string;
-					onConfirm({ ...data, serviceAccountSecretKeyFileInput: fileContent });
+					resolve(fileContent);
 				}
 			};
-			reader.readAsText(fileInput);
-		} else {
-			console.error('Archivo no seleccionado');
-		}
+			reader.onerror = (e) => {
+				reject(e.target?.error);
+			};
+			reader.readAsText(file);
+		});
 	};
 
 	return (

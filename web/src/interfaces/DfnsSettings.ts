@@ -35,7 +35,7 @@ export class DfnsSettings {
 
 	static fromForm(form: DfnsFormValues) {
 		return new DfnsSettings(
-			form.serviceAccountSecretKeyFileInput,
+			form.serviceAccountSecretKey,
 			form.serviceAccountCredentialId,
 			form.serviceAccountAuthToken,
 			form.appOrigin,

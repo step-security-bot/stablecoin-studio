@@ -272,7 +272,6 @@ const ModalWalletConnect = () => {
 		onFireblocksFormClose();
 		handleWalletConnect(SupportedWallets.FIREBLOCKS, '-', FireblocksSettings.fromForm(formData));
 	};
-
 	// Dfns
 	const handleConnectDfns = () => {
 		onWalletSelectClose(); // Cierra el modal de selección de wallet
