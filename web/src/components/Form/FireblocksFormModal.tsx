@@ -5,13 +5,9 @@ import {
 	FormLabel,
 	HStack,
 	Input,
-	Modal,
 	ModalBody,
-	ModalCloseButton,
-	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ModalOverlay,
 	Text,
 	VStack,
 } from '@chakra-ui/react';
@@ -25,7 +21,6 @@ export interface FireblocksFormValues {
 	assetId: string;
 	vaultAccountId: string;
 	hederaAccountId: string;
-	hederaAccountPublicKey: string;
 }
 
 interface FireblocksFormRawValues extends Omit<FireblocksFormValues, 'secretKey'> {
@@ -104,15 +99,6 @@ const FireblocksFormModal = (props: FireblocksFormModalProps) => {
 						<FormControl isInvalid={!!errors.hederaAccountId}>
 							<FormLabel htmlFor='hederaAccountId'>Hedera Account ID</FormLabel>
 							<Input id='hederaAccountId' {...register('hederaAccountId', { required: true })} />
-						</FormControl>
-						<FormControl isInvalid={!!errors.hederaAccountPublicKey}>
-							<FormLabel htmlFor='hederaAccountPublicKey'>
-								Hedera Account Public Key(format)
-							</FormLabel>
-							<Input
-								id='hederaAccountPublicKey'
-								{...register('hederaAccountPublicKey', { required: true })}
-							/>
 						</FormControl>
 						<FormControl isInvalid={!!errors.secretKeyFileInput}>
 							<FormLabel htmlFor='secretKeyFileInput'>

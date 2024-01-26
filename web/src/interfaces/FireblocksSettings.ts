@@ -7,7 +7,6 @@ export class FireblocksSettings {
 	public assetId: string;
 	public vaultAccountId: string;
 	public hederaAccountId: string;
-	public hederaAccountPublicKey: string;
 
 	constructor(
 		secretKey: string,
@@ -16,7 +15,6 @@ export class FireblocksSettings {
 		assetId: string,
 		vaultAccountId: string,
 		hederaAccountId: string,
-		hederaAccountPublicKey: string,
 	) {
 		this.secretKey = secretKey;
 		this.apiKey = apiKey;
@@ -24,7 +22,6 @@ export class FireblocksSettings {
 		this.assetId = assetId;
 		this.vaultAccountId = vaultAccountId;
 		this.hederaAccountId = hederaAccountId;
-		this.hederaAccountPublicKey = hederaAccountPublicKey;
 	}
 
 	static fromForm(form: FireblocksFormValues) {
@@ -35,7 +32,6 @@ export class FireblocksSettings {
 			form.assetId,
 			form.vaultAccountId,
 			form.hederaAccountId,
-			form.hederaAccountPublicKey,
 		);
 	}
 }

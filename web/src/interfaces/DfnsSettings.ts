@@ -9,7 +9,6 @@ export class DfnsSettings {
 	public baseUrl: string;
 	public walletId: string;
 	public hederaAccountId: string;
-	public hederaAccountPublicKey: string;
 
 	constructor(
 		serviceAccountSecretKey: string,
@@ -20,7 +19,6 @@ export class DfnsSettings {
 		baseUrl: string,
 		walletId: string,
 		hederaAccountId: string,
-		hederaAccountPublicKey: string,
 	) {
 		this.serviceAccountSecretKey = serviceAccountSecretKey;
 		this.serviceAccountCredentialId = serviceAccountCredentialId;
@@ -30,7 +28,6 @@ export class DfnsSettings {
 		this.baseUrl = baseUrl;
 		this.walletId = walletId;
 		this.hederaAccountId = hederaAccountId;
-		this.hederaAccountPublicKey = hederaAccountPublicKey;
 	}
 
 	static fromForm(form: DfnsFormValues) {
@@ -43,7 +40,6 @@ export class DfnsSettings {
 			form.baseUrl,
 			form.walletId,
 			form.hederaAccountId,
-			form.hederaAccountPublicKey,
 		);
 	}
 }
