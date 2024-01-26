@@ -48,36 +48,29 @@ const DfnsFormModal = (props: DfnsFormModalProps) => {
 		formState: { errors },
 	} = useForm<DfnsFormRawValues>();
 
-	const onSubmit: SubmitHandler<DfnsFormRawValues> = async (data) => {
+	const onSubmit: SubmitHandler<DfnsFormRawValues> = (data) => {
 		try {
 			const { serviceAccountSecretKeyFileInput, ...commonData } = data;
 			const fileInput = serviceAccountSecretKeyFileInput[0];
 
 			if (fileInput) {
-				const fileContent = await readFileAsText(fileInput);
-				onConfirm({ ...commonData, serviceAccountSecretKey: fileContent });
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					if (e.target) {
+						const fileContent = e.target.result as string;
+						onConfirm({ ...commonData, serviceAccountSecretKey: fileContent });
+					}
+				};
+				reader.onerror = (e) => {
+					console.error('Error reading file:', e.target?.error);
+				};
+				reader.readAsText(fileInput);
 			} else {
-				console.error('Archivo no seleccionado');
+				console.error('No file selected');
 			}
 		} catch (error) {
-			console.error('Error al leer el archivo:', error);
+			console.error('Error reading file:', error);
 		}
-	};
-
-	const readFileAsText = (file: File): Promise<string> => {
-		return new Promise((resolve, reject) => {
-			const reader = new FileReader();
-			reader.onload = (e) => {
-				if (e.target) {
-					const fileContent = e.target.result as string;
-					resolve(fileContent);
-				}
-			};
-			reader.onerror = (e) => {
-				reject(e.target?.error);
-			};
-			reader.readAsText(file);
-		});
 	};
 
 	return (

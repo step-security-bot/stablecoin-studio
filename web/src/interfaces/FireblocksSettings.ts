@@ -29,7 +29,7 @@ export class FireblocksSettings {
 
 	static fromForm(form: FireblocksFormValues) {
 		return new FireblocksSettings(
-			form.secretKeyFileInput,
+			form.secretKey,
 			form.apiKey,
 			form.baseUrl,
 			form.assetId,

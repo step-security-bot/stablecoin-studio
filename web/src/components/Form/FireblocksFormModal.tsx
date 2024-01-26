@@ -19,13 +19,17 @@ import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 
 export interface FireblocksFormValues {
-	secretKeyFileInput: string;
+	secretKey: string;
 	apiKey: string;
 	baseUrl: string;
 	assetId: string;
 	vaultAccountId: string;
 	hederaAccountId: string;
 	hederaAccountPublicKey: string;
+}
+
+interface FireblocksFormRawValues extends Omit<FireblocksFormValues, 'secretKey'> {
+	secretKeyFileInput: FileList;
 }
 
 interface FireblocksFormModalProps {
@@ -40,22 +44,30 @@ const FireblocksFormModal = (props: FireblocksFormModalProps) => {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<FireblocksFormValues>();
+	} = useForm<FireblocksFormRawValues>();
 
-	const onSubmit: SubmitHandler<FireblocksFormValues> = (data, event) => {
-		const fileInput = event?.target[3].files[0];
+	const onSubmit: SubmitHandler<FireblocksFormRawValues> = (data) => {
+		try {
+			const { secretKeyFileInput, ...commonData } = data;
+			const fileInput = secretKeyFileInput[0];
 
-		if (fileInput) {
-			const reader = new FileReader();
-			reader.onload = (e) => {
-				if (e.target) {
-					const fileContent = e.target.result as string;
-					onConfirm({ ...data, secretKeyFileInput: fileContent });
-				}
-			};
-			reader.readAsText(fileInput);
-		} else {
-			console.error('Archivo no seleccionado');
+			if (fileInput) {
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					if (e.target) {
+						const fileContent = e.target.result as string;
+						onConfirm({ ...commonData, secretKey: fileContent });
+					}
+				};
+				reader.onerror = (e) => {
+					console.error('Error reading file:', e.target?.error);
+				};
+				reader.readAsText(fileInput);
+			} else {
+				console.error('No file selected');
+			}
+		} catch (error) {
+			console.error('Error reading file:', error);
 		}
 	};
 
@@ -122,9 +134,7 @@ const FireblocksFormModal = (props: FireblocksFormModalProps) => {
 									type='file'
 									{...register('secretKeyFileInput', { required: true })}
 								/>
-								{errors.secretKeyFileInput && (
-									<FormErrorMessage>.key is mandatory</FormErrorMessage>
-								)}
+								{errors.secretKeyFileInput && <FormErrorMessage>.key is mandatory</FormErrorMessage>}
 							</FormControl>
 						</VStack>
 						<ModalFooter justifyContent='center' pt={4}>
