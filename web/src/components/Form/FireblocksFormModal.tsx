@@ -116,7 +116,8 @@ const FireblocksFormModal = (props: FireblocksFormModalProps) => {
 								<FormLabel htmlFor='secretKeyFileInput'>
 									SecretKey (File with extension &quot;.key&quot;)
 								</FormLabel>
-								<Input padding={1.5}
+								<Input
+									padding={1.5}
 									id='secretKeyFileInput'
 									type='file'
 									{...register('secretKeyFileInput', { required: true })}

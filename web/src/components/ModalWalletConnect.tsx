@@ -281,7 +281,11 @@ const ModalWalletConnect = () => {
 		// TODO: Remove this
 		console.log('Datos del formulario:', formData);
 		onFireblocksFormClose();
-		handleWalletConnect(SupportedWallets.FIREBLOCKS, '-', FireblocksSettings.fromForm(formData));
+		handleWalletConnect(
+			SupportedWallets.FIREBLOCKS,
+			'testnet',
+			FireblocksSettings.fromForm(formData),
+		);
 	};
 	// Dfns
 	const handleConnectDfns = () => {
@@ -294,7 +298,7 @@ const ModalWalletConnect = () => {
 		console.log('Datos del formulario:', formData);
 
 		onDfnsFormClose();
-		handleWalletConnect(SupportedWallets.DFNS, '-', DfnsSettings.fromForm(formData));
+		handleWalletConnect(SupportedWallets.DFNS, 'testnet', DfnsSettings.fromForm(formData));
 	};
 
 	const PairingSpinner: FC<{ wallet: SupportedWallets; children?: ReactNode }> = ({
