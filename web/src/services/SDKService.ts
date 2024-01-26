@@ -538,7 +538,6 @@ export class SDKService {
 				vaultAccountId: custodialSettings.vaultAccountId,
 				assetId: custodialSettings.assetId,
 				hederaAccountId: custodialSettings.hederaAccountId,
-				hederaAccountPublicKey: custodialSettings.hederaAccountPublicKey,
 			};
 		} else if (custodialSettings instanceof DfnsSettings) {
 			return {
@@ -547,10 +546,9 @@ export class SDKService {
 				serviceAccountPrivateKey: custodialSettings.serviceAccountSecretKey,
 				urlApplicationOrigin: custodialSettings.appOrigin,
 				applicationId: custodialSettings.appId,
-				testUrl: custodialSettings.baseUrl,
+				baseUrl: custodialSettings.baseUrl,
 				walletId: custodialSettings.walletId,
 				hederaAccountId: custodialSettings.hederaAccountId,
-				hederaAccountPublicKey: custodialSettings.hederaAccountPublicKey,
 			};
 		} else {
 			throw new Error('Unrecognized custodial settings type');
