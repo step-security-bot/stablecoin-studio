@@ -117,6 +117,8 @@ const ModalWalletConnect = () => {
 	const [rejected, setRejected] = useState<boolean>(false);
 	const [hashpackSelected, setHashpackSelected] = useState<boolean>(false);
 	const [bladeSelected, setBladeSelected] = useState<boolean>(false);
+	const [fireblocksSelected, setFireblocksSelected] = useState<boolean>(false);
+	const [dfnsSelected, setDFNSSelected] = useState<boolean>(false);
 	const availableWallets = useSelector(AVAILABLE_WALLETS);
 	const selectedMirrors: IMirrorRPCNode[] = useSelector(SELECTED_MIRRORS);
 	const selectedRPCs: IMirrorRPCNode[] = useSelector(SELECTED_RPCS);
@@ -273,8 +275,11 @@ const ModalWalletConnect = () => {
 	//* Custodial
 	// Fireblocks
 	const handleConnectFireblocks = () => {
-		onWalletSelectClose(); // Cierra el modal de selección de wallet
-		onFireblocksFormOpen(); // Abre el modal del formulario
+		setFireblocksSelected(true);
+	};
+	const unHandleConnectFireblocks = () => {
+		setFireblocksSelected(false);
+		setLoading(undefined);
 	};
 
 	const handleFireblocksFormConfirm = (formData: FireblocksFormValues) => {
@@ -289,8 +294,11 @@ const ModalWalletConnect = () => {
 	};
 	// Dfns
 	const handleConnectDfns = () => {
-		onWalletSelectClose(); // Cierra el modal de selección de wallet
-		onDfnsFormOpen(); // Abre el modal del formulario
+		setDFNSSelected(true);
+	};
+	const unHandleConnectDFNS = () => {
+		setFireblocksSelected(false);
+		setLoading(undefined);
 	};
 
 	const handleDfnsFormConfirm = (formData: DfnsFormValues) => {
@@ -345,183 +353,191 @@ const ModalWalletConnect = () => {
 			>
 				<ModalOverlay />
 				<ModalContent data-testid='modal-action-content' p='10' maxW='1000px'>
-					{!error && !rejected && !hashpackSelected && !bladeSelected && (
-						<>
-							<ModalHeader p='0' justifyContent='center'>
-								<Text
-									data-testid='title'
-									fontSize='20px'
-									fontWeight={700}
-									textAlign='center'
-									lineHeight='16px'
-									color='brand.black'
-								>
-									{t('walletActions.selectWallet')}
-								</Text>
-							</ModalHeader>
-							<ModalFooter p='0' justifyContent='center'>
-								<HStack
-									spacing={10}
-									pt={8}
-									w='full'
-									justifyContent={'center'}
-									alignItems={'stretch'}
-								>
-									<VStack justifyContent='center' spacing={0} {...styles.walletGroup}>
-										<Tooltip
-											label={t('walletActions.walletGroups.selfCustodialTT')}
-											placement='right'
-										>
-											<Text fontSize='15px' lineHeight='16px' fontWeight={700}>
-												{t('walletActions.walletGroups.selfCustodial')}
-											</Text>
-										</Tooltip>
-										<HStack
-											spacing={5}
-											pt={8}
-											w='full'
-											justifyContent={'left'}
-											alignItems={'stretch'}
-										>
-											{availableWallets.includes(SupportedWallets.HASHPACK) ? (
-												<VStack
-													data-testid={t('walletActions.supportedWallets.hashpack')}
-													{...styles.providerStyle}
-													shouldWrapChildren
-													onClick={handleConnectHashpackWallet}
-												>
-													<PairingSpinner wallet={SupportedWallets.HASHPACK}>
-														<Image src={HASHPACK_LOGO_PNG} w={20} />
-														<Text>{t('walletActions.supportedWallets.hashpack')}</Text>
-													</PairingSpinner>
-												</VStack>
-											) : (
-												<VStack
-													data-testid={t('walletActions.supportedWallets.hashpack')}
-													{...styles.providerStyle}
-												>
-													<Link
-														href='https://www.hashpack.app/download'
-														isExternal
-														_hover={{ textDecoration: 'none' }}
-													>
-														<Image src={HASHPACK_LOGO_PNG} w={20} />
-														<Text>{t('walletActions.supportedWallets.hashpack')}</Text>
-													</Link>
-												</VStack>
-											)}
-											{availableWallets.includes(SupportedWallets.METAMASK) ? (
-												<VStack
-													data-testid={t('walletActions.supportedWallets.metamask')}
-													{...styles.providerStyle}
-													shouldWrapChildren
-													onClick={handleConnectMetamaskWallet}
-												>
-													<PairingSpinner wallet={SupportedWallets.METAMASK}>
-														<Image src={METAMASK_LOGO} w={20} />
-														<Text textAlign='center' paddingTop={1}>
-															{t('walletActions.supportedWallets.metamask')}
-														</Text>
-													</PairingSpinner>
-												</VStack>
-											) : (
-												<VStack
-													data-testid={t('walletActions.supportedWallets.metamask')}
-													{...styles.providerStyle}
-												>
-													<Link
-														href='https://metamask.io/download/'
-														isExternal
-														_hover={{ textDecoration: 'none' }}
-													>
-														<Image src={METAMASK_LOGO} w={20} />
-														<Text textAlign='center' paddingTop={1}>
-															{t('walletActions.supportedWallets.metamask')}
-														</Text>
-													</Link>
-												</VStack>
-											)}
-											{isChrome(navigator.userAgent) ? (
-												availableWallets.includes(SupportedWallets.BLADE) ? (
+					{!error &&
+						!rejected &&
+						!hashpackSelected &&
+						!bladeSelected &&
+						!fireblocksSelected &&
+						!dfnsSelected && (
+							<>
+								<ModalHeader p='0' justifyContent='center'>
+									<Text
+										data-testid='title'
+										fontSize='20px'
+										fontWeight={700}
+										textAlign='center'
+										lineHeight='16px'
+										color='brand.black'
+									>
+										{t('walletActions.selectWallet')}
+									</Text>
+								</ModalHeader>
+								<ModalFooter p='0' justifyContent='center'>
+									<HStack
+										spacing={10}
+										pt={8}
+										w='full'
+										justifyContent={'center'}
+										alignItems={'stretch'}
+									>
+										<VStack justifyContent='center' spacing={0} {...styles.walletGroup}>
+											<Tooltip
+												label={t('walletActions.walletGroups.selfCustodialTT')}
+												placement='right'
+											>
+												<Text fontSize='15px' lineHeight='16px' fontWeight={700}>
+													{t('walletActions.walletGroups.selfCustodial')}
+												</Text>
+											</Tooltip>
+											<HStack
+												spacing={5}
+												pt={8}
+												w='full'
+												justifyContent={'left'}
+												alignItems={'stretch'}
+											>
+												{availableWallets.includes(SupportedWallets.HASHPACK) ? (
 													<VStack
-														data-testid={t('walletActions.supportedWallets.blade')}
+														data-testid={t('walletActions.supportedWallets.hashpack')}
 														{...styles.providerStyle}
 														shouldWrapChildren
-														onClick={handleConnectBladeWallet}
+														onClick={handleConnectHashpackWallet}
 													>
-														<PairingSpinner wallet={SupportedWallets.BLADE}>
-															<Image src={BLADE_LOGO_PNG} w={20} />
+														<PairingSpinner wallet={SupportedWallets.HASHPACK}>
+															<Image src={HASHPACK_LOGO_PNG} w={20} />
+															<Text>{t('walletActions.supportedWallets.hashpack')}</Text>
+														</PairingSpinner>
+													</VStack>
+												) : (
+													<VStack
+														data-testid={t('walletActions.supportedWallets.hashpack')}
+														{...styles.providerStyle}
+													>
+														<Link
+															href='https://www.hashpack.app/download'
+															isExternal
+															_hover={{ textDecoration: 'none' }}
+														>
+															<Image src={HASHPACK_LOGO_PNG} w={20} />
+															<Text>{t('walletActions.supportedWallets.hashpack')}</Text>
+														</Link>
+													</VStack>
+												)}
+												{availableWallets.includes(SupportedWallets.METAMASK) ? (
+													<VStack
+														data-testid={t('walletActions.supportedWallets.metamask')}
+														{...styles.providerStyle}
+														shouldWrapChildren
+														onClick={handleConnectMetamaskWallet}
+													>
+														<PairingSpinner wallet={SupportedWallets.METAMASK}>
+															<Image src={METAMASK_LOGO} w={20} />
 															<Text textAlign='center' paddingTop={1}>
-																{t('walletActions.supportedWallets.blade')}
+																{t('walletActions.supportedWallets.metamask')}
 															</Text>
 														</PairingSpinner>
 													</VStack>
 												) : (
 													<VStack
-														data-testid={t('walletActions.supportedWallets.blade')}
+														data-testid={t('walletActions.supportedWallets.metamask')}
 														{...styles.providerStyle}
 													>
 														<Link
-															href='https://bladewallet.io/'
+															href='https://metamask.io/download/'
 															isExternal
 															_hover={{ textDecoration: 'none' }}
 														>
-															<Image src={BLADE_LOGO_PNG} w={20} />
+															<Image src={METAMASK_LOGO} w={20} />
 															<Text textAlign='center' paddingTop={1}>
-																{t('walletActions.supportedWallets.blade')}
+																{t('walletActions.supportedWallets.metamask')}
 															</Text>
 														</Link>
 													</VStack>
-												)
-											) : (
-												<></>
-											)}
-										</HStack>
-									</VStack>
-									<VStack justifyContent='center' spacing={0} {...styles.walletGroup}>
-										<Tooltip label={t('walletActions.walletGroups.custodialTT')} placement='right'>
-											<Text
-												fontSize='15px'
-												lineHeight='16px'
-												fontWeight={700}
-												justifyContent={'center'}
+												)}
+												{isChrome(navigator.userAgent) ? (
+													availableWallets.includes(SupportedWallets.BLADE) ? (
+														<VStack
+															data-testid={t('walletActions.supportedWallets.blade')}
+															{...styles.providerStyle}
+															shouldWrapChildren
+															onClick={handleConnectBladeWallet}
+														>
+															<PairingSpinner wallet={SupportedWallets.BLADE}>
+																<Image src={BLADE_LOGO_PNG} w={20} />
+																<Text textAlign='center' paddingTop={1}>
+																	{t('walletActions.supportedWallets.blade')}
+																</Text>
+															</PairingSpinner>
+														</VStack>
+													) : (
+														<VStack
+															data-testid={t('walletActions.supportedWallets.blade')}
+															{...styles.providerStyle}
+														>
+															<Link
+																href='https://bladewallet.io/'
+																isExternal
+																_hover={{ textDecoration: 'none' }}
+															>
+																<Image src={BLADE_LOGO_PNG} w={20} />
+																<Text textAlign='center' paddingTop={1}>
+																	{t('walletActions.supportedWallets.blade')}
+																</Text>
+															</Link>
+														</VStack>
+													)
+												) : (
+													<></>
+												)}
+											</HStack>
+										</VStack>
+										<VStack justifyContent='center' spacing={0} {...styles.walletGroup}>
+											<Tooltip
+												label={t('walletActions.walletGroups.custodialTT')}
+												placement='right'
 											>
-												{t('walletActions.walletGroups.custodial')}
-											</Text>
-										</Tooltip>
-										<HStack spacing={5} pt={8} w='fit-content' justifyContent={'right'}>
-											<VStack
-												data-testid={t('walletActions.supportedWallets.fireblocks')}
-												{...styles.providerStyle}
-												shouldWrapChildren
-												onClick={handleConnectFireblocks}
-											>
-												<PairingSpinner wallet={SupportedWallets.FIREBLOCKS}>
-													<Image src={FIREBLOCKS_LOGO_PNG} w={20} />
-													<Text textAlign='center' paddingTop={1}>
-														{t('walletActions.supportedWallets.fireblocks')}
-													</Text>
-												</PairingSpinner>
-											</VStack>
-											<VStack
-												data-testid={t('walletActions.supportedWallets.dfns')}
-												{...styles.providerStyle}
-												shouldWrapChildren
-												onClick={handleConnectDfns}
-											>
-												<PairingSpinner wallet={SupportedWallets.DFNS}>
-													<Image src={DFNS_LOGO_PNG} w={20} />
-													<Text textAlign='center' paddingTop={1}>
-														{t('walletActions.supportedWallets.dfns')}
-													</Text>
-												</PairingSpinner>
-											</VStack>
-										</HStack>
-									</VStack>
-								</HStack>
-							</ModalFooter>
-						</>
-					)}
+												<Text
+													fontSize='15px'
+													lineHeight='16px'
+													fontWeight={700}
+													justifyContent={'center'}
+												>
+													{t('walletActions.walletGroups.custodial')}
+												</Text>
+											</Tooltip>
+											<HStack spacing={5} pt={8} w='fit-content' justifyContent={'right'}>
+												<VStack
+													data-testid={t('walletActions.supportedWallets.fireblocks')}
+													{...styles.providerStyle}
+													shouldWrapChildren
+													onClick={handleConnectFireblocks}
+												>
+													<PairingSpinner wallet={SupportedWallets.FIREBLOCKS}>
+														<Image src={FIREBLOCKS_LOGO_PNG} w={20} />
+														<Text textAlign='center' paddingTop={1}>
+															{t('walletActions.supportedWallets.fireblocks')}
+														</Text>
+													</PairingSpinner>
+												</VStack>
+												<VStack
+													data-testid={t('walletActions.supportedWallets.dfns')}
+													{...styles.providerStyle}
+													shouldWrapChildren
+													onClick={handleConnectDfns}
+												>
+													<PairingSpinner wallet={SupportedWallets.DFNS}>
+														<Image src={DFNS_LOGO_PNG} w={20} />
+														<Text textAlign='center' paddingTop={1}>
+															{t('walletActions.supportedWallets.dfns')}
+														</Text>
+													</PairingSpinner>
+												</VStack>
+											</HStack>
+										</VStack>
+									</HStack>
+								</ModalFooter>
+							</>
+						)}
 					{hashpackSelected && (
 						<>
 							<ModalHeader p='0' justifyContent='center'>
@@ -612,6 +628,20 @@ const ModalWalletConnect = () => {
 							</ModalFooter>
 						</>
 					)}
+					{fireblocksSelected && (
+						<FireblocksFormModal
+							isOpen={isFireblocksFormOpen}
+							onClose={unHandleConnectFireblocks}
+							onConfirm={handleFireblocksFormConfirm}
+						/>
+					)}
+					{dfnsSelected && (
+						<DfnsFormModal
+							isOpen={isDfnsFormOpen}
+							onClose={unHandleConnectDFNS}
+							onConfirm={handleDfnsFormConfirm}
+						/>
+					)}
 					{(error || rejected) && (
 						<>
 							<ModalHeader alignSelf='center' p='0'>
@@ -650,16 +680,6 @@ const ModalWalletConnect = () => {
 					)}
 				</ModalContent>
 			</Modal>
-			<FireblocksFormModal
-				isOpen={isFireblocksFormOpen}
-				onClose={onFireblocksFormClose}
-				onConfirm={handleFireblocksFormConfirm}
-			/>
-			<DfnsFormModal
-				isOpen={isDfnsFormOpen}
-				onClose={onDfnsFormClose}
-				onConfirm={handleDfnsFormConfirm}
-			/>
 		</>
 	);
 };
