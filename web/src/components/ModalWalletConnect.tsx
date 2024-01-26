@@ -55,7 +55,7 @@ const ModalWalletConnect = () => {
 	const dispatch = useDispatch();
 
 	const {
-		// isOpen: isWalletSelectOpen,
+		isOpen: isWalletSelectOpen,
 		// onOpen: onWalletSelectOpen,
 		onClose: onWalletSelectClose,
 	} = useDisclosure({ defaultIsOpen: true });
@@ -297,7 +297,7 @@ const ModalWalletConnect = () => {
 		setDFNSSelected(true);
 	};
 	const unHandleConnectDFNS = () => {
-		setFireblocksSelected(false);
+		setDFNSSelected(false);
 		setLoading(undefined);
 	};
 
@@ -305,8 +305,9 @@ const ModalWalletConnect = () => {
 		// TODO: Remove this
 		console.log('Datos del formulario:', formData);
 
-		onDfnsFormClose();
 		handleWalletConnect(SupportedWallets.DFNS, 'testnet', DfnsSettings.fromForm(formData));
+		unHandleConnectDFNS();
+		onWalletSelectClose();
 	};
 
 	const PairingSpinner: FC<{ wallet: SupportedWallets; children?: ReactNode }> = ({
@@ -344,15 +345,15 @@ const ModalWalletConnect = () => {
 	return (
 		<>
 			<Modal
-				isOpen={true}
+				isOpen={isWalletSelectOpen}
 				onClose={onWalletSelectClose}
-				size={'xl'}
+				size={'xxl'}
 				isCentered
 				closeOnEsc={false}
 				closeOnOverlayClick={false}
 			>
 				<ModalOverlay />
-				<ModalContent data-testid='modal-action-content' p='10' maxW='1000px'>
+				<ModalContent data-testid='modal-action-content' p='50' maxW='1000px'>
 					{!error &&
 						!rejected &&
 						!hashpackSelected &&
