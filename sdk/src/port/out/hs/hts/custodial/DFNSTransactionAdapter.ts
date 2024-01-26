@@ -78,24 +78,21 @@ export class DFNSTransactionAdapter extends HederaTransactionAdapter {
 
 	async register(dfnsSettings: DfnsSettings): Promise<InitializationData> {
 		Injectable.registerTransactionHandler(this);
-		const accountId = dfnsSettings.hederaAccountId.toString();
+		const accountId = dfnsSettings.hederaAccountId;
 		const accountMirror = await this.mirrorNodeAdapter.getAccountInfo(
 			accountId,
 		);
 		this.initCustodialWalletService(dfnsSettings);
 		//TODO: test if we can get the public key from the mirror node -> delete from the request
 		const publicKey = accountMirror.publicKey;
-		this.initClient(
-			accountId,
-			dfnsSettings.hederaAccountPublicKey.toString(),
-		);
+		this.initClient(accountId, dfnsSettings.hederaAccountPublicKey);
 		const accountProps: AccountProps = {
 			id: accountId,
 			publicKey: publicKey,
 		};
 		this.account = new Account(accountProps);
 		const eventData: WalletPairedEvent = {
-			wallet: SupportedWallets.FIREBLOCKS,
+			wallet: SupportedWallets.DFNS,
 			data: {
 				account: this.account,
 				pairing: '',
@@ -110,7 +107,7 @@ export class DFNSTransactionAdapter extends HederaTransactionAdapter {
 			},
 		};
 		this.eventService.emit(WalletEvents.walletPaired, eventData);
-		LogService.logTrace('Client registered as handler: ', eventData);
+		LogService.logTrace('DFNS registered as handler: ', eventData);
 		return Promise.resolve({
 			account: this.getAccount(),
 		});
