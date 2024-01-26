@@ -26,25 +26,27 @@
 
 import { StableCoin } from '../../../src/domain/context/stablecoin/StableCoin.js';
 import {
+	AcceptProxyOwnerRequest,
 	AssociateTokenRequest,
+	ChangeProxyOwnerRequest,
 	ConnectRequest,
+	Factory as FactoryInPort,
 	FreezeAccountRequest,
 	GetAccountBalanceHBARRequest,
 	GetAccountBalanceRequest,
+	GetProxyConfigRequest,
 	GetStableCoinDetailsRequest,
+	GetTokenManagerListRequest,
 	HBAR_DECIMALS,
 	KYCRequest,
+	LoggerTransports,
 	Network,
-	StableCoin as StableCoinInPort,
 	Proxy as ProxyInPort,
-	Factory as FactoryInPort,
-	SupportedWallets,
-	ChangeProxyOwnerRequest,
 	ProxyConfigurationViewModel,
-	GetProxyConfigRequest,
-	GetTokenManagerListRequest,
+	SDK,
+	StableCoin as StableCoinInPort,
+	SupportedWallets,
 	UpgradeImplementationRequest,
-	AcceptProxyOwnerRequest,
 } from '../../../src/index.js';
 import StableCoinCapabilities from '../../../src/domain/context/stablecoin/StableCoinCapabilities.js';
 import BigDecimal from '../../../src/domain/context/shared/BigDecimal.js';
@@ -75,7 +77,6 @@ import StableCoinService from '../../../src/app/service/StableCoinService.js';
 import { RESERVE_DECIMALS } from '../../../src/domain/context/reserve/Reserve.js';
 import RPCTransactionAdapter from '../../../src/port/out/rpc/RPCTransactionAdapter.js';
 import RPCQueryAdapter from '../../../src/port/out/rpc/RPCQueryAdapter.js';
-import { LoggerTransports, SDK } from '../../../src/index.js';
 import { MirrorNode } from '../../../src/domain/context/network/MirrorNode.js';
 import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay.js';
 import EvmAddress from '../../../src/domain/context/contract/EvmAddress.js';
