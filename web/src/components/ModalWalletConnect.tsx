@@ -285,12 +285,13 @@ const ModalWalletConnect = () => {
 	const handleFireblocksFormConfirm = (formData: FireblocksFormValues) => {
 		// TODO: Remove this
 		console.log('Datos del formulario:', formData);
-		onFireblocksFormClose();
 		handleWalletConnect(
 			SupportedWallets.FIREBLOCKS,
 			'testnet',
 			FireblocksSettings.fromForm(formData),
 		);
+		unHandleConnectFireblocks();
+		onWalletSelectClose();
 	};
 	// Dfns
 	const handleConnectDfns = () => {
