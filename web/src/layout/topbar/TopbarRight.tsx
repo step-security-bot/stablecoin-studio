@@ -13,6 +13,8 @@ import {
 import HEDERA_LOGO from '../../assets/png/hashpackLogo.png';
 import METAMASK_LOGO from '../../assets/svg/MetaMask_Fox.svg';
 import BLADE_LOGO from '../../assets/png/bladeLogo.png';
+import FIREBLOCKS_LOGO from '../../assets/png/fireblocksLogo.png';
+import DFNS_LOGO from '../../assets/png/dfnsLogo.png';
 import TooltipCopy from '../../components/TooltipCopy';
 import { SupportedWallets } from '@hashgraph/stablecoin-npm-sdk';
 import { Question } from 'phosphor-react';
@@ -37,6 +39,8 @@ const TopbarRight = () => {
 		if (selectedWallet === SupportedWallets.HASHPACK) return img(HEDERA_LOGO);
 		if (selectedWallet === SupportedWallets.METAMASK) return img(METAMASK_LOGO);
 		if (selectedWallet === SupportedWallets.BLADE) return img(BLADE_LOGO);
+		if (selectedWallet === SupportedWallets.FIREBLOCKS) return img(FIREBLOCKS_LOGO);
+		if (selectedWallet === SupportedWallets.DFNS) return img(DFNS_LOGO);
 
 		return <Question size={22} color='#fdfdfc' weight='light' />;
 	};
