@@ -82,17 +82,15 @@ const ModalWalletConnect = () => {
 				boxShadow: '0 0 12px 6px #E0E0E0',
 				transform: 'scale(1.05)',
 			},
+			backgroundColor: 'brand.white',
 		},
 		walletGroup: {
-			boxShadow: '0 0 12px 2px #E0E0E0',
-			borderRadius: 10,
-			// borderWidth: 4,
-			// borderColor: 'brand.black',
+			// boxShadow: '0 0 12px 2px #E0E0E0',
 			p: 6,
-			_hover: {
-				cursor: 'pointer',
-				// transform: 'scale(1.05)',
-			},
+			backgroundColor: '#fbfbfb',
+			borderRadius: '8px',
+			// borderWidth: 0.5,
+			// borderColor: 'brand.black',
 		},
 		networkOptions: {
 			menuList: {
