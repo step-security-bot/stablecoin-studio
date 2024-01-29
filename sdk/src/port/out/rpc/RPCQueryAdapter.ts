@@ -30,11 +30,11 @@ import NetworkService from '../../../app/service/NetworkService.js';
 import LogService from '../../../app/service/LogService.js';
 import {
 	AggregatorV3Interface__factory,
+	HederaReserve__factory,
 	HederaTokenManager__factory,
+	ITransparentUpgradeableProxy__factory,
 	StableCoinFactory__factory,
 	StableCoinProxyAdmin__factory,
-	ITransparentUpgradeableProxy__factory,
-	HederaReserve__factory,
 } from '@hashgraph/stablecoin-npm-contracts';
 import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole.js';
 import ContractId from '../../../domain/context/contract/ContractId.js';
