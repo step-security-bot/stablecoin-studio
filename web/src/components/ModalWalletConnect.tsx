@@ -60,17 +60,9 @@ const ModalWalletConnect = () => {
 		onClose: onWalletSelectClose,
 	} = useDisclosure({ defaultIsOpen: true });
 
-	const {
-		isOpen: isFireblocksFormOpen,
-		onOpen: onFireblocksFormOpen,
-		onClose: onFireblocksFormClose,
-	} = useDisclosure();
+	const { isOpen: isFireblocksFormOpen } = useDisclosure();
 
-	const {
-		isOpen: isDfnsFormOpen,
-		onOpen: onDfnsFormOpen,
-		onClose: onDfnsFormClose,
-	} = useDisclosure();
+	const { isOpen: isDfnsFormOpen } = useDisclosure();
 
 	const styles = {
 		providerStyle: {
@@ -281,8 +273,6 @@ const ModalWalletConnect = () => {
 	};
 
 	const handleFireblocksFormConfirm = (formData: FireblocksFormValues) => {
-		// TODO: Remove this
-		console.log('Datos del formulario:', formData);
 		handleWalletConnect(
 			SupportedWallets.FIREBLOCKS,
 			'testnet',
@@ -301,9 +291,6 @@ const ModalWalletConnect = () => {
 	};
 
 	const handleDfnsFormConfirm = (formData: DfnsFormValues) => {
-		// TODO: Remove this
-		console.log('Datos del formulario:', formData);
-
 		handleWalletConnect(SupportedWallets.DFNS, 'testnet', DfnsSettings.fromForm(formData));
 		unHandleConnectDFNS();
 		onWalletSelectClose();
