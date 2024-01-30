@@ -78,7 +78,11 @@ const FireblocksFormModal = (props: FireblocksFormModalProps) => {
 					<VStack spacing={4}>
 						<FormControl isInvalid={!!errors.apiKey}>
 							<FormLabel htmlFor='apiKey'>API Key</FormLabel>
-							<Input id='apiKey' {...register('apiKey', { required: true })} />
+							<Input
+								id='apiKey'
+								{...register('apiKey', { required: true })}
+								defaultValue='652415d5-e004-4dfd-9b3b-d93e8fc939d7'
+							/>
 						</FormControl>
 						<FormControl isInvalid={!!errors.baseUrl}>
 							<FormLabel htmlFor='baseUrl'>Base URL</FormLabel>
@@ -90,15 +94,27 @@ const FireblocksFormModal = (props: FireblocksFormModalProps) => {
 						</FormControl>
 						<FormControl isInvalid={!!errors.assetId}>
 							<FormLabel htmlFor='assetId'>Asset ID</FormLabel>
-							<Input id='assetId' {...register('assetId', { required: true })} />
+							<Input
+								id='assetId'
+								{...register('assetId', { required: true })}
+								defaultValue='HBAR_TEST'
+							/>
 						</FormControl>
 						<FormControl isInvalid={!!errors.vaultAccountId}>
 							<FormLabel htmlFor='vaultAccountId'>Vault Account ID</FormLabel>
-							<Input id='vaultAccountId' {...register('vaultAccountId', { required: true })} />
+							<Input
+								id='vaultAccountId'
+								{...register('vaultAccountId', { required: true })}
+								defaultValue='2'
+							/>
 						</FormControl>
 						<FormControl isInvalid={!!errors.hederaAccountId}>
 							<FormLabel htmlFor='hederaAccountId'>Hedera Account ID</FormLabel>
-							<Input id='hederaAccountId' {...register('hederaAccountId', { required: true })} />
+							<Input
+								id='hederaAccountId'
+								{...register('hederaAccountId', { required: true })}
+								defaultValue='0.0.5712904'
+							/>
 						</FormControl>
 						<FormControl isInvalid={!!errors.secretKeyFileInput}>
 							<FormLabel htmlFor='secretKeyFileInput'>

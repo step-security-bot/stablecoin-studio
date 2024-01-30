@@ -18,9 +18,9 @@
  *
  */
 
-import { QueryResponse } from '../../../../core/query/QueryResponse.js';
-import BigDecimal from '../../../../domain/context/shared/BigDecimal.js';
-import { HederaId } from '../../../../domain/context/shared/HederaId.js';
+import { QueryResponse } from '../../../../core/query/QueryResponse';
+import BigDecimal from '../../../../domain/context/shared/BigDecimal';
+import { HederaId } from '../../../../domain/context/shared/HederaId';
 
 export enum FreezeStatus {
 	'UNFROZEN' = 'UNFROZEN',

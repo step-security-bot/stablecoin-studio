@@ -39,37 +39,36 @@ import {
 	TokenAssociateTransaction,
 } from '@hashgraph/sdk';
 import { singleton } from 'tsyringe';
-import { HederaTransactionAdapter } from '../HederaTransactionAdapter.js';
-import { HashConnect } from '@hashgraph/hashconnect';
-import { HashConnectProvider } from '@hashgraph/hashconnect/provider/provider';
-import { HashConnectSigner } from '@hashgraph/hashconnect/provider/signer';
-import { HashConnectTypes } from '@hashgraph/hashconnect';
-import { HashConnectConnectionState } from '@hashgraph/hashconnect/types';
-import Account from '../../../../domain/context/account/Account.js';
-import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse.js';
-import Injectable from '../../../../core/Injectable.js';
-import { SigningError } from '../error/SigningError.js';
-import { HashpackTransactionResponseAdapter } from './HashpackTransactionResponseAdapter.js';
-import { TransactionType } from '../../TransactionResponseEnums.js';
-import LogService from '../../../../app/service/LogService.js';
-import EventService from '../../../../app/service/event/EventService.js';
-import { PairingError } from './error/PairingError.js';
-import { InitializationData } from '../../TransactionAdapter.js';
-import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator.js';
-import NetworkService from '../../../../app/service/NetworkService.js';
-import { RuntimeError } from '../../../../core/error/RuntimeError.js';
+import { HederaTransactionAdapter } from '../HederaTransactionAdapter';
+import { HashConnect , HashConnectTypes } from '@hashgraph/hashconnect';
+import { HashConnectSigner } from '@hashgraph/hashconnect/dist/esm/provider/signer';
+import { HashConnectConnectionState } from '@hashgraph/hashconnect/dist/esm/types';
+import Account from '../../../../domain/context/account/Account';
+import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse';
+import Injectable from '../../../../core/Injectable';
+import { SigningError } from '../error/SigningError';
+import { HashpackTransactionResponseAdapter } from './HashpackTransactionResponseAdapter';
+import { TransactionType } from '../../TransactionResponseEnums';
+import LogService from '../../../../app/service/LogService';
+import EventService from '../../../../app/service/event/EventService';
+import { PairingError } from './error/PairingError';
+import { InitializationData } from '../../TransactionAdapter';
+import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator';
+import NetworkService from '../../../../app/service/NetworkService';
+import { RuntimeError } from '../../../../core/error/RuntimeError';
 import {
 	ConnectionState,
 	WalletEvents,
 	WalletInitEvent,
-} from '../../../../app/service/event/WalletEvent.js';
-import { SupportedWallets } from '../../../in/request/ConnectRequest.js';
-import { MirrorNodeAdapter } from '../../mirror/MirrorNodeAdapter.js';
-import { SDK } from '../../../in/Common.js';
-import { HederaId } from '../../../../domain/context/shared/HederaId.js';
-import { QueryBus } from '../../../../core/query/QueryBus.js';
-import { AccountIdNotValid } from '../../../../domain/context/account/error/AccountIdNotValid.js';
-import { GetAccountInfoQuery } from '../../../../app/usecase/query/account/info/GetAccountInfoQuery.js';
+} from '../../../../app/service/event/WalletEvent';
+import { SupportedWallets } from '../../../in/request/ConnectRequest';
+import { MirrorNodeAdapter } from '../../mirror/MirrorNodeAdapter';
+import { SDK } from '../../../in/Common';
+import { HederaId } from '../../../../domain/context/shared/HederaId';
+import { QueryBus } from '../../../../core/query/QueryBus';
+import { AccountIdNotValid } from '../../../../domain/context/account/error/AccountIdNotValid';
+import { GetAccountInfoQuery } from '../../../../app/usecase/query/account/info/GetAccountInfoQuery';
+import {HashConnectProvider} from "@hashgraph/hashconnect/dist/esm/provider/provider";
 
 @singleton()
 export class HashpackTransactionAdapter extends HederaTransactionAdapter {

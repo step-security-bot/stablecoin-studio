@@ -18,14 +18,14 @@
  *
  */
 
-import CheckNums from '../../../core/checks/numbers/CheckNums.js';
-import BigDecimal from '../../../domain/context/shared/BigDecimal.js';
-import InvalidDecimalRange from '../../../domain/context/stablecoin/error/InvalidDecimalRange.js';
-import { StableCoin } from '../../../domain/context/stablecoin/StableCoin.js';
-import { InvalidType } from './error/InvalidType.js';
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
-import { RESERVE_DECIMALS } from '../../../domain/context/reserve/Reserve.js';
+import CheckNums from '../../../core/checks/numbers/CheckNums';
+import BigDecimal from '../../../domain/context/shared/BigDecimal';
+import InvalidDecimalRange from '../../../domain/context/stablecoin/error/InvalidDecimalRange';
+import { StableCoin } from '../../../domain/context/stablecoin/StableCoin';
+import { InvalidType } from './error/InvalidType';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
+import { RESERVE_DECIMALS } from '../../../domain/context/reserve/Reserve';
 
 export default class UpdateReserveAmountRequest extends ValidatedRequest<UpdateReserveAmountRequest> {
 	reserveAddress: string;

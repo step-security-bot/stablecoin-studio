@@ -1,4 +1,4 @@
-import BaseError, { ErrorCode } from '../../../../core/error/BaseError.js';
+import BaseError, { ErrorCode } from '../../../../core/error/BaseError';
 
 export class MaxSupplyReached extends BaseError {
 	constructor(maxSupply: string) {

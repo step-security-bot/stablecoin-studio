@@ -19,7 +19,7 @@
  */
 
 /* eslint-disable jest/no-disabled-tests */
-import Injectable from '../../../src/core/Injectable.js';
+import Injectable from '../../../src/core/Injectable';
 import {
 	Account,
 	Network,
@@ -29,7 +29,7 @@ import {
 	Proxy,
 	Factory,
 	ProxyConfigurationViewModel,
-} from '../../../src/index.js';
+} from "../../../src";
 import {
 	ChangeProxyOwnerRequest,
 	CreateRequest,
@@ -42,10 +42,10 @@ import {
 	ChangeFactoryProxyOwnerRequest,
 	AcceptProxyOwnerRequest,
 	AcceptFactoryProxyOwnerRequest,
-} from '../../../src/port/in/request/index.js';
+} from "../../../src/port/in/request";
 import ConnectRequest, {
 	SupportedWallets,
-} from '../../../src/port/in/request/ConnectRequest.js';
+} from '../../../src/port/in/request/ConnectRequest';
 
 import {
 	CLIENT_ACCOUNT_ED25519_2,
@@ -55,10 +55,10 @@ import {
 	HEDERA_TOKEN_MANAGER_ADDRESS,
 	MIRROR_NODE,
 	RPC_NODE,
-} from '../../config.js';
-import ContractId from 'domain/context/contract/ContractId.js';
-import { MirrorNode } from '../../../src/domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay.js';
+} from '../../config';
+import { MirrorNode } from '../../../src/domain/context/network/MirrorNode';
+import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay';
+import ContractId from "../../../src/domain/context/contract/ContractId";
 
 const mirrorNode: MirrorNode = {
 	name: MIRROR_NODE.name,

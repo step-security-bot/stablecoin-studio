@@ -18,10 +18,10 @@
  *
  */
 
-import { Query } from '../../../../../../core/query/Query.js';
-import { QueryResponse } from '../../../../../../core/query/QueryResponse.js';
-import { HederaId } from '../../../../../../domain/context/shared/HederaId.js';
-import { StableCoinRole } from '../../../../../../domain/context/stablecoin/StableCoinRole.js';
+import { Query } from '../../../../../../core/query/Query';
+import { QueryResponse } from '../../../../../../core/query/QueryResponse';
+import { HederaId } from '../../../../../../domain/context/shared/HederaId';
+import { StableCoinRole } from '../../../../../../domain/context/stablecoin/StableCoinRole';
 
 export class HasRoleQueryResponse implements QueryResponse {
 	constructor(public readonly payload: boolean) {}

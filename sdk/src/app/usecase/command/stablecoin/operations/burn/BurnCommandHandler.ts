@@ -18,20 +18,20 @@
  *
  */
 
-import CheckNums from '../../../../../../core/checks/numbers/CheckNums.js';
-import { CommandBus } from '../../../../../../core/command/CommandBus.js';
-import { ICommandHandler } from '../../../../../../core/command/CommandHandler.js';
-import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator.js';
-import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator.js';
-import { QueryBus } from '../../../../../../core/query/QueryBus.js';
-import BigDecimal from '../../../../../../domain/context/shared/BigDecimal.js';
-import AccountService from '../../../../../service/AccountService.js';
-import StableCoinService from '../../../../../service/StableCoinService.js';
-import TransactionService from '../../../../../service/TransactionService.js';
-import { BalanceOfQuery } from '../../../../query/stablecoin/balanceof/BalanceOfQuery.js';
-import { DecimalsOverRange } from '../../error/DecimalsOverRange.js';
-import { OperationNotAllowed } from '../../error/OperationNotAllowed.js';
-import { BurnCommand, BurnCommandResponse } from './BurnCommand.js';
+import CheckNums from '../../../../../../core/checks/numbers/CheckNums';
+import { CommandBus } from '../../../../../../core/command/CommandBus';
+import { ICommandHandler } from '../../../../../../core/command/CommandHandler';
+import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator';
+import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator';
+import { QueryBus } from '../../../../../../core/query/QueryBus';
+import BigDecimal from '../../../../../../domain/context/shared/BigDecimal';
+import AccountService from '../../../../../service/AccountService';
+import StableCoinService from '../../../../../service/StableCoinService';
+import TransactionService from '../../../../../service/TransactionService';
+import { BalanceOfQuery } from '../../../../query/stablecoin/balanceof/BalanceOfQuery';
+import { DecimalsOverRange } from '../../error/DecimalsOverRange';
+import { OperationNotAllowed } from '../../error/OperationNotAllowed';
+import { BurnCommand, BurnCommandResponse } from './BurnCommand';
 
 @CommandHandler(BurnCommand)
 export class BurnCommandHandler implements ICommandHandler<BurnCommand> {

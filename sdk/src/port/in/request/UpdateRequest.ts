@@ -18,11 +18,11 @@
  *
  */
 
-import { OptionalField } from '../../../core/decorator/OptionalDecorator.js';
-import { RequestPublicKey } from './BaseRequest.js';
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
-import { StableCoin } from '../../../domain/context/stablecoin/StableCoin.js';
+import { OptionalField } from '../../../core/decorator/OptionalDecorator';
+import { RequestPublicKey } from './BaseRequest';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
+import { StableCoin } from '../../../domain/context/stablecoin/StableCoin';
 
 export default class UpdateRequest extends ValidatedRequest<UpdateRequest> {
 	tokenId: string;

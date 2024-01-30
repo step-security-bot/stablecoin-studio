@@ -18,9 +18,9 @@
  *
  */
 
-import { FactoryCashinRole } from './FactoryCashinRole.js';
-import { FactoryKey } from './FactoryKey.js';
-import { FactoryRole } from './FactoryRole.js';
+import { FactoryCashinRole } from './FactoryCashinRole';
+import { FactoryKey } from './FactoryKey';
+import { FactoryRole } from './FactoryRole';
 
 export class FactoryStableCoin {
 	/**

@@ -19,13 +19,13 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
-import BigDecimal from '../../../domain/context/shared/BigDecimal.js';
-import CheckNums from '../../../core/checks/numbers/CheckNums.js';
-import { InvalidType } from './error/InvalidType.js';
-import InvalidDecimalRange from '../../../domain/context/stablecoin/error/InvalidDecimalRange.js';
-import { InvalidRange } from './error/InvalidRange.js';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
+import BigDecimal from '../../../domain/context/shared/BigDecimal';
+import CheckNums from '../../../core/checks/numbers/CheckNums';
+import { InvalidType } from './error/InvalidType';
+import InvalidDecimalRange from '../../../domain/context/stablecoin/error/InvalidDecimalRange';
+import { InvalidRange } from './error/InvalidRange';
 
 export default class AddFixedFeeRequest extends ValidatedRequest<AddFixedFeeRequest> {
 	tokenId: string;

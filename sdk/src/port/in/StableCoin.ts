@@ -19,83 +19,83 @@
  */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Injectable from '../../core/Injectable.js';
-import CreateRequest from './request/CreateRequest.js';
-import CashInRequest from './request/CashInRequest.js';
-import GetStableCoinDetailsRequest from './request/GetStableCoinDetailsRequest.js';
-import BurnRequest from './request/BurnRequest.js';
-import RescueRequest from './request/RescueRequest.js';
-import RescueHBARRequest from './request/RescueHBARRequest.js';
-import WipeRequest from './request/WipeRequest.js';
-import AssociateTokenRequest from './request/AssociateTokenRequest.js';
-import BigDecimal from '../../domain/context/shared/BigDecimal.js';
-import { HederaId } from '../../domain/context/shared/HederaId.js';
-import ContractId from '../../domain/context/contract/ContractId.js';
-import EvmAddress from '../../domain/context/contract/EvmAddress.js';
+import Injectable from '../../core/Injectable';
+import CreateRequest from './request/CreateRequest';
+import CashInRequest from './request/CashInRequest';
+import GetStableCoinDetailsRequest from './request/GetStableCoinDetailsRequest';
+import BurnRequest from './request/BurnRequest';
+import RescueRequest from './request/RescueRequest';
+import RescueHBARRequest from './request/RescueHBARRequest';
+import WipeRequest from './request/WipeRequest';
+import AssociateTokenRequest from './request/AssociateTokenRequest';
+import BigDecimal from '../../domain/context/shared/BigDecimal';
+import { HederaId } from '../../domain/context/shared/HederaId';
+import ContractId from '../../domain/context/contract/ContractId';
+import EvmAddress from '../../domain/context/contract/EvmAddress';
 import {
 	StableCoinProps,
 	TRANSFER_LIST_SIZE,
-} from '../../domain/context/stablecoin/StableCoin.js';
-import { QueryBus } from '../../core/query/QueryBus.js';
-import { CommandBus } from '../../core/command/CommandBus.js';
-import { CashInCommand } from '../../app/usecase/command/stablecoin/operations/cashin/CashInCommand.js';
-import StableCoinViewModel from '../out/mirror/response/StableCoinViewModel.js';
-import StableCoinListViewModel from '../out/mirror/response/StableCoinListViewModel.js';
-import StableCoinService from '../../app/service/StableCoinService.js';
-import { GetStableCoinQuery } from '../../app/usecase/query/stablecoin/get/GetStableCoinQuery.js';
-import { CreateCommand } from '../../app/usecase/command/stablecoin/create/CreateCommand.js';
-import PublicKey from '../../domain/context/account/PublicKey.js';
-import DeleteRequest from './request/DeleteRequest.js';
-import FreezeAccountRequest from './request/FreezeAccountRequest.js';
-import PauseRequest from './request/PauseRequest.js';
-import GetAccountBalanceRequest from './request/GetAccountBalanceRequest.js';
-import GetAccountBalanceHBARRequest from './request/GetAccountBalanceHBARRequest.js';
-import CapabilitiesRequest from './request/CapabilitiesRequest.js';
-import IsAccountAssociatedTokenRequest from './request/IsAccountAssociatedTokenRequest.js';
-import { Balance } from '../../domain/context/stablecoin/Balance.js';
-import StableCoinCapabilities from '../../domain/context/stablecoin/StableCoinCapabilities.js';
+} from '../../domain/context/stablecoin/StableCoin';
+import { QueryBus } from '../../core/query/QueryBus';
+import { CommandBus } from '../../core/command/CommandBus';
+import { CashInCommand } from '../../app/usecase/command/stablecoin/operations/cashin/CashInCommand';
+import StableCoinViewModel from '../out/mirror/response/StableCoinViewModel';
+import StableCoinListViewModel from '../out/mirror/response/StableCoinListViewModel';
+import StableCoinService from '../../app/service/StableCoinService';
+import { GetStableCoinQuery } from '../../app/usecase/query/stablecoin/get/GetStableCoinQuery';
+import { CreateCommand } from '../../app/usecase/command/stablecoin/create/CreateCommand';
+import PublicKey from '../../domain/context/account/PublicKey';
+import DeleteRequest from './request/DeleteRequest';
+import FreezeAccountRequest from './request/FreezeAccountRequest';
+import PauseRequest from './request/PauseRequest';
+import GetAccountBalanceRequest from './request/GetAccountBalanceRequest';
+import GetAccountBalanceHBARRequest from './request/GetAccountBalanceHBARRequest';
+import CapabilitiesRequest from './request/CapabilitiesRequest';
+import IsAccountAssociatedTokenRequest from './request/IsAccountAssociatedTokenRequest';
+import { Balance } from '../../domain/context/stablecoin/Balance';
+import StableCoinCapabilities from '../../domain/context/stablecoin/StableCoinCapabilities';
 import {
 	Capability,
 	Access,
 	Operation,
-} from '../../domain/context/stablecoin/Capability.js';
-import { TokenSupplyType } from '../../domain/context/stablecoin/TokenSupply.js';
-import Account from '../../domain/context/account/Account.js';
-import { BurnCommand } from '../../app/usecase/command/stablecoin/operations/burn/BurnCommand.js';
-import { RescueCommand } from '../../app/usecase/command/stablecoin/operations/rescue/RescueCommand.js';
-import { RescueHBARCommand } from '../../app/usecase/command/stablecoin/operations/rescueHBAR/RescueHBARCommand.js';
-import { WipeCommand } from '../../app/usecase/command/stablecoin/operations/wipe/WipeCommand.js';
-import { PauseCommand } from '../../app/usecase/command/stablecoin/operations/pause/PauseCommand.js';
-import { UnPauseCommand } from '../../app/usecase/command/stablecoin/operations/unpause/UnPauseCommand.js';
-import { DeleteCommand } from '../../app/usecase/command/stablecoin/operations/delete/DeleteCommand.js';
-import { FreezeCommand } from '../../app/usecase/command/stablecoin/operations/freeze/FreezeCommand.js';
-import { UnFreezeCommand } from '../../app/usecase/command/stablecoin/operations/unfreeze/UnFreezeCommand.js';
-import { GetAccountInfoQuery } from '../../app/usecase/query/account/info/GetAccountInfoQuery.js';
-import { handleValidation } from './Common.js';
-import UpdateReserveAddressRequest from './request/UpdateReserveAddressRequest.js';
-import GetReserveAddressRequest from './request/GetReserveAddressRequest.js';
-import { UpdateReserveAddressCommand } from '../../app/usecase/command/stablecoin/operations/updateReserveAddress/UpdateReserveAddressCommand.js';
-import { RESERVE_DECIMALS } from '../../domain/context/reserve/Reserve.js';
-import ReserveViewModel from '../out/mirror/response/ReserveViewModel.js';
-import { BalanceOfQuery } from '../../app/usecase/query/stablecoin/balanceof/BalanceOfQuery.js';
-import { BalanceOfHBARQuery } from '../../app/usecase/query/stablecoin/balanceOfHBAR/BalanceOfHBARQuery.js';
-import { GetReserveAddressQuery } from '../../app/usecase/query/stablecoin/getReserveAddress/GetReserveAddressQuey.js';
-import KYCRequest from './request/KYCRequest.js';
-import { GrantKycCommand } from '../../app/usecase/command/stablecoin/operations/grantKyc/GrantKycCommand.js';
-import { RevokeKycCommand } from '../../app/usecase/command/stablecoin/operations/revokeKyc/RevokeKycCommand.js';
-import { LogError } from '../../core/decorator/LogErrorDecorator.js';
-import { GetAccountTokenRelationshipQuery } from '../../app/usecase/query/account/tokenRelationship/GetAccountTokenRelationshipQuery.js';
+} from '../../domain/context/stablecoin/Capability';
+import { TokenSupplyType } from '../../domain/context/stablecoin/TokenSupply';
+import Account from '../../domain/context/account/Account';
+import { BurnCommand } from '../../app/usecase/command/stablecoin/operations/burn/BurnCommand';
+import { RescueCommand } from '../../app/usecase/command/stablecoin/operations/rescue/RescueCommand';
+import { RescueHBARCommand } from '../../app/usecase/command/stablecoin/operations/rescueHBAR/RescueHBARCommand';
+import { WipeCommand } from '../../app/usecase/command/stablecoin/operations/wipe/WipeCommand';
+import { PauseCommand } from '../../app/usecase/command/stablecoin/operations/pause/PauseCommand';
+import { UnPauseCommand } from '../../app/usecase/command/stablecoin/operations/unpause/UnPauseCommand';
+import { DeleteCommand } from '../../app/usecase/command/stablecoin/operations/delete/DeleteCommand';
+import { FreezeCommand } from '../../app/usecase/command/stablecoin/operations/freeze/FreezeCommand';
+import { UnFreezeCommand } from '../../app/usecase/command/stablecoin/operations/unfreeze/UnFreezeCommand';
+import { GetAccountInfoQuery } from '../../app/usecase/query/account/info/GetAccountInfoQuery';
+import { handleValidation } from './Common';
+import UpdateReserveAddressRequest from './request/UpdateReserveAddressRequest';
+import GetReserveAddressRequest from './request/GetReserveAddressRequest';
+import { UpdateReserveAddressCommand } from '../../app/usecase/command/stablecoin/operations/updateReserveAddress/UpdateReserveAddressCommand';
+import { RESERVE_DECIMALS } from '../../domain/context/reserve/Reserve';
+import ReserveViewModel from '../out/mirror/response/ReserveViewModel';
+import { BalanceOfQuery } from '../../app/usecase/query/stablecoin/balanceof/BalanceOfQuery';
+import { BalanceOfHBARQuery } from '../../app/usecase/query/stablecoin/balanceOfHBAR/BalanceOfHBARQuery';
+import { GetReserveAddressQuery } from '../../app/usecase/query/stablecoin/getReserveAddress/GetReserveAddressQuey';
+import KYCRequest from './request/KYCRequest';
+import { GrantKycCommand } from '../../app/usecase/command/stablecoin/operations/grantKyc/GrantKycCommand';
+import { RevokeKycCommand } from '../../app/usecase/command/stablecoin/operations/revokeKyc/RevokeKycCommand';
+import { LogError } from '../../core/decorator/LogErrorDecorator';
+import { GetAccountTokenRelationshipQuery } from '../../app/usecase/query/account/tokenRelationship/GetAccountTokenRelationshipQuery';
 import {
 	FreezeStatus,
 	KycStatus,
-} from '../out/mirror/response/AccountTokenRelationViewModel.js';
-import TransfersRequest from './request/TransfersRequest.js';
-import UpdateRequest from './request/UpdateRequest.js';
-import { TransfersCommand } from '../../app/usecase/command/stablecoin/operations/transfer/TransfersCommand.js';
-import { UpdateCommand } from '../../app/usecase/command/stablecoin/update/UpdateCommand.js';
-import NetworkService from '../../app/service/NetworkService.js';
-import { AssociateCommand } from '../../app/usecase/command/account/associate/AssociateCommand.js';
-import { MirrorNodeAdapter } from '../../port/out/mirror/MirrorNodeAdapter.js';
+} from '../out/mirror/response/AccountTokenRelationViewModel';
+import TransfersRequest from './request/TransfersRequest';
+import UpdateRequest from './request/UpdateRequest';
+import { TransfersCommand } from '../../app/usecase/command/stablecoin/operations/transfer/TransfersCommand';
+import { UpdateCommand } from '../../app/usecase/command/stablecoin/update/UpdateCommand';
+import NetworkService from '../../app/service/NetworkService';
+import { AssociateCommand } from '../../app/usecase/command/account/associate/AssociateCommand';
+import { MirrorNodeAdapter } from "../out/mirror/MirrorNodeAdapter";
 
 export {
 	StableCoinViewModel,

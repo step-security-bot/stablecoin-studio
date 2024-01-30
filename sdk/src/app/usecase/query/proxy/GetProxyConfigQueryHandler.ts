@@ -18,20 +18,20 @@
  *
  */
 
-import ContractId from '../../../../domain/context/contract/ContractId.js';
-import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator.js';
-import { QueryHandler } from '../../../../core/decorator/QueryHandlerDecorator.js';
-import { IQueryHandler } from '../../../../core/query/QueryHandler.js';
-import { HederaId } from '../../../../domain/context/shared/HederaId.js';
-import RPCQueryAdapter from '../../../../port/out/rpc/RPCQueryAdapter.js';
-import StableCoinService from '../../../service/StableCoinService.js';
+import ContractId from '../../../../domain/context/contract/ContractId';
+import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator';
+import { QueryHandler } from '../../../../core/decorator/QueryHandlerDecorator';
+import { IQueryHandler } from '../../../../core/query/QueryHandler';
+import { HederaId } from '../../../../domain/context/shared/HederaId';
+import RPCQueryAdapter from '../../../../port/out/rpc/RPCQueryAdapter';
+import StableCoinService from '../../../service/StableCoinService';
 import { ContractId as HContractId } from '@hashgraph/sdk';
 import {
 	GetProxyConfigQuery,
 	GetProxyConfigQueryResponse,
-} from './GetProxyConfigQuery.js';
-import { MirrorNodeAdapter } from '../../../../port/out/mirror/MirrorNodeAdapter.js';
-import { EVM_ZERO_ADDRESS } from '../../../../core/Constants.js';
+} from './GetProxyConfigQuery';
+import { MirrorNodeAdapter } from '../../../../port/out/mirror/MirrorNodeAdapter';
+import { EVM_ZERO_ADDRESS } from '../../../../core/Constants';
 
 @QueryHandler(GetProxyConfigQuery)
 export class GetProxyConfigQueryHandler

@@ -36,7 +36,6 @@ import { Environment } from '../../../../../domain/context/network/Environment';
 import { TransactionType } from '../../../TransactionResponseEnums';
 import TransactionResponse from '../../../../../domain/context/transaction/TransactionResponse';
 import LogService from '../../../../../app/service/LogService';
-import { TransactionResponse as HTransactionResponse } from '@hashgraph/sdk/lib/exports';
 import { HTSTransactionResponseAdapter } from '../HTSTransactionResponseAdapter';
 import { SigningError } from '../../error/SigningError';
 import { SupportedWallets } from '../../../../../domain/context/network/Wallet';
@@ -98,7 +97,7 @@ export abstract class CustodialTransactionAdapter extends HederaTransactionAdapt
 				nameFunction,
 			);
 
-			const tr: HTransactionResponse = await t.execute(this.client);
+			const tr = await t.execute(this.client);
 			this.logTransaction(
 				tr.transactionId.toString(),
 				this.networkService.environment,

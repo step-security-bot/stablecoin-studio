@@ -21,10 +21,10 @@
 import { transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import TransportStream from 'winston-transport';
-import LogService from '../../app/service/LogService.js';
-import { BaseRequest } from './request/BaseRequest.js';
-import { ValidationError } from './request/error/ValidationError.js';
-import ValidatedRequest from './request/validation/ValidatedRequest.js';
+import LogService from '../../app/service/LogService';
+import { BaseRequest } from './request/BaseRequest';
+import { ValidationError } from './request/error/ValidationError';
+import ValidatedRequest from './request/validation/ValidatedRequest';
 
 // App Metadata
 export type AppMetadata = {

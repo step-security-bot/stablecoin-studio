@@ -42,8 +42,8 @@ import {
 	Timestamp,
 } from '@hashgraph/sdk';
 import Long from 'long';
-import LogService from '../../../app/service/LogService.js';
-import { TransactionBuildingError } from './error/TransactionBuildingError.js';
+import LogService from '../../../app/service/LogService';
+import { TransactionBuildingError } from './error/TransactionBuildingError';
 
 export class HTSTransactionBuilder {
 	public static buildContractExecuteTransaction(

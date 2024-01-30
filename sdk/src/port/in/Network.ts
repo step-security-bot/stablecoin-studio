@@ -19,41 +19,41 @@
  */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Injectable from '../../core/Injectable.js';
-import { CommandBus } from '../../core/command/CommandBus.js';
-import { InitializationData } from '../out/TransactionAdapter.js';
-import { ConnectCommand } from '../../app/usecase/command/network/connect/ConnectCommand.js';
+import Injectable from '../../core/Injectable';
+import { CommandBus } from '../../core/command/CommandBus';
+import { InitializationData } from '../out/TransactionAdapter';
+import { ConnectCommand } from '../../app/usecase/command/network/connect/ConnectCommand';
 import ConnectRequest, {
 	DFNSConfigRequest,
 	FireblocksConfigRequest,
 	SupportedWallets,
-} from './request/ConnectRequest.js';
-import RequestMapper from './request/mapping/RequestMapper.js';
-import TransactionService from '../../app/service/TransactionService.js';
-import NetworkService from '../../app/service/NetworkService.js';
-import SetNetworkRequest from './request/SetNetworkRequest.js';
-import { SetNetworkCommand } from '../../app/usecase/command/network/setNetwork/SetNetworkCommand.js';
-import { SetConfigurationCommand } from '../../app/usecase/command/network/setConfiguration/SetConfigurationCommand.js';
+} from './request/ConnectRequest';
+import RequestMapper from './request/mapping/RequestMapper';
+import TransactionService from '../../app/service/TransactionService';
+import NetworkService from '../../app/service/NetworkService';
+import SetNetworkRequest from './request/SetNetworkRequest';
+import { SetNetworkCommand } from '../../app/usecase/command/network/setNetwork/SetNetworkCommand';
+import { SetConfigurationCommand } from '../../app/usecase/command/network/setConfiguration/SetConfigurationCommand';
 import {
 	Environment,
 	unrecognized,
-} from '../../domain/context/network/Environment.js';
-import InitializationRequest from './request/InitializationRequest.js';
-import Event from './Event.js';
-import RPCTransactionAdapter from '../out/rpc/RPCTransactionAdapter.js';
-import { HashpackTransactionAdapter } from '../out/hs/hashpack/HashpackTransactionAdapter.js';
-import { LogError } from '../../core/decorator/LogErrorDecorator.js';
-import SetConfigurationRequest from './request/SetConfigurationRequest.js';
-import { handleValidation } from './Common.js';
-import { MirrorNode } from '../../domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../domain/context/network/JsonRpcRelay.js';
-import { BladeTransactionAdapter } from '../out/hs/blade/BladeTransactionAdapter.js';
-import DfnsSettings from 'domain/context/custodialwalletsettings/DfnsSettings.js';
+} from '../../domain/context/network/Environment';
+import InitializationRequest from './request/InitializationRequest';
+import Event from './Event';
+import RPCTransactionAdapter from '../out/rpc/RPCTransactionAdapter';
+import { HashpackTransactionAdapter } from '../out/hs/hashpack/HashpackTransactionAdapter';
+import { LogError } from '../../core/decorator/LogErrorDecorator';
+import SetConfigurationRequest from './request/SetConfigurationRequest';
+import { handleValidation } from './Common';
+import { MirrorNode } from '../../domain/context/network/MirrorNode';
+import { JsonRpcRelay } from '../../domain/context/network/JsonRpcRelay';
+import { BladeTransactionAdapter } from '../out/hs/blade/BladeTransactionAdapter';
 import FireblocksSettings from '../../domain/context/custodialwalletsettings/FireblocksSettings';
 import { HederaId } from '../../domain/context/shared/HederaId';
 import PublicKey from '../../domain/context/account/PublicKey';
-import { FireblocksTransactionAdapter } from '../out/hs/hts/custodial/FireblocksTransactionAdapter.js';
-import { DFNSTransactionAdapter } from '../out/hs/hts/custodial/DFNSTransactionAdapter.js';
+import { FireblocksTransactionAdapter } from '../out/hs/hts/custodial/FireblocksTransactionAdapter';
+import { DFNSTransactionAdapter } from '../out/hs/hts/custodial/DFNSTransactionAdapter';
+import DfnsSettings from "../../domain/context/custodialwalletsettings/DfnsSettings";
 
 export { InitializationData, SupportedWallets };
 

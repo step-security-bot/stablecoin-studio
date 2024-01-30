@@ -18,13 +18,13 @@
  *
  */
 
-import { ICommandHandler } from '../../../../../core/command/CommandHandler.js';
-import { CommandHandler } from '../../../../../core/decorator/CommandHandlerDecorator.js';
-import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator.js';
-import AccountService from '../../../../service/AccountService.js';
-import TransactionService from '../../../../service/TransactionService.js';
-import { UpdateCommand, UpdateCommandResponse } from './UpdateCommand.js';
-import StableCoinService from '../../../../service/StableCoinService.js';
+import { ICommandHandler } from '../../../../../core/command/CommandHandler';
+import { CommandHandler } from '../../../../../core/decorator/CommandHandlerDecorator';
+import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator';
+import AccountService from '../../../../service/AccountService';
+import TransactionService from '../../../../service/TransactionService';
+import { UpdateCommand, UpdateCommandResponse } from './UpdateCommand';
+import StableCoinService from '../../../../service/StableCoinService';
 
 @CommandHandler(UpdateCommand)
 export class UpdateCommandHandler implements ICommandHandler<UpdateCommand> {

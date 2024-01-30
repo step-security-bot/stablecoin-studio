@@ -19,10 +19,10 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Query } from '../../../../src/core/query/Query.js';
-import { IQueryHandler } from '../../../../src/core/query/QueryHandler.js';
-import { QueryResponse } from '../../../../src/core/query/QueryResponse.js';
-import { QueryHandler } from '../../../../src/core/decorator/QueryHandlerDecorator.js';
+import { Query } from '../../../../src/core/query/Query';
+import { IQueryHandler } from '../../../../src/core/query/QueryHandler';
+import { QueryResponse } from '../../../../src/core/query/QueryResponse';
+import { QueryHandler } from '../../../../src/core/decorator/QueryHandlerDecorator';
 
 export class ConcreteQueryResponse implements QueryResponse {
 	constructor(public readonly payload: number) {}

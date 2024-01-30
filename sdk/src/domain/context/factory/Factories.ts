@@ -18,8 +18,8 @@
  *
  */
 
-import { Environment } from '../network/Environment.js';
-import { HederaId } from '../shared/HederaId.js';
+import { Environment } from '../network/Environment';
+import { HederaId } from '../shared/HederaId';
 
 export class EnvironmentFactory {
 	factory: HederaId;

@@ -18,14 +18,14 @@
  *
  */
 
-import { ICommandHandler } from '../../../../../../core/command/CommandHandler.js';
-import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator.js';
-import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator.js';
-import TransactionService from '../../../../../service/TransactionService.js';
+import { ICommandHandler } from '../../../../../../core/command/CommandHandler';
+import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator';
+import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator';
+import TransactionService from '../../../../../service/TransactionService';
 import {
 	UpdateReserveAmountCommand,
 	UpdateReserveAmountCommandResponse,
-} from './UpdateReserveAmountCommand.js';
+} from './UpdateReserveAmountCommand';
 
 @CommandHandler(UpdateReserveAmountCommand)
 export class UpdateReserveAmountCommandHandler

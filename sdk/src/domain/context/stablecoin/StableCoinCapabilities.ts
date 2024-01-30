@@ -18,9 +18,9 @@
  *
  */
 
-import Account from '../account/Account.js';
-import { Capability } from './Capability.js';
-import { StableCoin } from './StableCoin.js';
+import Account from '../account/Account';
+import { Capability } from './Capability';
+import { StableCoin } from './StableCoin';
 
 export default class StableCoinCapabilities {
 	constructor(

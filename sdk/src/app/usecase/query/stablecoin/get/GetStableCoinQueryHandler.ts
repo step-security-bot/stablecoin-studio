@@ -18,17 +18,17 @@
  *
  */
 
-import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator.js';
-import { QueryHandler } from '../../../../../core/decorator/QueryHandlerDecorator.js';
-import { IQueryHandler } from '../../../../../core/query/QueryHandler.js';
-import EvmAddress from '../../../../../domain/context/contract/EvmAddress.js';
-import BigDecimal from '../../../../../domain/context/shared/BigDecimal.js';
-import { MirrorNodeAdapter } from '../../../../../port/out/mirror/MirrorNodeAdapter.js';
-import RPCQueryAdapter from '../../../../../port/out/rpc/RPCQueryAdapter.js';
+import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator';
+import { QueryHandler } from '../../../../../core/decorator/QueryHandlerDecorator';
+import { IQueryHandler } from '../../../../../core/query/QueryHandler';
+import EvmAddress from '../../../../../domain/context/contract/EvmAddress';
+import BigDecimal from '../../../../../domain/context/shared/BigDecimal';
+import { MirrorNodeAdapter } from '../../../../../port/out/mirror/MirrorNodeAdapter';
+import RPCQueryAdapter from '../../../../../port/out/rpc/RPCQueryAdapter';
 import {
 	GetStableCoinQuery,
 	GetStableCoinQueryResponse,
-} from './GetStableCoinQuery.js';
+} from './GetStableCoinQuery';
 
 @QueryHandler(GetStableCoinQuery)
 export class GetStableCoinQueryHandler

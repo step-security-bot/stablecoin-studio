@@ -18,18 +18,18 @@
  *
  */
 
-import { HederaId } from '../../../../../domain/context/shared/HederaId.js';
-import { ICommandHandler } from '../../../../../core/command/CommandHandler.js';
-import { CommandHandler } from '../../../../../core/decorator/CommandHandlerDecorator.js';
-import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator.js';
-import StableCoinService from '../../../../service/StableCoinService.js';
-import TransactionService from '../../../../service/TransactionService.js';
+import { HederaId } from '../../../../../domain/context/shared/HederaId';
+import { ICommandHandler } from '../../../../../core/command/CommandHandler';
+import { CommandHandler } from '../../../../../core/decorator/CommandHandlerDecorator';
+import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator';
+import StableCoinService from '../../../../service/StableCoinService';
+import TransactionService from '../../../../service/TransactionService';
 import {
 	AcceptFactoryOwnerCommand,
 	AcceptFactoryOwnerCommandResponse,
-} from './AcceptFactoryOwnerCommand.js';
-import { MirrorNodeAdapter } from '../../../../../port/out/mirror/MirrorNodeAdapter.js';
-import EvmAddress from '../../../../../domain/context/contract/EvmAddress.js';
+} from './AcceptFactoryOwnerCommand';
+import { MirrorNodeAdapter } from '../../../../../port/out/mirror/MirrorNodeAdapter';
+import EvmAddress from '../../../../../domain/context/contract/EvmAddress';
 
 @CommandHandler(AcceptFactoryOwnerCommand)
 export class AcceptFactoryOwnerCommandHandler

@@ -1,11 +1,11 @@
 import { DelegateContractId, ContractId as HContractId } from '@hashgraph/sdk';
 import { proto } from '@hashgraph/proto';
 import Long from 'long';
-import InvalidKeyForContract from './error/InvalidKeyForContract.js';
-import BaseError from '../../../core/error/BaseError.js';
-import CheckStrings from '../../../core/checks/strings/CheckStrings.js';
-import { InvalidContractId } from './error/InvalidContractId.js';
-import { HederaId } from '../shared/HederaId.js';
+import InvalidKeyForContract from './error/InvalidKeyForContract';
+import BaseError from '../../../core/error/BaseError';
+import CheckStrings from '../../../core/checks/strings/CheckStrings';
+import { InvalidContractId } from './error/InvalidContractId';
+import { HederaId } from '../shared/HederaId';
 
 export default class ContractId extends HederaId {
 	public readonly value: string;

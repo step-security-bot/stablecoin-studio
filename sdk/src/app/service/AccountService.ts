@@ -19,16 +19,16 @@
  */
 
 import { singleton } from 'tsyringe';
-import { CommandBus } from '../../core/command/CommandBus.js';
-import Injectable from '../../core/Injectable.js';
-import { QueryBus } from '../../core/query/QueryBus.js';
-import Account from '../../domain/context/account/Account.js';
-import { AccountIdNotValid } from '../../domain/context/account/error/AccountIdNotValid.js';
-import { HederaId } from '../../domain/context/shared/HederaId.js';
-import { GetAccountInfoQuery } from '../usecase/query/account/info/GetAccountInfoQuery.js';
-import NetworkService from './NetworkService.js';
-import Service from './Service.js';
-import TransactionService from './TransactionService.js';
+import { CommandBus } from '../../core/command/CommandBus';
+import Injectable from '../../core/Injectable';
+import { QueryBus } from '../../core/query/QueryBus';
+import Account from '../../domain/context/account/Account';
+import { AccountIdNotValid } from '../../domain/context/account/error/AccountIdNotValid';
+import { HederaId } from '../../domain/context/shared/HederaId';
+import { GetAccountInfoQuery } from '../usecase/query/account/info/GetAccountInfoQuery';
+import NetworkService from './NetworkService';
+import Service from './Service';
+import TransactionService from './TransactionService';
 
 @singleton()
 export default class AccountService extends Service {

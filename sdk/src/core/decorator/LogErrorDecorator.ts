@@ -18,7 +18,7 @@
  *
  */
 
-import LogService from '../../app/service/LogService.js';
+import LogService from '../../app/service/LogService';
 
 export const LogError = (
 	target: unknown,

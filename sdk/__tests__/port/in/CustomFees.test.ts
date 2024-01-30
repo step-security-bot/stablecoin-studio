@@ -37,11 +37,10 @@ import {
 	StableCoin,
 	StableCoinCapabilities,
 	UpdateCustomFeesRequest,
-} from '../../../src/index';
+ HederaId, TokenSupplyType } from "../../../src";
 import ConnectRequest, {
 	SupportedWallets,
 } from '../../../src/port/in/request/ConnectRequest';
-import { HederaId, TokenSupplyType } from '../../../src';
 import {
 	CLIENT_ACCOUNT_ED25519,
 	FACTORY_ADDRESS,
@@ -51,8 +50,8 @@ import {
 } from '../../config';
 import Injectable from '../../../src/core/Injectable';
 import StableCoinService from '../../../src/app/service/StableCoinService';
-import { MirrorNode } from '../../../src/domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay.js';
+import { MirrorNode } from '../../../src/domain/context/network/MirrorNode';
+import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay';
 
 const decimals = 6;
 const mirrorNode: MirrorNode = {

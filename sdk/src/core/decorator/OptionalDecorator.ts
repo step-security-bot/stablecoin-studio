@@ -18,8 +18,8 @@
  *
  */
 
-import RequestMapper from '../../port/in/request/mapping/RequestMapper.js';
-import { IndexableObject } from '../Type.js';
+import RequestMapper from '../../port/in/request/mapping/RequestMapper';
+import { IndexableObject } from '../Type';
 
 const OPTIONAL_KEYS = Symbol('optionalKeys');
 

@@ -18,39 +18,38 @@
  *
  */
 
-import axios, { AxiosRequestConfig } from 'axios';
-import { AxiosInstance } from 'axios';
+import axios, { AxiosRequestConfig , AxiosInstance } from 'axios';
 import { singleton } from 'tsyringe';
-import StableCoinViewModel from '../../out/mirror/response/StableCoinViewModel.js';
-import AccountViewModel from '../../out/mirror/response/AccountViewModel.js';
-import StableCoinListViewModel from '../../out/mirror/response/StableCoinListViewModel.js';
-import TransactionResultViewModel from '../../out/mirror/response/TransactionResultViewModel.js';
-import LogService from '../../../app/service/LogService.js';
-import { StableCoinNotFound } from './error/StableCoinNotFound.js';
-import BigDecimal from '../../../domain/context/shared/BigDecimal.js';
+import StableCoinViewModel from "./response/StableCoinViewModel";
+import AccountViewModel from "./response/AccountViewModel";
+import StableCoinListViewModel from "./response/StableCoinListViewModel";
+import TransactionResultViewModel from "./response/TransactionResultViewModel";
+import LogService from '../../../app/service/LogService';
+import { StableCoinNotFound } from './error/StableCoinNotFound';
+import BigDecimal from '../../../domain/context/shared/BigDecimal';
 import { PublicKey as HPublicKey } from '@hashgraph/sdk';
-import PublicKey from '../../../domain/context/account/PublicKey.js';
-import { StableCoinMemo } from '../../../domain/context/stablecoin/StableCoinMemo.js';
-import ContractId from '../../../domain/context/contract/ContractId.js';
-import { MAX_PERCENTAGE_DECIMALS } from '../../../domain/context/fee/CustomFee.js';
-import { HBAR_DECIMALS } from '../../../core/Constants.js';
-import { InvalidResponse } from './error/InvalidResponse.js';
-import { HederaId } from '../../../domain/context/shared/HederaId.js';
-import { KeyType } from '../../../domain/context/account/KeyProps.js';
-import EvmAddress from '../../../domain/context/contract/EvmAddress.js';
+import PublicKey from '../../../domain/context/account/PublicKey';
+import { StableCoinMemo } from '../../../domain/context/stablecoin/StableCoinMemo';
+import ContractId from '../../../domain/context/contract/ContractId';
+import { MAX_PERCENTAGE_DECIMALS } from '../../../domain/context/fee/CustomFee';
+import { HBAR_DECIMALS } from '../../../core/Constants';
+import { InvalidResponse } from './error/InvalidResponse';
+import { HederaId } from '../../../domain/context/shared/HederaId';
+import { KeyType } from '../../../domain/context/account/KeyProps';
+import EvmAddress from '../../../domain/context/contract/EvmAddress';
 import {
 	AccountTokenRelationViewModel,
 	FreezeStatus,
 	KycStatus,
-} from './response/AccountTokenRelationViewModel.js';
-import { REGEX_TRANSACTION } from '../error/TransactionResponseError.js';
+} from './response/AccountTokenRelationViewModel';
+import { REGEX_TRANSACTION } from '../error/TransactionResponseError';
 import {
 	RequestCustomFee,
 	RequestFixedFee,
 	RequestFractionalFee,
-} from '../../in/request/BaseRequest.js';
-import { MirrorNode } from '../../../domain/context/network/MirrorNode.js';
-import ContractViewModel from '../../out/mirror/response/ContractViewModel.js';
+} from '../../in/request/BaseRequest';
+import { MirrorNode } from '../../../domain/context/network/MirrorNode';
+import ContractViewModel from "./response/ContractViewModel";
 
 @singleton()
 export class MirrorNodeAdapter {

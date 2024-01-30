@@ -19,12 +19,12 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import { OptionalField } from '../../../core/decorator/OptionalDecorator.js';
-import Validation from './validation/Validation.js';
-import BaseError from '../../../core/error/BaseError.js';
-import { InvalidSupplierType } from '../../../domain/context/stablecoin/error/InvalidSupplierType.js';
-import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole.js';
+import ValidatedRequest from './validation/ValidatedRequest';
+import { OptionalField } from '../../../core/decorator/OptionalDecorator';
+import Validation from './validation/Validation';
+import BaseError from '../../../core/error/BaseError';
+import { InvalidSupplierType } from '../../../domain/context/stablecoin/error/InvalidSupplierType';
+import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole';
 
 export default class GrantRoleRequest extends ValidatedRequest<GrantRoleRequest> {
 	targetId: string;

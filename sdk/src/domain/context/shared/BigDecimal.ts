@@ -21,7 +21,7 @@
 import { FixedFormat, parseFixed } from '@ethersproject/bignumber';
 import { BigNumber, FixedNumber } from '@hashgraph/hethers';
 import Long from 'long';
-import CheckNums from '../../../core/checks/numbers/CheckNums.js';
+import CheckNums from '../../../core/checks/numbers/CheckNums';
 
 export type BigDecimalFormat = string | number | FixedFormat | undefined;
 

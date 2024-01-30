@@ -19,10 +19,10 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
-import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole.js';
-import { InvalidValue } from './error/InvalidValue.js';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
+import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole';
+import { InvalidValue } from './error/InvalidValue';
 
 export default class RevokeMultiRolesRequest extends ValidatedRequest<RevokeMultiRolesRequest> {
 	tokenId: string;

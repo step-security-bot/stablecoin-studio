@@ -45,26 +45,26 @@ import {
 	TransferTransaction,
 } from '@hashgraph/sdk';
 import { singleton } from 'tsyringe';
-import LogService from '../../../../app/service/LogService.js';
-import NetworkService from '../../../../app/service/NetworkService.js';
-import EventService from '../../../../app/service/event/EventService.js';
-import { WalletEvents } from '../../../../app/service/event/WalletEvent.js';
-import Injectable from '../../../../core/Injectable.js';
-import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator.js';
-import { RuntimeError } from '../../../../core/error/RuntimeError.js';
-import Account from '../../../../domain/context/account/Account.js';
-import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse.js';
-import { SupportedWallets } from '../../../in/request/ConnectRequest.js';
-import { InitializationData } from '../../TransactionAdapter.js';
-import { TransactionType } from '../../TransactionResponseEnums.js';
-import { HederaId } from '../../../../domain/context/shared/HederaId.js';
-import { MirrorNodeAdapter } from '../../mirror/MirrorNodeAdapter.js';
-import { HederaTransactionAdapter } from '../HederaTransactionAdapter.js';
-import { SigningError } from '../error/SigningError.js';
-import { HashpackTransactionResponseAdapter } from '../hashpack/HashpackTransactionResponseAdapter.js';
-import { QueryBus } from '../../../../core/query/QueryBus.js';
-import { AccountIdNotValid } from '../../../../domain/context/account/error/AccountIdNotValid.js';
-import { GetAccountInfoQuery } from '../../../../app/usecase/query/account/info/GetAccountInfoQuery.js';
+import LogService from '../../../../app/service/LogService';
+import NetworkService from '../../../../app/service/NetworkService';
+import EventService from '../../../../app/service/event/EventService';
+import { WalletEvents } from '../../../../app/service/event/WalletEvent';
+import Injectable from '../../../../core/Injectable';
+import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator';
+import { RuntimeError } from '../../../../core/error/RuntimeError';
+import Account from '../../../../domain/context/account/Account';
+import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse';
+import { SupportedWallets } from '../../../in/request/ConnectRequest';
+import { InitializationData } from '../../TransactionAdapter';
+import { TransactionType } from '../../TransactionResponseEnums';
+import { HederaId } from '../../../../domain/context/shared/HederaId';
+import { MirrorNodeAdapter } from '../../mirror/MirrorNodeAdapter';
+import { HederaTransactionAdapter } from '../HederaTransactionAdapter';
+import { SigningError } from '../error/SigningError';
+import { HashpackTransactionResponseAdapter } from '../hashpack/HashpackTransactionResponseAdapter';
+import { QueryBus } from '../../../../core/query/QueryBus';
+import { AccountIdNotValid } from '../../../../domain/context/account/error/AccountIdNotValid';
+import { GetAccountInfoQuery } from '../../../../app/usecase/query/account/info/GetAccountInfoQuery';
 
 @singleton()
 export class BladeTransactionAdapter extends HederaTransactionAdapter {

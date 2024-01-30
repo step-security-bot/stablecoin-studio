@@ -18,11 +18,11 @@
  *
  */
 
-import { Environment } from '../../../domain/context/network/Environment.js';
-import { MirrorNode } from '../../../domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../../domain/context/network/JsonRpcRelay.js';
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
+import { Environment } from '../../../domain/context/network/Environment';
+import { MirrorNode } from '../../../domain/context/network/MirrorNode';
+import { JsonRpcRelay } from '../../../domain/context/network/JsonRpcRelay';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
 
 export interface SetNetworkRequestProps {
 	environment: Environment;

@@ -18,7 +18,7 @@
  *
  */
 
-import { Environment } from './Environment.js';
+import { Environment } from './Environment';
 
 export class JsonRpcRelay {
 	name?: string;

@@ -18,11 +18,11 @@
  *
  */
 
-import { OptionalField } from '../../../core/decorator/OptionalDecorator.js';
-import BaseError from '../../../core/error/BaseError.js';
-import { InvalidSupplierType } from '../../../domain/context/stablecoin/error/InvalidSupplierType.js';
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
+import { OptionalField } from '../../../core/decorator/OptionalDecorator';
+import BaseError from '../../../core/error/BaseError';
+import { InvalidSupplierType } from '../../../domain/context/stablecoin/error/InvalidSupplierType';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
 
 export default class CheckSupplierLimitRequest extends ValidatedRequest<CheckSupplierLimitRequest> {
 	targetId: string;

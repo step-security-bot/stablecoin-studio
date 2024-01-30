@@ -18,9 +18,9 @@
  *
  */
 
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
-import { HBAR_DECIMALS } from '../../../core/Constants.js';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
+import { HBAR_DECIMALS } from '../../../core/Constants';
 
 export default class RescueHBARRequest extends ValidatedRequest<RescueHBARRequest> {
 	tokenId: string;

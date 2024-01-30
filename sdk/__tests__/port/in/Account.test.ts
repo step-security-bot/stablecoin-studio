@@ -18,24 +18,24 @@
  *
  */
 
-import { Account, Network } from '../../../src/index.js';
+import { Account, Network } from "../../../src";
 import {
 	GetAccountInfoRequest,
 	GetListStableCoinRequest,
 	GetPublicKeyRequest,
-} from '../../../src/port/in/request/index.js';
+} from "../../../src/port/in/request";
 import ConnectRequest, {
 	SupportedWallets,
-} from '../../../src/port/in/request/ConnectRequest.js';
+} from '../../../src/port/in/request/ConnectRequest';
 
 import {
 	CLIENT_ACCOUNT_ED25519,
 	CLIENT_PUBLIC_KEY_ED25519,
 	MIRROR_NODE,
 	RPC_NODE,
-} from '../../config.js';
-import { MirrorNode } from '../../../src/domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay.js';
+} from '../../config';
+import { MirrorNode } from '../../../src/domain/context/network/MirrorNode';
+import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay';
 
 describe('🧪 Account test', () => {
 	beforeAll(async () => {

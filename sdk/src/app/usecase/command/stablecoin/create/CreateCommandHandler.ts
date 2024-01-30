@@ -19,23 +19,23 @@
  */
 
 import { ContractId as HContractId } from '@hashgraph/sdk';
-import { ICommandHandler } from '../../../../../core/command/CommandHandler.js';
-import { CommandHandler } from '../../../../../core/decorator/CommandHandlerDecorator.js';
-import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator.js';
-import ContractId from '../../../../../domain/context/contract/ContractId.js';
-import { StableCoin } from '../../../../../domain/context/stablecoin/StableCoin.js';
-import AccountService from '../../../../service/AccountService.js';
-import TransactionService from '../../../../service/TransactionService.js';
-import NetworkService from '../../../../service/NetworkService.js';
-import { OperationNotAllowed } from '../error/OperationNotAllowed.js';
-import { CreateCommand, CreateCommandResponse } from './CreateCommand.js';
-import { RESERVE_DECIMALS } from '../../../../../domain/context/reserve/Reserve.js';
-import { InvalidRequest } from '../error/InvalidRequest.js';
-import { EVM_ZERO_ADDRESS } from '../../../../../core/Constants.js';
-import { MirrorNodeAdapter } from '../../../../../port/out/mirror/MirrorNodeAdapter.js';
-import RPCQueryAdapter from '../../../../../port/out/rpc/RPCQueryAdapter.js';
-import BigDecimal from '../../../../../domain/context/shared/BigDecimal.js';
-import EvmAddress from '../../../../../domain/context/contract/EvmAddress.js';
+import { ICommandHandler } from '../../../../../core/command/CommandHandler';
+import { CommandHandler } from '../../../../../core/decorator/CommandHandlerDecorator';
+import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator';
+import ContractId from '../../../../../domain/context/contract/ContractId';
+import { StableCoin } from '../../../../../domain/context/stablecoin/StableCoin';
+import AccountService from '../../../../service/AccountService';
+import TransactionService from '../../../../service/TransactionService';
+import NetworkService from '../../../../service/NetworkService';
+import { OperationNotAllowed } from '../error/OperationNotAllowed';
+import { CreateCommand, CreateCommandResponse } from './CreateCommand';
+import { RESERVE_DECIMALS } from '../../../../../domain/context/reserve/Reserve';
+import { InvalidRequest } from '../error/InvalidRequest';
+import { EVM_ZERO_ADDRESS } from '../../../../../core/Constants';
+import { MirrorNodeAdapter } from '../../../../../port/out/mirror/MirrorNodeAdapter';
+import RPCQueryAdapter from '../../../../../port/out/rpc/RPCQueryAdapter';
+import BigDecimal from '../../../../../domain/context/shared/BigDecimal';
+import EvmAddress from '../../../../../domain/context/contract/EvmAddress';
 
 @CommandHandler(CreateCommand)
 export class CreateCommandHandler implements ICommandHandler<CreateCommand> {

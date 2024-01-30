@@ -18,7 +18,7 @@
  *
  */
 
-import BaseError, { ErrorCode } from '../../../../core/error/BaseError.js';
+import BaseError, { ErrorCode } from '../../../../core/error/BaseError';
 
 export class MaxSupplyOverLimit extends BaseError {
 	constructor(maxSupply: string, limit: string) {

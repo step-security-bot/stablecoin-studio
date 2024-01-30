@@ -23,11 +23,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { BigNumber, ethers } from 'ethers';
-import { singleton } from 'tsyringe';
-import { lazyInject } from '../../../core/decorator/LazyInjectDecorator.js';
-import NetworkService from '../../../app/service/NetworkService.js';
-import LogService from '../../../app/service/LogService.js';
+import {BigNumber, ethers} from 'ethers';
+import {singleton} from 'tsyringe';
+import {lazyInject} from '../../../core/decorator/LazyInjectDecorator';
+import NetworkService from '../../../app/service/NetworkService';
+import LogService from '../../../app/service/LogService';
 import {
 	AggregatorV3Interface__factory,
 	HederaReserve__factory,
@@ -36,11 +36,11 @@ import {
 	StableCoinFactory__factory,
 	StableCoinProxyAdmin__factory,
 } from '@hashgraph/stablecoin-npm-contracts';
-import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole.js';
-import ContractId from '../../../domain/context/contract/ContractId.js';
-import EvmAddress from '../../../domain/context/contract/EvmAddress.js';
-import { MirrorNodeAdapter } from '../mirror/MirrorNodeAdapter.js';
-import { ContractId as HContractId } from '@hashgraph/sdk';
+import {StableCoinRole} from '../../../domain/context/stablecoin/StableCoinRole';
+import ContractId from '../../../domain/context/contract/ContractId';
+import EvmAddress from '../../../domain/context/contract/EvmAddress';
+import {MirrorNodeAdapter} from '../mirror/MirrorNodeAdapter';
+import {ContractId as HContractId} from '@hashgraph/sdk';
 
 const LOCAL_JSON_RPC_RELAY_URL = 'http://127.0.0.1:7546/api';
 

@@ -18,7 +18,7 @@
  *
  */
 
-import BaseError, { ErrorCode } from '../../error/BaseError.js';
+import BaseError, { ErrorCode } from '../../error/BaseError';
 
 export class InvalidQueryHandlerException extends BaseError {
 	constructor() {

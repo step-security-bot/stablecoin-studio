@@ -26,11 +26,11 @@ import {
 	Signer,
 } from '@hashgraph/sdk';
 import { MessageTypes } from '@hashgraph/hashconnect';
-import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse.js';
-import { TransactionResponseError } from '../../error/TransactionResponseError.js';
-import { TransactionType } from '../../TransactionResponseEnums.js';
-import { TransactionResponseAdapter } from '../../TransactionResponseAdapter.js';
-import LogService from '../../../../app/service/LogService.js';
+import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse';
+import { TransactionResponseError } from '../../error/TransactionResponseError';
+import { TransactionType } from '../../TransactionResponseEnums';
+import { TransactionResponseAdapter } from '../../TransactionResponseAdapter';
+import LogService from '../../../../app/service/LogService';
 
 export class HashpackTransactionResponseAdapter extends TransactionResponseAdapter {
 	public static async manageResponse(

@@ -1,7 +1,7 @@
-import { Command } from '../../../../../../core/command/Command.js';
-import { CommandResponse } from '../../../../../../core/command/CommandResponse.js';
-import { CustomFee } from '../../../../../../domain/context/fee/CustomFee.js';
-import { HederaId } from '../../../../../../domain/context/shared/HederaId.js';
+import { Command } from '../../../../../../core/command/Command';
+import { CommandResponse } from '../../../../../../core/command/CommandResponse';
+import { CustomFee } from '../../../../../../domain/context/fee/CustomFee';
+import { HederaId } from '../../../../../../domain/context/shared/HederaId';
 
 export class UpdateCustomFeesCommandResponse implements CommandResponse {
 	constructor(public readonly payload: boolean) {}

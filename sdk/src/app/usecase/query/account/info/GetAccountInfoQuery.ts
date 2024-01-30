@@ -18,10 +18,10 @@
  *
  */
 
-import { Query } from '../../../../../core/query/Query.js';
-import { QueryResponse } from '../../../../../core/query/QueryResponse.js';
-import { HederaId } from '../../../../../domain/context/shared/HederaId.js';
-import AccountViewModel from '../../../../../port/out/mirror/response/AccountViewModel.js';
+import { Query } from '../../../../../core/query/Query';
+import { QueryResponse } from '../../../../../core/query/QueryResponse';
+import { HederaId } from '../../../../../domain/context/shared/HederaId';
+import AccountViewModel from '../../../../../port/out/mirror/response/AccountViewModel';
 
 export class GetAccountInfoQueryResponse implements QueryResponse {
 	constructor(public readonly account: AccountViewModel) {}

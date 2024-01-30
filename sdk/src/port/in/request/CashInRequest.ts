@@ -18,9 +18,9 @@
  *
  */
 
-import { BaseRequest } from './BaseRequest.js';
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
+import { BaseRequest } from './BaseRequest';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
 
 export default class CashInRequest
 	extends ValidatedRequest<CashInRequest>

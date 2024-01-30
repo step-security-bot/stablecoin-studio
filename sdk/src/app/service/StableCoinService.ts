@@ -20,25 +20,25 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { singleton } from 'tsyringe';
-import Injectable from '../../core/Injectable.js';
-import AccountService from './AccountService.js';
-import Service from './Service.js';
-import { QueryBus } from '../../core/query/QueryBus.js';
-import { HederaId } from '../../domain/context/shared/HederaId.js';
-import StableCoinCapabilities from '../../domain/context/stablecoin/StableCoinCapabilities.js';
+import Injectable from '../../core/Injectable';
+import AccountService from './AccountService';
+import Service from './Service';
+import { QueryBus } from '../../core/query/QueryBus';
+import { HederaId } from '../../domain/context/shared/HederaId';
+import StableCoinCapabilities from '../../domain/context/stablecoin/StableCoinCapabilities';
 import {
 	Access,
 	Capability,
 	Operation,
-} from '../../domain/context/stablecoin/Capability.js';
-import Account from '../../domain/context/account/Account.js';
-import { StableCoin } from '../../domain/context/stablecoin/StableCoin.js';
-import PublicKey from '../../domain/context/account/PublicKey.js';
-import { GetStableCoinQuery } from '../usecase/query/stablecoin/get/GetStableCoinQuery.js';
-import { StableCoinNotFound } from '../../port/out/mirror/error/StableCoinNotFound.js';
+} from '../../domain/context/stablecoin/Capability';
+import Account from '../../domain/context/account/Account';
+import { StableCoin } from '../../domain/context/stablecoin/StableCoin';
+import PublicKey from '../../domain/context/account/PublicKey';
+import { GetStableCoinQuery } from '../usecase/query/stablecoin/get/GetStableCoinQuery';
+import { StableCoinNotFound } from '../../port/out/mirror/error/StableCoinNotFound';
 import { Console } from 'console';
-import { MAX_CUSTOM_FEES } from '../../domain/context/fee/CustomFee.js';
-import { toCustomFees } from '../../port/in/request/BaseRequest.js';
+import { MAX_CUSTOM_FEES } from '../../domain/context/fee/CustomFee';
+import { toCustomFees } from '../../port/in/request/BaseRequest';
 
 @singleton()
 export default class StableCoinService extends Service {

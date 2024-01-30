@@ -18,15 +18,15 @@
  *
  */
 
-import { LoggerTransports, Network, SDK } from '../../../src/index.js';
+import { LoggerTransports, Network, SDK } from "../../../src";
 import ConnectRequest, {
 	SupportedWallets,
-} from '../../../src/port/in/request/ConnectRequest.js';
-import { CLIENT_ACCOUNT_ED25519, FACTORY_ADDRESS } from '../../config.js';
-import Factory from '../../../src/port/in/Factory.js';
-import GetTokenManagerListRequest from '../../../src/port/in/request/GetTokenManagerListRequest.js';
-import { MirrorNode } from '../../../src/domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay.js';
+} from '../../../src/port/in/request/ConnectRequest';
+import { CLIENT_ACCOUNT_ED25519, FACTORY_ADDRESS } from '../../config';
+import Factory from '../../../src/port/in/Factory';
+import GetTokenManagerListRequest from '../../../src/port/in/request/GetTokenManagerListRequest';
+import { MirrorNode } from '../../../src/domain/context/network/MirrorNode';
+import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay';
 
 SDK.log = { level: 'ERROR', transports: new LoggerTransports.Console() };
 describe('🧪 Factory test', () => {

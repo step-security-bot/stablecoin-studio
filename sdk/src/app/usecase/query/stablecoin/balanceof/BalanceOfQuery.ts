@@ -18,10 +18,10 @@
  *
  */
 
-import { Query } from '../../../../../core/query/Query.js';
-import { QueryResponse } from '../../../../../core/query/QueryResponse.js';
-import BigDecimal from '../../../../../domain/context/shared/BigDecimal.js';
-import { HederaId } from '../../../../../domain/context/shared/HederaId.js';
+import { Query } from '../../../../../core/query/Query';
+import { QueryResponse } from '../../../../../core/query/QueryResponse';
+import BigDecimal from '../../../../../domain/context/shared/BigDecimal';
+import { HederaId } from '../../../../../domain/context/shared/HederaId';
 
 export class BalanceOfQueryResponse implements QueryResponse {
 	constructor(public readonly payload: BigDecimal) {}

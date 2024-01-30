@@ -18,8 +18,8 @@
  *
  */
 
-import BaseError from '../../../../core/error/BaseError.js';
-import { BaseRequest } from '../BaseRequest.js';
+import BaseError from '../../../../core/error/BaseError';
+import { BaseRequest } from '../BaseRequest';
 
 export type ValidatedRequestKey<T extends BaseRequest> = keyof Omit<
 	T,

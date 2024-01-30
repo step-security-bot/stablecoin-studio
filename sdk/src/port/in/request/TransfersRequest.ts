@@ -18,10 +18,10 @@
  *
  */
 
-import { EmptyValue } from './error/EmptyValue.js';
-import { InvalidValue } from './error/InvalidValue.js';
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
+import { EmptyValue } from './error/EmptyValue';
+import { InvalidValue } from './error/InvalidValue';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
 
 export default class TransfersRequest extends ValidatedRequest<TransfersRequest> {
 	targetsId: string[];

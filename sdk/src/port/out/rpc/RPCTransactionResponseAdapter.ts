@@ -40,10 +40,10 @@
  */
 
 import { ethers } from 'ethers';
-import LogService from '../../../app/service/LogService.js';
-import TransactionResponse from '../../../domain/context/transaction/TransactionResponse.js';
-import { TransactionResponseError } from '../error/TransactionResponseError.js';
-import { TransactionResponseAdapter } from '../TransactionResponseAdapter.js';
+import LogService from '../../../app/service/LogService';
+import TransactionResponse from '../../../domain/context/transaction/TransactionResponse';
+import { TransactionResponseError } from '../error/TransactionResponseError';
+import { TransactionResponseAdapter } from '../TransactionResponseAdapter';
 
 export class RPCTransactionResponseAdapter extends TransactionResponseAdapter {
 	public static async manageResponse(

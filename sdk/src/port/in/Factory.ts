@@ -18,15 +18,15 @@
  *
  */
 
-import Injectable from '../../core/Injectable.js';
-import ContractId from '../../domain/context/contract/ContractId.js';
-import { CommandBus } from '../../core/command/CommandBus.js';
-import { handleValidation } from './Common.js';
-import { QueryBus } from '../../core/query/QueryBus.js';
-import { LogError } from '../../core/decorator/LogErrorDecorator.js';
-import GetTokenManagerListRequest from './request/GetTokenManagerListRequest.js';
-import { GetTokenManagerListQuery } from '../../app/usecase/query/factory/getTokenManagerList/GetTokenManagerListQuery.js';
-import { MirrorNodeAdapter } from '../../port/out/mirror/MirrorNodeAdapter.js';
+import Injectable from '../../core/Injectable';
+import ContractId from '../../domain/context/contract/ContractId';
+import { CommandBus } from '../../core/command/CommandBus';
+import { handleValidation } from './Common';
+import { QueryBus } from '../../core/query/QueryBus';
+import { LogError } from '../../core/decorator/LogErrorDecorator';
+import GetTokenManagerListRequest from './request/GetTokenManagerListRequest';
+import { GetTokenManagerListQuery } from '../../app/usecase/query/factory/getTokenManagerList/GetTokenManagerListQuery';
+import { MirrorNodeAdapter } from "../out/mirror/MirrorNodeAdapter";
 
 interface IFactoryInPort {
 	getHederaTokenManagerList(

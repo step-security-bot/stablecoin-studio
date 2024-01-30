@@ -20,8 +20,8 @@
 
 import { QUERY_HANDLER_METADATA, QUERY_METADATA } from '../Constants';
 import { v4 } from 'uuid';
-import { BaseQuery } from '../query/Query.js';
-import { Constructor } from '../Type.js';
+import { BaseQuery } from '../query/Query';
+import { Constructor } from '../Type';
 import { injectable } from 'tsyringe';
 
 /**

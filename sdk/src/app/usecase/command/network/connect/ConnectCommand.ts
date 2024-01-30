@@ -1,11 +1,11 @@
-import { Command } from '../../../../../core/command/Command.js';
-import { CommandResponse } from '../../../../../core/command/CommandResponse.js';
-import Account from '../../../../../domain/context/account/Account.js';
-import { Environment } from '../../../../../domain/context/network/Environment.js';
-import { SupportedWallets } from '../../../../../domain/context/network/Wallet.js';
-import { InitializationData } from '../../../../../port/out/TransactionAdapter.js';
-import DfnsSettings from 'domain/context/custodialwalletsettings/DfnsSettings.js';
-import FireblocksSettings from 'domain/context/custodialwalletsettings/FireblocksSettings.js';
+import { Command } from '../../../../../core/command/Command';
+import { CommandResponse } from '../../../../../core/command/CommandResponse';
+import Account from '../../../../../domain/context/account/Account';
+import { Environment } from '../../../../../domain/context/network/Environment';
+import { SupportedWallets } from '../../../../../domain/context/network/Wallet';
+import { InitializationData } from '../../../../../port/out/TransactionAdapter';
+import DfnsSettings from 'domain/context/custodialwalletsettings/DfnsSettings';
+import FireblocksSettings from 'domain/context/custodialwalletsettings/FireblocksSettings';
 
 export class ConnectCommandResponse implements CommandResponse {
 	constructor(

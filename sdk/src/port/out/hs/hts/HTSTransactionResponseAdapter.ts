@@ -27,10 +27,10 @@ import {
 	TransactionRecord,
 	TransactionId,
 } from '@hashgraph/sdk';
-import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse.js';
-import { TransactionResponseError } from '../../error/TransactionResponseError.js';
-import { TransactionType } from '../../TransactionResponseEnums.js';
-import { TransactionResponseAdapter } from '../../TransactionResponseAdapter.js';
+import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse';
+import { TransactionResponseError } from '../../error/TransactionResponseError';
+import { TransactionType } from '../../TransactionResponseEnums';
+import { TransactionResponseAdapter } from '../../TransactionResponseAdapter';
 
 export class HTSTransactionResponseAdapter extends TransactionResponseAdapter {
 	public static async manageResponse(

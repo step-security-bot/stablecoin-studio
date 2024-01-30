@@ -22,9 +22,9 @@ import {
 	CustomFee,
 	FixedFee,
 	FractionalFee,
-} from '../../../domain/context/fee/CustomFee.js';
-import BigDecimal from '../../../domain/context/shared/BigDecimal.js';
-import { HederaId } from '../../../domain/context/shared/HederaId.js';
+} from '../../../domain/context/fee/CustomFee';
+import BigDecimal from '../../../domain/context/shared/BigDecimal';
+import { HederaId } from '../../../domain/context/shared/HederaId';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface BaseRequest {

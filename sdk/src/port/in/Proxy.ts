@@ -18,31 +18,31 @@
  *
  */
 
-import Injectable from '../../core/Injectable.js';
-import { CommandBus } from '../../core/command/CommandBus.js';
-import { handleValidation } from './Common.js';
-import { QueryBus } from '../../core/query/QueryBus.js';
-import { LogError } from '../../core/decorator/LogErrorDecorator.js';
-import GetProxyConfigRequest from './request/GetProxyConfigRequest.js';
-import UpgradeImplementationRequest from './request/UpgradeImplementationRequest.js';
-import { GetProxyConfigQuery } from '../../app/usecase/query/proxy/GetProxyConfigQuery.js';
-import { HederaId } from '../../domain/context/shared/HederaId.js';
-import { UpgradeImplementationCommand } from '../../app/usecase/command/proxy/upgrade/UpgradeImplementationCommand.js';
-import ContractId from '../../domain/context/contract/ContractId.js';
-import { ChangeOwnerCommand } from '../../app/usecase/command/proxy/changeOwner/ChangeOwnerCommand.js';
-import { AcceptOwnerCommand } from '../../app/usecase/command/proxy/acceptOwner/AcceptOwnerCommand.js';
-import ProxyConfigurationViewModel from '../out/rpc/response/ProxyConfigurationViewModel.js';
-import ChangeProxyOwnerRequest from './request/ChangeProxyOwnerRequest.js';
-import { MirrorNodeAdapter } from '../../port/out/mirror/MirrorNodeAdapter.js';
-import AcceptProxyOwnerRequest from './request/AcceptProxyOwnerRequest.js';
-import GetFactoryProxyConfigRequest from './request/GetFactoryProxyConfigRequest.js';
-import { GetFactoryProxyConfigQuery } from '../../app/usecase/query/factoryProxy/GetFactoryProxyConfigQuery.js';
-import UpgradeFactoryImplementationRequest from './request/UpgradeFactoryImplementationRequest.js';
-import { UpgradeFactoryImplementationCommand } from '../../app/usecase/command/factoryProxy/upgrade/UpgradeFactoryImplementationCommand.js';
-import ChangeFactoryProxyOwnerRequest from './request/ChangeFactoryProxyOwnerRequest.js';
-import AcceptFactoryProxyOwnerRequest from './request/AcceptFactoryProxyOwnerRequest.js';
-import { ChangeFactoryOwnerCommand } from '../../app/usecase/command/factoryProxy/changeOwner/ChangeFactoryOwnerCommand.js';
-import { AcceptFactoryOwnerCommand } from '../../app/usecase/command/factoryProxy/acceptOwner/AcceptFactoryOwnerCommand.js';
+import Injectable from '../../core/Injectable';
+import { CommandBus } from '../../core/command/CommandBus';
+import { handleValidation } from './Common';
+import { QueryBus } from '../../core/query/QueryBus';
+import { LogError } from '../../core/decorator/LogErrorDecorator';
+import GetProxyConfigRequest from './request/GetProxyConfigRequest';
+import UpgradeImplementationRequest from './request/UpgradeImplementationRequest';
+import { GetProxyConfigQuery } from '../../app/usecase/query/proxy/GetProxyConfigQuery';
+import { HederaId } from '../../domain/context/shared/HederaId';
+import { UpgradeImplementationCommand } from '../../app/usecase/command/proxy/upgrade/UpgradeImplementationCommand';
+import ContractId from '../../domain/context/contract/ContractId';
+import { ChangeOwnerCommand } from '../../app/usecase/command/proxy/changeOwner/ChangeOwnerCommand';
+import { AcceptOwnerCommand } from '../../app/usecase/command/proxy/acceptOwner/AcceptOwnerCommand';
+import ProxyConfigurationViewModel from '../out/rpc/response/ProxyConfigurationViewModel';
+import ChangeProxyOwnerRequest from './request/ChangeProxyOwnerRequest';
+import { MirrorNodeAdapter } from "../out/mirror/MirrorNodeAdapter";
+import AcceptProxyOwnerRequest from './request/AcceptProxyOwnerRequest';
+import GetFactoryProxyConfigRequest from './request/GetFactoryProxyConfigRequest';
+import { GetFactoryProxyConfigQuery } from '../../app/usecase/query/factoryProxy/GetFactoryProxyConfigQuery';
+import UpgradeFactoryImplementationRequest from './request/UpgradeFactoryImplementationRequest';
+import { UpgradeFactoryImplementationCommand } from '../../app/usecase/command/factoryProxy/upgrade/UpgradeFactoryImplementationCommand';
+import ChangeFactoryProxyOwnerRequest from './request/ChangeFactoryProxyOwnerRequest';
+import AcceptFactoryProxyOwnerRequest from './request/AcceptFactoryProxyOwnerRequest';
+import { ChangeFactoryOwnerCommand } from '../../app/usecase/command/factoryProxy/changeOwner/ChangeFactoryOwnerCommand';
+import { AcceptFactoryOwnerCommand } from '../../app/usecase/command/factoryProxy/acceptOwner/AcceptFactoryOwnerCommand';
 
 export { ProxyConfigurationViewModel };
 

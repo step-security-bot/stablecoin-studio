@@ -23,24 +23,24 @@ import {
 	RequestAccount,
 	RequestPrivateKey,
 	RequestPublicKey,
-} from '../BaseRequest.js';
-import { EmptyValue } from '../error/EmptyValue.js';
-import { InvalidLength } from '../error/InvalidLength.js';
-import { InvalidRange } from '../error/InvalidRange.js';
-import { InvalidFormatHedera as InvalidIdFormatHedera } from '../error/InvalidFormatHedera.js';
-import { InvalidType } from '../error/InvalidType.js';
-import BaseError from '../../../../core/error/BaseError.js';
-import PublicKey from '../../../../domain/context/account/PublicKey.js';
-import PrivateKey from '../../../../domain/context/account/PrivateKey.js';
-import CheckStrings from '../../../../core/checks/strings/CheckStrings.js';
-import CheckNums from '../../../../core/checks/numbers/CheckNums.js';
-import { AccountIdNotValid } from '../../../../domain/context/account/error/AccountIdNotValid.js';
-import BigDecimal from '../../../../domain/context/shared/BigDecimal.js';
-import Account from '../../../../domain/context/account/Account.js';
-import ContractId from '../../../../domain/context/contract/ContractId.js';
-import InvalidDecimalRange from '../../../../domain/context/stablecoin/error/InvalidDecimalRange.js';
-import { StableCoinRole } from '../../../../domain/context/stablecoin/StableCoinRole.js';
-import { InvalidRole } from '../../../../domain/context/stablecoin/error/InvalidRole.js';
+} from '../BaseRequest';
+import { EmptyValue } from '../error/EmptyValue';
+import { InvalidLength } from '../error/InvalidLength';
+import { InvalidRange } from '../error/InvalidRange';
+import { InvalidFormatHedera as InvalidIdFormatHedera } from '../error/InvalidFormatHedera';
+import { InvalidType } from '../error/InvalidType';
+import BaseError from '../../../../core/error/BaseError';
+import PublicKey from '../../../../domain/context/account/PublicKey';
+import PrivateKey from '../../../../domain/context/account/PrivateKey';
+import CheckStrings from '../../../../core/checks/strings/CheckStrings';
+import CheckNums from '../../../../core/checks/numbers/CheckNums';
+import { AccountIdNotValid } from '../../../../domain/context/account/error/AccountIdNotValid';
+import BigDecimal from '../../../../domain/context/shared/BigDecimal';
+import Account from '../../../../domain/context/account/Account';
+import ContractId from '../../../../domain/context/contract/ContractId';
+import InvalidDecimalRange from '../../../../domain/context/stablecoin/error/InvalidDecimalRange';
+import { StableCoinRole } from '../../../../domain/context/stablecoin/StableCoinRole';
+import { InvalidRole } from '../../../../domain/context/stablecoin/error/InvalidRole';
 
 export default class Validation {
 	public static checkPublicKey = () => {

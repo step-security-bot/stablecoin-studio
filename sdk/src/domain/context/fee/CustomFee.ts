@@ -18,8 +18,8 @@
  *
  */
 
-import BigDecimal from '../shared/BigDecimal.js';
-import { HederaId } from '../shared/HederaId.js';
+import BigDecimal from '../shared/BigDecimal';
+import { HederaId } from '../shared/HederaId';
 import {
 	CustomFee as HCustomFee,
 	CustomFixedFee as HCustomFixedFee,

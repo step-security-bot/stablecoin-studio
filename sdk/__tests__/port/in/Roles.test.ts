@@ -18,7 +18,7 @@
  *
  */
 
-import Injectable from '../../../src/core/Injectable.js';
+import Injectable from '../../../src/core/Injectable';
 import {
 	Account,
 	Balance,
@@ -28,7 +28,7 @@ import {
 	StableCoinRole,
 	StableCoinViewModel,
 	TokenSupplyType,
-} from '../../../src/index.js';
+} from "../../../src";
 import {
 	CheckSupplierLimitRequest,
 	CreateRequest,
@@ -43,21 +43,21 @@ import {
 	RevokeRoleRequest,
 	GrantMultiRolesRequest,
 	RevokeMultiRolesRequest,
-} from '../../../src/port/in/request/index.js';
+} from "../../../src/port/in/request";
 import ConnectRequest, {
 	SupportedWallets,
-} from '../../../src/port/in/request/ConnectRequest.js';
+} from '../../../src/port/in/request/ConnectRequest';
 
 import {
 	CLIENT_ACCOUNT_ECDSA,
 	CLIENT_ACCOUNT_ED25519,
 	FACTORY_ADDRESS,
 	HEDERA_TOKEN_MANAGER_ADDRESS,
-} from '../../config.js';
-import BigDecimal from '../../../src/domain/context/shared/BigDecimal.js';
-import GetAccountsWithRolesRequest from '../../../src/port/in/request/GetAccountsWithRolesRequest.js';
-import { MirrorNode } from '../../../src/domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay.js';
+} from '../../config';
+import BigDecimal from '../../../src/domain/context/shared/BigDecimal';
+import GetAccountsWithRolesRequest from '../../../src/port/in/request/GetAccountsWithRolesRequest';
+import { MirrorNode } from '../../../src/domain/context/network/MirrorNode';
+import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay';
 
 describe('🧪 Role test', () => {
 	let stableCoinSC: StableCoinViewModel;

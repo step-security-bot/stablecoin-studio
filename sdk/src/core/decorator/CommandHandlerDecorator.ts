@@ -20,9 +20,9 @@
 
 import { COMMAND_HANDLER_METADATA, COMMAND_METADATA } from '../Constants';
 import { v4 } from 'uuid';
-import { BaseCommand } from '../command/Command.js';
+import { BaseCommand } from '../command/Command';
 import { injectable } from 'tsyringe';
-import { Constructor } from '../Type.js';
+import { Constructor } from '../Type';
 
 /**
  * This decorator determines that a class is a command handler

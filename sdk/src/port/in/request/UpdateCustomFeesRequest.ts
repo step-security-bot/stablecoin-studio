@@ -19,18 +19,18 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
-import { MAX_CUSTOM_FEES } from '../../../domain/context/fee/CustomFee.js';
-import { InvalidLength } from './error/InvalidLength.js';
-import AddFixedFeeRequest from './AddFixedFeeRequest.js';
-import AddFractionalFeeRequest from './AddFractionalFeeRequest.js';
-import { InvalidType } from './error/InvalidType.js';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
+import { MAX_CUSTOM_FEES } from '../../../domain/context/fee/CustomFee';
+import { InvalidLength } from './error/InvalidLength';
+import AddFixedFeeRequest from './AddFixedFeeRequest';
+import AddFractionalFeeRequest from './AddFractionalFeeRequest';
+import { InvalidType } from './error/InvalidType';
 import {
 	RequestCustomFee,
 	isRequestFractionalFee,
 	isRequestFixedFee,
-} from './BaseRequest.js';
+} from './BaseRequest';
 
 export default class UpdateCustomFeesRequest extends ValidatedRequest<UpdateCustomFeesRequest> {
 	customFees: RequestCustomFee[];

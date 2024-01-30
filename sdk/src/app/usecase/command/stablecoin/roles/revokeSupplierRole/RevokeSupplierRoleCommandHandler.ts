@@ -18,16 +18,16 @@
  *
  */
 
-import { ICommandHandler } from '../../../../../../core/command/CommandHandler.js';
-import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator.js';
-import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator.js';
-import AccountService from '../../../../../service/AccountService.js';
-import StableCoinService from '../../../../../service/StableCoinService.js';
-import TransactionService from '../../../../../service/TransactionService.js';
+import { ICommandHandler } from '../../../../../../core/command/CommandHandler';
+import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator';
+import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator';
+import AccountService from '../../../../../service/AccountService';
+import StableCoinService from '../../../../../service/StableCoinService';
+import TransactionService from '../../../../../service/TransactionService';
 import {
 	RevokeSupplierRoleCommand,
 	RevokeSupplierRoleCommandResponse,
-} from './RevokeSupplierRoleCommand.js';
+} from './RevokeSupplierRoleCommand';
 
 @CommandHandler(RevokeSupplierRoleCommand)
 export class RevokeSupplierRoleCommandHandler

@@ -18,7 +18,7 @@
  *
  */
 
-import { HederaId } from '../../../domain/context/shared/HederaId.js';
+import { HederaId } from '../../../domain/context/shared/HederaId';
 
 export default class CheckStrings {
 	public static isNotEmpty(value?: string): boolean {

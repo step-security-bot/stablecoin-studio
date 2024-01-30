@@ -19,12 +19,12 @@
  */
 
 /* eslint-disable jest/no-mocks-import */
-import { CommandBus } from '../../../src/core/command/CommandBus.js';
-import Injectable from '../../../src/core/Injectable.js';
+import { CommandBus } from '../../../src/core/command/CommandBus';
+import Injectable from '../../../src/core/Injectable';
 import {
 	ConcreteCommand,
 	ConcreteCommandResponse,
-} from './__mocks__/ConcreteCommandHandler.js';
+} from './__mocks__/ConcreteCommandHandler';
 
 const commandBus = Injectable.resolve(CommandBus);
 

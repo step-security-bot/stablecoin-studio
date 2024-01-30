@@ -18,10 +18,10 @@
  *
  */
 
-import Account from '../src/domain/context/account/Account.js';
-import PrivateKey from '../src/domain/context/account/PrivateKey.js';
-import PublicKey from '../src/domain/context/account/PublicKey.js';
-import { HederaId } from '../src/domain/context/shared/HederaId.js';
+import Account from '../src/domain/context/account/Account';
+import PrivateKey from '../src/domain/context/account/PrivateKey';
+import PublicKey from '../src/domain/context/account/PublicKey';
+import { HederaId } from '../src/domain/context/shared/HederaId';
 import { config } from 'dotenv';
 config();
 

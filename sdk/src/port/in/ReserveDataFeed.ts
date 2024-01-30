@@ -19,21 +19,21 @@
  */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Injectable from '../../core/Injectable.js';
-import BigDecimal from '../../domain/context/shared/BigDecimal.js';
-import ContractId from '../../domain/context/contract/ContractId.js';
-import { CommandBus } from '../../core/command/CommandBus.js';
-import { handleValidation } from './Common.js';
-import { UpdateReserveAmountCommand } from '../../app/usecase/command/reserve/operations/updateReserveAmount/UpdateReserveAmountCommand.js';
-import { Balance } from '../../domain/context/stablecoin/Balance.js';
-import { HederaId } from '../../domain/context/shared/HederaId.js';
-import UpdateReserveAmountRequest from './request/UpdateReserveAmountRequest.js';
-import GetReserveAmountRequest from './request/GetReserveAmountRequest.js';
-import { RESERVE_DECIMALS } from '../../domain/context/reserve/Reserve.js';
-import { GetReserveAmountQuery } from '../../app/usecase/query/stablecoin/getReserveAmount/GetReserveAmountQuery.js';
-import { QueryBus } from '../../core/query/QueryBus.js';
-import { LogError } from '../../core/decorator/LogErrorDecorator.js';
-import { MirrorNodeAdapter } from '../../port/out/mirror/MirrorNodeAdapter.js';
+import Injectable from '../../core/Injectable';
+import BigDecimal from '../../domain/context/shared/BigDecimal';
+import ContractId from '../../domain/context/contract/ContractId';
+import { CommandBus } from '../../core/command/CommandBus';
+import { handleValidation } from './Common';
+import { UpdateReserveAmountCommand } from '../../app/usecase/command/reserve/operations/updateReserveAmount/UpdateReserveAmountCommand';
+import { Balance } from '../../domain/context/stablecoin/Balance';
+import { HederaId } from '../../domain/context/shared/HederaId';
+import UpdateReserveAmountRequest from './request/UpdateReserveAmountRequest';
+import GetReserveAmountRequest from './request/GetReserveAmountRequest';
+import { RESERVE_DECIMALS } from '../../domain/context/reserve/Reserve';
+import { GetReserveAmountQuery } from '../../app/usecase/query/stablecoin/getReserveAmount/GetReserveAmountQuery';
+import { QueryBus } from '../../core/query/QueryBus';
+import { LogError } from '../../core/decorator/LogErrorDecorator';
+import { MirrorNodeAdapter } from '../../port/out/mirror/MirrorNodeAdapter';
 
 interface IReserveDataFeedInPort {
 	getReserveAmount(request: GetReserveAmountRequest): Promise<Balance>;

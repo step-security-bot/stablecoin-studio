@@ -18,20 +18,20 @@
  *
  */
 
-import ContractId from '../../../../domain/context/contract/ContractId.js';
-import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator.js';
-import { QueryHandler } from '../../../../core/decorator/QueryHandlerDecorator.js';
-import { IQueryHandler } from '../../../../core/query/QueryHandler.js';
-import { HederaId } from '../../../../domain/context/shared/HederaId.js';
-import RPCQueryAdapter from '../../../../port/out/rpc/RPCQueryAdapter.js';
-import StableCoinService from '../../../service/StableCoinService.js';
+import ContractId from '../../../../domain/context/contract/ContractId';
+import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator';
+import { QueryHandler } from '../../../../core/decorator/QueryHandlerDecorator';
+import { IQueryHandler } from '../../../../core/query/QueryHandler';
+import { HederaId } from '../../../../domain/context/shared/HederaId';
+import RPCQueryAdapter from '../../../../port/out/rpc/RPCQueryAdapter';
+import StableCoinService from '../../../service/StableCoinService';
 import {
 	GetFactoryProxyConfigQuery,
 	GetFactoryProxyConfigQueryResponse,
-} from './GetFactoryProxyConfigQuery.js';
-import { MirrorNodeAdapter } from '../../../../port/out/mirror/MirrorNodeAdapter.js';
-import EvmAddress from '../../../../domain/context/contract/EvmAddress.js';
-import { EVM_ZERO_ADDRESS } from '../../../../core/Constants.js';
+} from './GetFactoryProxyConfigQuery';
+import { MirrorNodeAdapter } from '../../../../port/out/mirror/MirrorNodeAdapter';
+import EvmAddress from '../../../../domain/context/contract/EvmAddress';
+import { EVM_ZERO_ADDRESS } from '../../../../core/Constants';
 
 @QueryHandler(GetFactoryProxyConfigQuery)
 export class GetFactoryProxyConfigQueryHandler

@@ -18,29 +18,29 @@
  *
  */
 
-import CheckNums from '../../../../../../core/checks/numbers/CheckNums.js';
-import { ICommandHandler } from '../../../../../../core/command/CommandHandler.js';
-import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator.js';
-import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator.js';
-import BigDecimal from '../../../../../../domain/context/shared/BigDecimal.js';
-import { StableCoinNotAssociated } from '../../error/StableCoinNotAssociated.js';
-import AccountService from '../../../../../service/AccountService.js';
-import StableCoinService from '../../../../../service/StableCoinService.js';
-import TransactionService from '../../../../../service/TransactionService.js';
-import { DecimalsOverRange } from '../../error/DecimalsOverRange.js';
-import { OperationNotAllowed } from '../../error/OperationNotAllowed.js';
-import { CashInCommand, CashInCommandResponse } from './CashInCommand.js';
-import { GetAccountTokenRelationshipQuery } from '../../../../query/account/tokenRelationship/GetAccountTokenRelationshipQuery.js';
+import CheckNums from '../../../../../../core/checks/numbers/CheckNums';
+import { ICommandHandler } from '../../../../../../core/command/CommandHandler';
+import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator';
+import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator';
+import BigDecimal from '../../../../../../domain/context/shared/BigDecimal';
+import { StableCoinNotAssociated } from '../../error/StableCoinNotAssociated';
+import AccountService from '../../../../../service/AccountService';
+import StableCoinService from '../../../../../service/StableCoinService';
+import TransactionService from '../../../../../service/TransactionService';
+import { DecimalsOverRange } from '../../error/DecimalsOverRange';
+import { OperationNotAllowed } from '../../error/OperationNotAllowed';
+import { CashInCommand, CashInCommandResponse } from './CashInCommand';
+import { GetAccountTokenRelationshipQuery } from '../../../../query/account/tokenRelationship/GetAccountTokenRelationshipQuery';
 import {
 	FreezeStatus,
 	KycStatus,
-} from '../../../../../../port/out/mirror/response/AccountTokenRelationViewModel.js';
-import RPCQueryAdapter from '../../../../../../port/out/rpc/RPCQueryAdapter.js';
-import { AccountFreeze } from '../../error/AccountFreeze.js';
-import { AccountNotKyc } from '../../error/AccountNotKyc.js';
-import { GetReserveAmountQuery } from '../../../../query/stablecoin/getReserveAmount/GetReserveAmountQuery.js';
-import { RESERVE_DECIMALS } from '../../../../../../domain/context/reserve/Reserve.js';
-import { MirrorNodeAdapter } from '../../../../../../port/out/mirror/MirrorNodeAdapter.js';
+} from '../../../../../../port/out/mirror/response/AccountTokenRelationViewModel';
+import RPCQueryAdapter from '../../../../../../port/out/rpc/RPCQueryAdapter';
+import { AccountFreeze } from '../../error/AccountFreeze';
+import { AccountNotKyc } from '../../error/AccountNotKyc';
+import { GetReserveAmountQuery } from '../../../../query/stablecoin/getReserveAmount/GetReserveAmountQuery';
+import { RESERVE_DECIMALS } from '../../../../../../domain/context/reserve/Reserve';
+import { MirrorNodeAdapter } from '../../../../../../port/out/mirror/MirrorNodeAdapter';
 import { BigNumber } from 'ethers';
 import { TokenSupplyType } from '@hashgraph/sdk';
 

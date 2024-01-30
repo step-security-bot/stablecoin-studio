@@ -21,8 +21,8 @@
 import {
 	Operation,
 	Access,
-} from '../../domain/context/stablecoin/Capability.js';
-import StableCoinCapabilities from '../../domain/context/stablecoin/StableCoinCapabilities.js';
+} from '../../domain/context/stablecoin/Capability';
+import StableCoinCapabilities from '../../domain/context/stablecoin/StableCoinCapabilities';
 
 export class CapabilityDecider {
 	static decide(

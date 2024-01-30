@@ -18,14 +18,14 @@
  *
  */
 
-import { QueryHandler } from '../../../../../core/decorator/QueryHandlerDecorator.js';
-import Injectable from '../../../../../core/Injectable.js';
-import { IQueryHandler } from '../../../../../core/query/QueryHandler.js';
-import { MirrorNodeAdapter } from '../../../../../port/out/mirror/MirrorNodeAdapter.js';
+import { QueryHandler } from '../../../../../core/decorator/QueryHandlerDecorator';
+import Injectable from '../../../../../core/Injectable';
+import { IQueryHandler } from '../../../../../core/query/QueryHandler';
+import { MirrorNodeAdapter } from '../../../../../port/out/mirror/MirrorNodeAdapter';
 import {
 	GetAccountInfoQuery,
 	GetAccountInfoQueryResponse,
-} from './GetAccountInfoQuery.js';
+} from './GetAccountInfoQuery';
 
 @QueryHandler(GetAccountInfoQuery)
 export class GetAccountInfoQueryHandler

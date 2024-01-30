@@ -20,48 +20,48 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import Injectable from '../../core/Injectable.js';
-import { QueryBus } from '../../core/query/QueryBus.js';
-import { CommandBus } from '../../core/command/CommandBus.js';
+import Injectable from '../../core/Injectable';
+import { QueryBus } from '../../core/query/QueryBus';
+import { CommandBus } from '../../core/command/CommandBus';
 import {
 	GetRolesRequest,
 	GrantRoleRequest,
 	HasRoleRequest,
 	RevokeRoleRequest,
-} from './request/index.js';
-import GetSupplierAllowanceRequest from './request/GetSupplierAllowanceRequest.js';
-import ResetSupplierAllowanceRequest from './request/ResetSupplierAllowanceRequest.js';
-import IncreaseSupplierAllowanceRequest from './request/IncreaseSupplierAllowanceRequest.js';
-import DecreaseSupplierAllowanceRequest from './request/DecreaseSupplierAllowanceRequest.js';
-import CheckSupplierLimitRequest from './request/CheckSupplierLimitRequest.js';
-import { HasRoleQuery } from '../../app/usecase/query/stablecoin/roles/hasRole/HasRoleQuery.js';
-import { HederaId } from '../../domain/context/shared/HederaId.js';
-import { GrantRoleCommand } from '../../app/usecase/command/stablecoin/roles/grantRole/GrantRoleCommand.js';
-import { RevokeRoleCommand } from '../../app/usecase/command/stablecoin/roles/revokeRole/RevokeRoleCommand.js';
-import { GetRolesQuery } from '../../app/usecase/query/stablecoin/roles/getRoles/GetRolesQuery.js';
-import { GetAllowanceQuery } from '../../app/usecase/query/stablecoin/roles/getAllowance/GetAllowanceQuery.js';
-import { ResetAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/resetAllowance/ResetAllowanceCommand.js';
-import { IncreaseAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/increaseAllowance/IncreaseAllowanceCommand.js';
-import { DecreaseAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/decreaseAllowance/DecreaseAllowanceCommand.js';
+} from "./request";
+import GetSupplierAllowanceRequest from './request/GetSupplierAllowanceRequest';
+import ResetSupplierAllowanceRequest from './request/ResetSupplierAllowanceRequest';
+import IncreaseSupplierAllowanceRequest from './request/IncreaseSupplierAllowanceRequest';
+import DecreaseSupplierAllowanceRequest from './request/DecreaseSupplierAllowanceRequest';
+import CheckSupplierLimitRequest from './request/CheckSupplierLimitRequest';
+import { HasRoleQuery } from '../../app/usecase/query/stablecoin/roles/hasRole/HasRoleQuery';
+import { HederaId } from '../../domain/context/shared/HederaId';
+import { GrantRoleCommand } from '../../app/usecase/command/stablecoin/roles/grantRole/GrantRoleCommand';
+import { RevokeRoleCommand } from '../../app/usecase/command/stablecoin/roles/revokeRole/RevokeRoleCommand';
+import { GetRolesQuery } from '../../app/usecase/query/stablecoin/roles/getRoles/GetRolesQuery';
+import { GetAllowanceQuery } from '../../app/usecase/query/stablecoin/roles/getAllowance/GetAllowanceQuery';
+import { ResetAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/resetAllowance/ResetAllowanceCommand';
+import { IncreaseAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/increaseAllowance/IncreaseAllowanceCommand';
+import { DecreaseAllowanceCommand } from '../../app/usecase/command/stablecoin/roles/decreaseAllowance/DecreaseAllowanceCommand';
 import {
 	StableCoinRole,
 	StableCoinRoleLabel,
 	MAX_ACCOUNTS_ROLES,
-} from '../../domain/context/stablecoin/StableCoinRole.js';
-import { GrantSupplierRoleCommand } from '../../app/usecase/command/stablecoin/roles/grantSupplierRole/GrantSupplierRoleCommand.js';
-import { GrantUnlimitedSupplierRoleCommand } from '../../app/usecase/command/stablecoin/roles/granUnlimitedSupplierRole/GrantUnlimitedSupplierRoleCommand.js';
-import { RevokeSupplierRoleCommand } from '../../app/usecase/command/stablecoin/roles/revokeSupplierRole/RevokeSupplierRoleCommand.js';
-import { handleValidation } from './Common.js';
-import { Balance } from '../../domain/context/stablecoin/Balance.js';
-import { IsUnlimitedQuery } from '../../app/usecase/query/stablecoin/isUnlimited/IsUnlimitedQuery.js';
-import LogService from '../../app/service/LogService.js';
-import { LogError } from '../../core/decorator/LogErrorDecorator.js';
-import GrantMultiRolesRequest from './request/GrantMultiRolesRequest.js';
-import RevokeMultiRolesRequest from './request/RevokeMultiRolesRequest.js';
-import { GrantMultiRolesCommand } from '../../app/usecase/command/stablecoin/roles/grantMultiRoles/GrantMultiRolesCommand.js';
-import { RevokeMultiRolesCommand } from '../../app/usecase/command/stablecoin/roles/revokeMultiRoles/RevokeMultiRolesCommand.js';
-import GetAccountsWithRolesRequest from './request/GetAccountsWithRolesRequest.js';
-import { GetAccountsWithRolesQuery } from '../../app/usecase/query/stablecoin/roles/getAccountsWithRole/GetAccountsWithRolesQuery.js';
+} from '../../domain/context/stablecoin/StableCoinRole';
+import { GrantSupplierRoleCommand } from '../../app/usecase/command/stablecoin/roles/grantSupplierRole/GrantSupplierRoleCommand';
+import { GrantUnlimitedSupplierRoleCommand } from '../../app/usecase/command/stablecoin/roles/granUnlimitedSupplierRole/GrantUnlimitedSupplierRoleCommand';
+import { RevokeSupplierRoleCommand } from '../../app/usecase/command/stablecoin/roles/revokeSupplierRole/RevokeSupplierRoleCommand';
+import { handleValidation } from './Common';
+import { Balance } from '../../domain/context/stablecoin/Balance';
+import { IsUnlimitedQuery } from '../../app/usecase/query/stablecoin/isUnlimited/IsUnlimitedQuery';
+import LogService from '../../app/service/LogService';
+import { LogError } from '../../core/decorator/LogErrorDecorator';
+import GrantMultiRolesRequest from './request/GrantMultiRolesRequest';
+import RevokeMultiRolesRequest from './request/RevokeMultiRolesRequest';
+import { GrantMultiRolesCommand } from '../../app/usecase/command/stablecoin/roles/grantMultiRoles/GrantMultiRolesCommand';
+import { RevokeMultiRolesCommand } from '../../app/usecase/command/stablecoin/roles/revokeMultiRoles/RevokeMultiRolesCommand';
+import GetAccountsWithRolesRequest from './request/GetAccountsWithRolesRequest';
+import { GetAccountsWithRolesQuery } from '../../app/usecase/query/stablecoin/roles/getAccountsWithRole/GetAccountsWithRolesQuery';
 
 export { StableCoinRole, StableCoinRoleLabel, MAX_ACCOUNTS_ROLES };
 

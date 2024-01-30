@@ -24,7 +24,7 @@
 /* eslint-disable jest/no-standalone-expect */
 /* eslint-disable jest/no-disabled-tests */
 
-import { StableCoin } from '../../../src/domain/context/stablecoin/StableCoin.js';
+import { StableCoin } from '../../../src/domain/context/stablecoin/StableCoin';
 import {
 	AcceptProxyOwnerRequest,
 	AssociateTokenRequest,
@@ -47,16 +47,16 @@ import {
 	StableCoin as StableCoinInPort,
 	SupportedWallets,
 	UpgradeImplementationRequest,
-} from '../../../src/index.js';
-import StableCoinCapabilities from '../../../src/domain/context/stablecoin/StableCoinCapabilities.js';
-import BigDecimal from '../../../src/domain/context/shared/BigDecimal.js';
+} from "../../../src";
+import StableCoinCapabilities from '../../../src/domain/context/stablecoin/StableCoinCapabilities';
+import BigDecimal from '../../../src/domain/context/shared/BigDecimal';
 import { ethers, Wallet } from 'ethers';
-import { StableCoinRole } from '../../../src/domain/context/stablecoin/StableCoinRole.js';
-import Injectable from '../../../src/core/Injectable.js';
-import { MirrorNodeAdapter } from '../../../src/port/out/mirror/MirrorNodeAdapter.js';
-import PublicKey from '../../../src/domain/context/account/PublicKey.js';
-import ContractId from '../../../src/domain/context/contract/ContractId.js';
-import { TokenSupplyType } from '../../../src/port/in/StableCoin.js';
+import { StableCoinRole } from '../../../src/domain/context/stablecoin/StableCoinRole';
+import Injectable from '../../../src/core/Injectable';
+import { MirrorNodeAdapter } from '../../../src/port/out/mirror/MirrorNodeAdapter';
+import PublicKey from '../../../src/domain/context/account/PublicKey';
+import ContractId from '../../../src/domain/context/contract/ContractId';
+import { TokenSupplyType } from '../../../src/port/in/StableCoin';
 import {
 	CLIENT_ACCOUNT_ECDSA,
 	CLIENT_ACCOUNT_ED25519,
@@ -64,22 +64,22 @@ import {
 	HEDERA_TOKEN_MANAGER_ADDRESS,
 	MIRROR_NODE,
 	RPC_NODE,
-} from '../../config.js';
-import Account from '../../../src/domain/context/account/Account.js';
-import NetworkService from '../../../src/app/service/NetworkService.js';
+} from '../../config';
+import Account from '../../../src/domain/context/account/Account';
+import NetworkService from '../../../src/app/service/NetworkService';
 import {
 	Client,
 	ContractId as HContractId,
 	Hbar,
 	TransferTransaction,
 } from '@hashgraph/sdk';
-import StableCoinService from '../../../src/app/service/StableCoinService.js';
-import { RESERVE_DECIMALS } from '../../../src/domain/context/reserve/Reserve.js';
-import RPCTransactionAdapter from '../../../src/port/out/rpc/RPCTransactionAdapter.js';
-import RPCQueryAdapter from '../../../src/port/out/rpc/RPCQueryAdapter.js';
-import { MirrorNode } from '../../../src/domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay.js';
-import EvmAddress from '../../../src/domain/context/contract/EvmAddress.js';
+import StableCoinService from '../../../src/app/service/StableCoinService';
+import { RESERVE_DECIMALS } from '../../../src/domain/context/reserve/Reserve';
+import RPCTransactionAdapter from '../../../src/port/out/rpc/RPCTransactionAdapter';
+import RPCQueryAdapter from '../../../src/port/out/rpc/RPCQueryAdapter';
+import { MirrorNode } from '../../../src/domain/context/network/MirrorNode';
+import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay';
+import EvmAddress from '../../../src/domain/context/contract/EvmAddress';
 
 SDK.log = { level: 'ERROR', transports: new LoggerTransports.Console() };
 const mirrorNode: MirrorNode = {

@@ -18,13 +18,13 @@
  *
  */
 
-import { QueryResponse } from '../../../../core/query/QueryResponse.js';
-import PublicKey from '../../../../domain/context/account/PublicKey.js';
-import ContractId from '../../../../domain/context/contract/ContractId.js';
-import EvmAddress from '../../../../domain/context/contract/EvmAddress.js';
-import BigDecimal from '../../../../domain/context/shared/BigDecimal.js';
-import { HederaId } from '../../../../domain/context/shared/HederaId.js';
-import { RequestCustomFee } from '../../../in/request/BaseRequest.js';
+import { QueryResponse } from '../../../../core/query/QueryResponse';
+import PublicKey from '../../../../domain/context/account/PublicKey';
+import ContractId from '../../../../domain/context/contract/ContractId';
+import EvmAddress from '../../../../domain/context/contract/EvmAddress';
+import BigDecimal from '../../../../domain/context/shared/BigDecimal';
+import { HederaId } from '../../../../domain/context/shared/HederaId';
+import { RequestCustomFee } from '../../../in/request/BaseRequest';
 
 export default interface StableCoinViewModel extends QueryResponse {
 	tokenId?: HederaId;

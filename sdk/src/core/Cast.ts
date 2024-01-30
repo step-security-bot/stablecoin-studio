@@ -21,7 +21,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { BaseContract } from 'ethers';
-import { Constructible } from './Type.js';
+import { Constructible } from './Type';
 
 export const safeCast = <TYPE>(
 	val?: TYPE | Partial<TYPE> | undefined,

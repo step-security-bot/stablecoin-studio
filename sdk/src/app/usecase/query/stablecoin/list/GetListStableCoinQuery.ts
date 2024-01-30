@@ -18,10 +18,10 @@
  *
  */
 
-import { Query } from '../../../../../core/query/Query.js';
-import { QueryResponse } from '../../../../../core/query/QueryResponse.js';
-import { HederaId } from '../../../../../domain/context/shared/HederaId.js';
-import StableCoinListViewModel from '../../../../../port/out/mirror/response/StableCoinListViewModel.js';
+import { Query } from '../../../../../core/query/Query';
+import { QueryResponse } from '../../../../../core/query/QueryResponse';
+import { HederaId } from '../../../../../domain/context/shared/HederaId';
+import StableCoinListViewModel from '../../../../../port/out/mirror/response/StableCoinListViewModel';
 
 export class GetListStableCoinQueryResponse implements QueryResponse {
 	constructor(public readonly list: StableCoinListViewModel) {}

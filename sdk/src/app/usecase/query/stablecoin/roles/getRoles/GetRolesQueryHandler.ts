@@ -18,13 +18,13 @@
  *
  */
 
-import { IQueryHandler } from '../../../../../../core/query/QueryHandler.js';
-import { QueryHandler } from '../../../../../../core/decorator/QueryHandlerDecorator.js';
-import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator.js';
-import StableCoinService from '../../../../../service/StableCoinService.js';
-import { GetRolesQuery, GetRolesQueryResponse } from './GetRolesQuery.js';
-import RPCQueryAdapter from '../../../../../../port/out/rpc/RPCQueryAdapter.js';
-import { MirrorNodeAdapter } from '../../../../../../port/out/mirror/MirrorNodeAdapter.js';
+import { IQueryHandler } from '../../../../../../core/query/QueryHandler';
+import { QueryHandler } from '../../../../../../core/decorator/QueryHandlerDecorator';
+import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator';
+import StableCoinService from '../../../../../service/StableCoinService';
+import { GetRolesQuery, GetRolesQueryResponse } from './GetRolesQuery';
+import RPCQueryAdapter from '../../../../../../port/out/rpc/RPCQueryAdapter';
+import { MirrorNodeAdapter } from '../../../../../../port/out/mirror/MirrorNodeAdapter';
 
 @QueryHandler(GetRolesQuery)
 export class GetRolesQueryHandler implements IQueryHandler<GetRolesQuery> {

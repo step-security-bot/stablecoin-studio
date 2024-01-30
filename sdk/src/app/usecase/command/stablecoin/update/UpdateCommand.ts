@@ -18,10 +18,10 @@
  *
  */
 
-import { Command } from '../../../../../core/command/Command.js';
-import { CommandResponse } from '../../../../../core/command/CommandResponse.js';
-import PublicKey from '../../../../../domain/context/account/PublicKey.js';
-import { HederaId } from '../../../../../domain/context/shared/HederaId.js';
+import { Command } from '../../../../../core/command/Command';
+import { CommandResponse } from '../../../../../core/command/CommandResponse';
+import PublicKey from '../../../../../domain/context/account/PublicKey';
+import { HederaId } from '../../../../../domain/context/shared/HederaId';
 
 export class UpdateCommandResponse implements CommandResponse {
 	constructor(public readonly payload: boolean) {}

@@ -19,16 +19,16 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
-import { InvalidType } from './error/InvalidType.js';
-import InvalidDecimalRange from '../../../domain/context/stablecoin/error/InvalidDecimalRange.js';
-import { InvalidValue } from './error/InvalidValue.js';
-import CheckNums from '../../../core/checks/numbers/CheckNums.js';
-import { InvalidRange } from './error/InvalidRange.js';
-import BigDecimal from '../../../domain/context/shared/BigDecimal.js';
-import { MAX_PERCENTAGE_DECIMALS } from '../../../domain/context/fee/CustomFee.js';
-import { OptionalField } from '../../../core/decorator/OptionalDecorator.js';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
+import { InvalidType } from './error/InvalidType';
+import InvalidDecimalRange from '../../../domain/context/stablecoin/error/InvalidDecimalRange';
+import { InvalidValue } from './error/InvalidValue';
+import CheckNums from '../../../core/checks/numbers/CheckNums';
+import { InvalidRange } from './error/InvalidRange';
+import BigDecimal from '../../../domain/context/shared/BigDecimal';
+import { MAX_PERCENTAGE_DECIMALS } from '../../../domain/context/fee/CustomFee';
+import { OptionalField } from '../../../core/decorator/OptionalDecorator';
 
 export default class AddFractionalFeeRequest extends ValidatedRequest<AddFractionalFeeRequest> {
 	tokenId: string;

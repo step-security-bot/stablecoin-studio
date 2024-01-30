@@ -18,11 +18,11 @@
  *
  */
 
-import { Command } from '../../../../../core/command/Command.js';
-import { CommandResponse } from '../../../../../core/command/CommandResponse.js';
-import ContractId from '../../../../../domain/context/contract/ContractId.js';
-import { StableCoinProps } from '../../../../../domain/context/stablecoin/StableCoin.js';
-import BigDecimal from '../../../../../domain/context/shared/BigDecimal.js';
+import { Command } from '../../../../../core/command/Command';
+import { CommandResponse } from '../../../../../core/command/CommandResponse';
+import ContractId from '../../../../../domain/context/contract/ContractId';
+import { StableCoinProps } from '../../../../../domain/context/stablecoin/StableCoin';
+import BigDecimal from '../../../../../domain/context/shared/BigDecimal';
 
 export class CreateCommandResponse implements CommandResponse {
 	public readonly tokenId: ContractId;

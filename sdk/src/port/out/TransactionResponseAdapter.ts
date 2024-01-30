@@ -19,9 +19,9 @@
  */
 
 import Web3 from 'web3';
-import LogService from '../../app/service/LogService.js';
-import TransactionResponse from '../../domain/context/transaction/TransactionResponse.js';
-import { TransactionResponseError } from './error/TransactionResponseError.js';
+import LogService from '../../app/service/LogService';
+import TransactionResponse from '../../domain/context/transaction/TransactionResponse';
+import { TransactionResponseError } from './error/TransactionResponseError';
 
 export interface TransactionResponseAdapter {
 	manageResponse(): TransactionResponse;

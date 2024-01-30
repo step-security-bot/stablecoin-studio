@@ -19,24 +19,24 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import LogService from '../../../../app/service/LogService.js';
-import { isConstructible } from '../../../../core/Cast.js';
-import { Constructible, MapFunction } from '../../../../core/Type.js';
-import Account from '../../../../domain/context/account/Account.js';
-import PrivateKey from '../../../../domain/context/account/PrivateKey.js';
-import PublicKey from '../../../../domain/context/account/PublicKey.js';
+import LogService from '../../../../app/service/LogService';
+import { isConstructible } from '../../../../core/Cast';
+import { Constructible, MapFunction } from '../../../../core/Type';
+import Account from '../../../../domain/context/account/Account';
+import PrivateKey from '../../../../domain/context/account/PrivateKey';
+import PublicKey from '../../../../domain/context/account/PublicKey';
 import {
 	FireblocksConfigRequest,
 	DFNSConfigRequest,
-} from '../ConnectRequest.js';
+} from '../ConnectRequest';
 import {
 	RequestAccount,
 	RequestPrivateKey,
 	RequestPublicKey,
-} from '../BaseRequest.js';
-import ValidatedRequest from '../validation/ValidatedRequest.js';
-import DfnsSettings from '../../../../domain/context/custodialwalletsettings/DfnsSettings.js';
-import FireblocksSettings from '../../../../domain/context/custodialwalletsettings/FireblocksSettings.js';
+} from '../BaseRequest';
+import ValidatedRequest from '../validation/ValidatedRequest';
+import DfnsSettings from '../../../../domain/context/custodialwalletsettings/DfnsSettings';
+import FireblocksSettings from '../../../../domain/context/custodialwalletsettings/FireblocksSettings';
 
 export default class RequestMapper {
 	public static isPublicKey = (val: any): val is RequestPublicKey => {

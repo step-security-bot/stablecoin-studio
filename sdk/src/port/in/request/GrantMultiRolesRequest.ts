@@ -19,12 +19,12 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import { OptionalField } from '../../../core/decorator/OptionalDecorator.js';
-import Validation from './validation/Validation.js';
-import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole.js';
-import { InvalidValue } from './error/InvalidValue.js';
-import { EmptyValue } from './error/EmptyValue.js';
+import ValidatedRequest from './validation/ValidatedRequest';
+import { OptionalField } from '../../../core/decorator/OptionalDecorator';
+import Validation from './validation/Validation';
+import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole';
+import { InvalidValue } from './error/InvalidValue';
+import { EmptyValue } from './error/EmptyValue';
 
 export default class GrantMultiRolesRequest extends ValidatedRequest<GrantMultiRolesRequest> {
 	tokenId: string;

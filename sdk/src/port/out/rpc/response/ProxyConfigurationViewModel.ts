@@ -18,9 +18,9 @@
  *
  */
 
-import { QueryResponse } from '../../../../core/query/QueryResponse.js';
-import ContractId from '../../../../domain/context/contract/ContractId.js';
-import { HederaId } from '../../../../domain/context/shared/HederaId.js';
+import { QueryResponse } from '../../../../core/query/QueryResponse';
+import ContractId from '../../../../domain/context/contract/ContractId';
+import { HederaId } from '../../../../domain/context/shared/HederaId';
 
 export default interface ProxyConfigurationViewModel extends QueryResponse {
 	implementationAddress: ContractId;

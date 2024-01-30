@@ -20,9 +20,9 @@
 
 /* eslint-disable jest/no-standalone-expect */
 
-import EventService from '../../../src/app/service/event/EventService.js';
-import { WalletEvents } from '../../../src/app/service/event/WalletEvent.js';
-import Injectable from '../../../src/core/Injectable.js';
+import EventService from '../../../src/app/service/event/EventService';
+import { WalletEvents } from '../../../src/app/service/event/WalletEvent';
+import Injectable from '../../../src/core/Injectable';
 import {
 	Account,
 	Balance,
@@ -34,7 +34,7 @@ import {
 	StableCoin,
 	StableCoinViewModel,
 	TokenSupplyType,
-} from '../../../src/index.js';
+} from "../../../src";
 import {
 	AssociateTokenRequest,
 	BurnRequest,
@@ -56,24 +56,24 @@ import {
 	UpdateRequest,
 	UpdateReserveAddressRequest,
 	WipeRequest,
-} from '../../../src/port/in/request/index.js';
+} from "../../../src/port/in/request";
 import ConnectRequest, {
 	SupportedWallets,
-} from '../../../src/port/in/request/ConnectRequest.js';
-import GetStableCoinDetailsRequest from '../../../src/port/in/request/GetStableCoinDetailsRequest.js';
+} from '../../../src/port/in/request/ConnectRequest';
+import GetStableCoinDetailsRequest from '../../../src/port/in/request/GetStableCoinDetailsRequest';
 import {
 	CLIENT_ACCOUNT_ECDSA,
 	CLIENT_ACCOUNT_ED25519,
 	FACTORY_ADDRESS,
 	HEDERA_TOKEN_MANAGER_ADDRESS,
-} from '../../config.js';
+} from '../../config';
 import { Client, Hbar, TransferTransaction } from '@hashgraph/sdk';
-import { MirrorNode } from '../../../src/domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay.js';
+import { MirrorNode } from '../../../src/domain/context/network/MirrorNode';
+import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay';
 import BaseError, {
 	ErrorCategory,
 	ErrorCode,
-} from '../../../src/core/error/BaseError.js';
+} from '../../../src/core/error/BaseError';
 
 const decimals = 6;
 const initialSupply = 1000;

@@ -18,7 +18,7 @@
  *
  */
 
-import BaseError from '../../../../core/error/BaseError.js';
+import BaseError from '../../../../core/error/BaseError';
 import safeStringify from 'fast-safe-stringify';
 export default class ValidationResponse {
 	name: string;

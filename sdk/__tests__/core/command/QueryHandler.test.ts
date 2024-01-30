@@ -18,12 +18,12 @@
  *
  */
 
-import { QueryBus } from '../../../src/core/query/QueryBus.js';
+import { QueryBus } from '../../../src/core/query/QueryBus';
 // eslint-disable-next-line jest/no-mocks-import
 import {
 	ConcreteQuery,
 	ConcreteQueryResponse,
-} from './__mocks__/ConcreteQueryHandler.js';
+} from './__mocks__/ConcreteQueryHandler';
 const queryBus = new QueryBus();
 describe('🧪 QueryHandler Test', () => {
 	it('Executes a simple query', async () => {

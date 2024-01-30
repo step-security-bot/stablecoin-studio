@@ -20,12 +20,12 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import LogService from '../../app/service/LogService.js';
-import Account from '../../domain/context/account/Account.js';
-import PublicKey from '../../domain/context/account/PublicKey.js';
-import BaseEntity from '../../domain/context/BaseEntity.js';
-import { isConstructible } from '../Cast.js';
-import { Constructible, MapFunction } from '../Type.js';
+import LogService from '../../app/service/LogService';
+import Account from '../../domain/context/account/Account';
+import PublicKey from '../../domain/context/account/PublicKey';
+import BaseEntity from '../../domain/context/BaseEntity';
+import { isConstructible } from '../Cast';
+import { Constructible, MapFunction } from '../Type';
 
 export default class Mapper {
 	public static isPublicKey = (val: any): val is PublicKey => {

@@ -18,23 +18,23 @@
  *
  */
 
-import { CommandBus } from '../../../../../../core/command/CommandBus.js';
-import { ICommandHandler } from '../../../../../../core/command/CommandHandler.js';
-import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator.js';
-import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator.js';
-import { QueryBus } from '../../../../../../core/query/QueryBus.js';
-import { KycStatus } from '../../../../../../port/out/mirror/response/AccountTokenRelationViewModel.js';
-import AccountService from '../../../../../service/AccountService.js';
-import StableCoinService from '../../../../../service/StableCoinService.js';
-import TransactionService from '../../../../../service/TransactionService.js';
-import { GetAccountTokenRelationshipQuery } from '../../../../query/account/tokenRelationship/GetAccountTokenRelationshipQuery.js';
-import { KycNotActive } from '../../error/KycNotActive.js';
-import { OperationNotAllowed } from '../../error/OperationNotAllowed.js';
-import { StableCoinNotAssociated } from '../../error/StableCoinNotAssociated.js';
+import { CommandBus } from '../../../../../../core/command/CommandBus';
+import { ICommandHandler } from '../../../../../../core/command/CommandHandler';
+import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator';
+import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator';
+import { QueryBus } from '../../../../../../core/query/QueryBus';
+import { KycStatus } from '../../../../../../port/out/mirror/response/AccountTokenRelationViewModel';
+import AccountService from '../../../../../service/AccountService';
+import StableCoinService from '../../../../../service/StableCoinService';
+import TransactionService from '../../../../../service/TransactionService';
+import { GetAccountTokenRelationshipQuery } from '../../../../query/account/tokenRelationship/GetAccountTokenRelationshipQuery';
+import { KycNotActive } from '../../error/KycNotActive';
+import { OperationNotAllowed } from '../../error/OperationNotAllowed';
+import { StableCoinNotAssociated } from '../../error/StableCoinNotAssociated';
 import {
 	RevokeKycCommand,
 	RevokeKycCommandResponse,
-} from './RevokeKycCommand.js';
+} from './RevokeKycCommand';
 
 @CommandHandler(RevokeKycCommand)
 export class RevokeKycCommandHandler

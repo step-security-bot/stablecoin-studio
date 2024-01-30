@@ -28,31 +28,31 @@ import {
 	CustomFee as HCustomFee,
 } from '@hashgraph/sdk';
 import TransactionAdapter from '../TransactionAdapter';
-import TransactionResponse from '../../../domain/context/transaction/TransactionResponse.js';
-import { Operation } from '../../../domain/context/stablecoin/Capability.js';
+import TransactionResponse from '../../../domain/context/transaction/TransactionResponse';
+import { Operation } from '../../../domain/context/stablecoin/Capability';
 import Web3 from 'web3';
-import { CapabilityDecider, Decision } from '../CapabilityDecider.js';
-import { CapabilityError } from './error/CapabilityError.js';
-import StableCoinCapabilities from '../../../domain/context/stablecoin/StableCoinCapabilities.js';
-import { StableCoinProps } from '../../../domain/context/stablecoin/StableCoin.js';
-import { TokenSupplyType } from '../../../domain/context/stablecoin/TokenSupply.js';
-import PublicKey from '../../../domain/context/account/PublicKey.js';
-import ContractId from '../../../domain/context/contract/ContractId.js';
+import { CapabilityDecider, Decision } from '../CapabilityDecider';
+import { CapabilityError } from './error/CapabilityError';
+import StableCoinCapabilities from '../../../domain/context/stablecoin/StableCoinCapabilities';
+import { StableCoinProps } from '../../../domain/context/stablecoin/StableCoin';
+import { TokenSupplyType } from '../../../domain/context/stablecoin/TokenSupply';
+import PublicKey from '../../../domain/context/account/PublicKey';
+import ContractId from '../../../domain/context/contract/ContractId';
 import {
 	HederaTokenManager__factory,
 	HederaReserve__factory,
 	StableCoinFactory__factory,
 	StableCoinProxyAdmin__factory,
 } from '@hashgraph/stablecoin-npm-contracts';
-import BigDecimal from '../../../domain/context/shared/BigDecimal.js';
-import { TransactionType } from '../TransactionResponseEnums.js';
-import { HTSTransactionBuilder } from './HTSTransactionBuilder.js';
-import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole.js';
-import Account from '../../../domain/context/account/Account.js';
-import { MirrorNodeAdapter } from '../mirror/MirrorNodeAdapter.js';
-import { HederaId } from '../../../domain/context/shared/HederaId.js';
-import { FactoryKey } from '../../../domain/context/factory/FactoryKey.js';
-import { FactoryStableCoin } from '../../../domain/context/factory/FactoryStableCoin.js';
+import BigDecimal from '../../../domain/context/shared/BigDecimal';
+import { TransactionType } from '../TransactionResponseEnums';
+import { HTSTransactionBuilder } from './HTSTransactionBuilder';
+import { StableCoinRole } from '../../../domain/context/stablecoin/StableCoinRole';
+import Account from '../../../domain/context/account/Account';
+import { MirrorNodeAdapter } from '../mirror/MirrorNodeAdapter';
+import { HederaId } from '../../../domain/context/shared/HederaId';
+import { FactoryKey } from '../../../domain/context/factory/FactoryKey';
+import { FactoryStableCoin } from '../../../domain/context/factory/FactoryStableCoin';
 import {
 	CREATE_SC_GAS,
 	BALANCE_OF_GAS,
@@ -87,14 +87,14 @@ import {
 	CHANGE_PROXY_OWNER_GAS,
 	ACCEPT_PROXY_OWNER_GAS,
 	UPDATE_PROXY_IMPLEMENTATION_GAS,
-} from '../../../core/Constants.js';
-import LogService from '../../../app/service/LogService.js';
-import { RESERVE_DECIMALS } from '../../../domain/context/reserve/Reserve.js';
-import TransactionResultViewModel from '../mirror/response/TransactionResultViewModel.js';
-import { TransactionResponseError } from '../error/TransactionResponseError.js';
-import { FactoryRole } from '../../../domain/context/factory/FactoryRole.js';
-import { FactoryCashinRole } from '../../../domain/context/factory/FactoryCashinRole.js';
-import NetworkService from '../../../app/service/NetworkService.js';
+} from '../../../core/Constants';
+import LogService from '../../../app/service/LogService';
+import { RESERVE_DECIMALS } from '../../../domain/context/reserve/Reserve';
+import TransactionResultViewModel from '../mirror/response/TransactionResultViewModel';
+import { TransactionResponseError } from '../error/TransactionResponseError';
+import { FactoryRole } from '../../../domain/context/factory/FactoryRole';
+import { FactoryCashinRole } from '../../../domain/context/factory/FactoryCashinRole';
+import NetworkService from '../../../app/service/NetworkService';
 
 export abstract class HederaTransactionAdapter extends TransactionAdapter {
 	private web3 = new Web3();

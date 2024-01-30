@@ -20,14 +20,14 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import 'reflect-metadata';
-import { BaseRequest } from '../BaseRequest.js';
-import { ValidationSchema, ValidatedRequestKey } from './ValidationSchema.js';
-import ValidationResponse from './ValidationResponse.js';
-import { EmptyValue } from '../error/EmptyValue.js';
-import RequestMapper from '../mapping/RequestMapper.js';
-import { getOptionalFields } from '../../../../core/decorator/OptionalDecorator.js';
-import BaseError from '../../../../core/error/BaseError.js';
-import { RuntimeError } from '../../../../core/error/RuntimeError.js';
+import { BaseRequest } from '../BaseRequest';
+import { ValidationSchema, ValidatedRequestKey } from './ValidationSchema';
+import ValidationResponse from './ValidationResponse';
+import { EmptyValue } from '../error/EmptyValue';
+import RequestMapper from '../mapping/RequestMapper';
+import { getOptionalFields } from '../../../../core/decorator/OptionalDecorator';
+import BaseError from '../../../../core/error/BaseError';
+import { RuntimeError } from '../../../../core/error/RuntimeError';
 export default class ValidatedRequest<T extends BaseRequest> {
 	private schema: ValidationSchema<T>;
 

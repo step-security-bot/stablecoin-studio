@@ -18,9 +18,9 @@
  *
  */
 
-import Injectable from '../../../src/core/Injectable.js';
-import { MirrorNode } from '../../../src/domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay.js';
+import Injectable from '../../../src/core/Injectable';
+import { MirrorNode } from '../../../src/domain/context/network/MirrorNode';
+import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay';
 import {
 	Account,
 	CreateRequest,
@@ -33,16 +33,16 @@ import {
 	GetReserveAmountRequest,
 	UpdateReserveAmountRequest,
 	GetReserveAddressRequest,
-} from '../../../src/index.js';
+} from "../../../src";
 import ConnectRequest, {
 	SupportedWallets,
-} from '../../../src/port/in/request/ConnectRequest.js';
+} from '../../../src/port/in/request/ConnectRequest';
 
 import {
 	CLIENT_ACCOUNT_ED25519,
 	FACTORY_ADDRESS,
 	HEDERA_TOKEN_MANAGER_ADDRESS,
-} from '../../config.js';
+} from '../../config';
 
 describe('🧪 Reserve test', () => {
 	let stableCoinSC: StableCoinViewModel;

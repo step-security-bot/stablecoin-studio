@@ -18,9 +18,9 @@
  *
  */
 
-import { Query } from '../../../../../core/query/Query.js';
-import { QueryResponse } from '../../../../../core/query/QueryResponse.js';
-import ContractId from '../../../../../domain/context/contract/ContractId.js';
+import { Query } from '../../../../../core/query/Query';
+import { QueryResponse } from '../../../../../core/query/QueryResponse';
+import ContractId from '../../../../../domain/context/contract/ContractId';
 
 export class GetTokenManagerListQueryResponse implements QueryResponse {
 	constructor(public readonly payload: ContractId[]) {}

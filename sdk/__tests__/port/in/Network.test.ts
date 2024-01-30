@@ -18,31 +18,31 @@
  *
  */
 
-import NetworkService from '../../../src/app/service/NetworkService.js';
-import Injectable from '../../../src/core/Injectable.js';
+import NetworkService from '../../../src/app/service/NetworkService';
+import Injectable from '../../../src/core/Injectable';
 import {
 	InitializationRequest,
 	Network,
 	SetConfigurationRequest,
 	SetNetworkRequest,
-} from '../../../src/index.js';
+} from "../../../src";
 import {
 	testnet,
 	previewnet,
 	unrecognized,
-} from '../../../src/domain/context/network/Environment.js';
+} from '../../../src/domain/context/network/Environment';
 import ConnectRequest, {
 	SupportedWallets,
-} from '../../../src/port/in/request/ConnectRequest.js';
+} from '../../../src/port/in/request/ConnectRequest';
 
 import {
 	CLIENT_ACCOUNT_ED25519,
 	FACTORY_ADDRESS,
 	MIRROR_NODE,
 	RPC_NODE,
-} from '../../config.js';
-import { MirrorNode } from 'domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from 'domain/context/network/JsonRpcRelay.js';
+} from '../../config';
+import {MirrorNode} from "../../../src/domain/context/network/MirrorNode";
+import {JsonRpcRelay} from "../../../src/domain/context/network/JsonRpcRelay";
 
 const mirrorNode: MirrorNode = {
 	name: MIRROR_NODE.name,

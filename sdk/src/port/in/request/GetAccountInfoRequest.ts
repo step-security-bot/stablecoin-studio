@@ -18,9 +18,9 @@
  *
  */
 
-import { AccountBaseRequest, RequestAccount } from './BaseRequest.js';
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
+import { AccountBaseRequest, RequestAccount } from './BaseRequest';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
 
 export default class GetAccountInfoRequest
 	extends ValidatedRequest<GetAccountInfoRequest>

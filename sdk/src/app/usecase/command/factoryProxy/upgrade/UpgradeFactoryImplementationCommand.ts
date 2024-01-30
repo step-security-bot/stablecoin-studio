@@ -18,10 +18,10 @@
  *
  */
 
-import { Command } from '../../../../../core/command/Command.js';
-import { CommandResponse } from '../../../../../core/command/CommandResponse.js';
-import ContractId from '../../../../../domain/context/contract/ContractId.js';
-import { HederaId } from '../../../../../domain/context/shared/HederaId.js';
+import { Command } from '../../../../../core/command/Command';
+import { CommandResponse } from '../../../../../core/command/CommandResponse';
+import ContractId from '../../../../../domain/context/contract/ContractId';
+import { HederaId } from '../../../../../domain/context/shared/HederaId';
 
 export class UpgradeFactoryImplementationCommandResponse
 	implements CommandResponse

@@ -18,8 +18,8 @@
  *
  */
 
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
 
 export default class GetStableCoinDetailsRequest extends ValidatedRequest<GetStableCoinDetailsRequest> {
 	id: string;

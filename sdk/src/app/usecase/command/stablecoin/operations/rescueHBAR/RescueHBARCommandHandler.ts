@@ -18,25 +18,25 @@
  *
  */
 
-import CheckNums from '../../../../../../core/checks/numbers/CheckNums.js';
-import { CommandBus } from '../../../../../../core/command/CommandBus.js';
-import { ICommandHandler } from '../../../../../../core/command/CommandHandler.js';
-import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator.js';
-import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator.js';
-import BigDecimal from '../../../../../../domain/context/shared/BigDecimal.js';
-import AccountService from '../../../../../service/AccountService.js';
-import StableCoinService from '../../../../../service/StableCoinService.js';
-import TransactionService from '../../../../../service/TransactionService.js';
+import CheckNums from '../../../../../../core/checks/numbers/CheckNums';
+import { CommandBus } from '../../../../../../core/command/CommandBus';
+import { ICommandHandler } from '../../../../../../core/command/CommandHandler';
+import { CommandHandler } from '../../../../../../core/decorator/CommandHandlerDecorator';
+import { lazyInject } from '../../../../../../core/decorator/LazyInjectDecorator';
+import BigDecimal from '../../../../../../domain/context/shared/BigDecimal';
+import AccountService from '../../../../../service/AccountService';
+import StableCoinService from '../../../../../service/StableCoinService';
+import TransactionService from '../../../../../service/TransactionService';
 
-import { DecimalsOverRange } from '../../error/DecimalsOverRange.js';
-import { OperationNotAllowed } from '../../error/OperationNotAllowed.js';
+import { DecimalsOverRange } from '../../error/DecimalsOverRange';
+import { OperationNotAllowed } from '../../error/OperationNotAllowed';
 import {
 	RescueHBARCommand,
 	RescueHBARCommandResponse,
-} from './RescueHBARCommand.js';
-import { QueryBus } from '../../../../../../core/query/QueryBus.js';
-import { BalanceOfHBARQuery } from '../../../../query/stablecoin/balanceOfHBAR/BalanceOfHBARQuery.js';
-import { HBAR_DECIMALS } from '../../../../../../core/Constants.js';
+} from './RescueHBARCommand';
+import { QueryBus } from '../../../../../../core/query/QueryBus';
+import { BalanceOfHBARQuery } from '../../../../query/stablecoin/balanceOfHBAR/BalanceOfHBARQuery';
+import { HBAR_DECIMALS } from '../../../../../../core/Constants';
 
 @CommandHandler(RescueHBARCommand)
 export class RescueHBARCommandHandler

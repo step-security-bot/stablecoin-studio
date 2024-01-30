@@ -18,7 +18,7 @@
  *
  */
 
-import BaseError, { ErrorCode } from '../../../../core/error/BaseError.js';
+import BaseError, { ErrorCode } from '../../../../core/error/BaseError';
 
 export default class InvalidAutoRenewPeriod extends BaseError {
 	constructor(val: number | string, min: number, max?: number) {

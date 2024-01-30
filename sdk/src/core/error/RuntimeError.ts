@@ -18,7 +18,7 @@
  *
  */
 
-import BaseError, { ErrorCode } from './BaseError.js';
+import BaseError, { ErrorCode } from './BaseError';
 
 export class RuntimeError extends BaseError {
 	constructor(msg: string) {

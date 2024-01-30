@@ -18,8 +18,8 @@
  *
  */
 
-import { QueryResponse } from '../../../../core/query/QueryResponse.js';
-import { AccountTokenRelationViewModel } from './AccountTokenRelationViewModel.js';
+import { QueryResponse } from '../../../../core/query/QueryResponse';
+import { AccountTokenRelationViewModel } from './AccountTokenRelationViewModel';
 
 export default interface AccountTokenListRelationViewModel
 	extends QueryResponse {

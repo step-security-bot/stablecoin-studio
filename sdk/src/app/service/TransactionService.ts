@@ -19,15 +19,15 @@
  */
 
 import { singleton } from 'tsyringe';
-import Injectable from '../../core/Injectable.js';
-import { InvalidWalletTypeError } from '../../domain/context/network/error/InvalidWalletAccountTypeError.js';
-import { SupportedWallets } from '../../domain/context/network/Wallet.js';
-import { HashpackTransactionAdapter } from '../../port/out/hs/hashpack/HashpackTransactionAdapter.js';
-import { HTSTransactionAdapter } from '../../port/out/hs/hts/HTSTransactionAdapter.js';
-import RPCTransactionAdapter from '../../port/out/rpc/RPCTransactionAdapter.js';
-import TransactionAdapter from '../../port/out/TransactionAdapter.js';
-import Service from './Service.js';
-import { BladeTransactionAdapter } from '../../port/out/hs/blade/BladeTransactionAdapter.js';
+import Injectable from '../../core/Injectable';
+import { InvalidWalletTypeError } from '../../domain/context/network/error/InvalidWalletAccountTypeError';
+import { SupportedWallets } from '../../domain/context/network/Wallet';
+import { HashpackTransactionAdapter } from '../../port/out/hs/hashpack/HashpackTransactionAdapter';
+import { HTSTransactionAdapter } from '../../port/out/hs/hts/HTSTransactionAdapter';
+import RPCTransactionAdapter from '../../port/out/rpc/RPCTransactionAdapter';
+import TransactionAdapter from '../../port/out/TransactionAdapter';
+import Service from './Service';
+import { BladeTransactionAdapter } from '../../port/out/hs/blade/BladeTransactionAdapter';
 import { FireblocksTransactionAdapter } from '../../port/out/hs/hts/custodial/FireblocksTransactionAdapter';
 import { DFNSTransactionAdapter } from '../../port/out/hs/hts/custodial/DFNSTransactionAdapter';
 

@@ -18,10 +18,10 @@
  *
  */
 
-import { OptionalField } from '../../../core/decorator/OptionalDecorator.js';
-import { AccountBaseRequest, RequestAccount } from './BaseRequest.js';
-import ValidatedRequest from './validation/ValidatedRequest.js';
-import Validation from './validation/Validation.js';
+import { OptionalField } from '../../../core/decorator/OptionalDecorator';
+import { AccountBaseRequest, RequestAccount } from './BaseRequest';
+import ValidatedRequest from './validation/ValidatedRequest';
+import Validation from './validation/Validation';
 
 export default class CapabilitiesRequest
 	extends ValidatedRequest<CapabilitiesRequest>

@@ -21,9 +21,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createLogger, LoggerOptions, transports, format } from 'winston';
 import safeStringify from 'fast-safe-stringify';
-import BaseError from '../../core/error/BaseError.js';
-import { SDK } from '../../port/in/Common.js';
-import Injectable from '../../core/Injectable.js';
+import BaseError from '../../core/error/BaseError';
+import { SDK } from '../../port/in/Common';
+import Injectable from '../../core/Injectable';
 
 const { Console } = transports;
 const { printf } = format;

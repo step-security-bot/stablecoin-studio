@@ -18,19 +18,19 @@
  *
  */
 
-import { EVM_ZERO_ADDRESS } from '../../../../../core/Constants.js';
-import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator.js';
-import { QueryHandler } from '../../../../../core/decorator/QueryHandlerDecorator.js';
-import { IQueryHandler } from '../../../../../core/query/QueryHandler.js';
-import ContractId from '../../../../../domain/context/contract/ContractId.js';
-import RPCQueryAdapter from '../../../../../port/out/rpc/RPCQueryAdapter.js';
-import { MirrorNodeAdapter } from '../../../../../port/out/mirror/MirrorNodeAdapter.js';
-import EvmAddress from '../../../../../domain/context/contract/EvmAddress.js';
+import { EVM_ZERO_ADDRESS } from '../../../../../core/Constants';
+import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator';
+import { QueryHandler } from '../../../../../core/decorator/QueryHandlerDecorator';
+import { IQueryHandler } from '../../../../../core/query/QueryHandler';
+import ContractId from '../../../../../domain/context/contract/ContractId';
+import RPCQueryAdapter from '../../../../../port/out/rpc/RPCQueryAdapter';
+import { MirrorNodeAdapter } from '../../../../../port/out/mirror/MirrorNodeAdapter';
+import EvmAddress from '../../../../../domain/context/contract/EvmAddress';
 import { ContractId as HContractId } from '@hashgraph/sdk';
 import {
 	GetTokenManagerListQuery,
 	GetTokenManagerListQueryResponse,
-} from './GetTokenManagerListQuery.js';
+} from './GetTokenManagerListQuery';
 
 @QueryHandler(GetTokenManagerListQuery)
 export class GetTokenManagerListQueryHandler

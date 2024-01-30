@@ -18,13 +18,12 @@
  *
  */
 
-import EventEmitter from '../../../core/EventEmitter.js';
-import Service from '../Service.js';
-import { EventListenerNotFound } from './error/EventListenerNotFound.js';
-import { EventNotFound } from './error/EventNotFound.js';
-import { singleton } from 'tsyringe';
-import WalletEvent, { WalletEvents } from './WalletEvent.js';
-import { inject } from 'tsyringe';
+import EventEmitter from '../../../core/EventEmitter';
+import Service from '../Service';
+import { EventListenerNotFound } from './error/EventListenerNotFound';
+import { EventNotFound } from './error/EventNotFound';
+import { singleton , inject } from 'tsyringe';
+import WalletEvent, { WalletEvents } from './WalletEvent';
 
 type WalletEventIndex = Record<keyof WalletEvent, WalletEvent>;
 type WalletEventEmitterIndex = Partial<

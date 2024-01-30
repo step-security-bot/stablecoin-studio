@@ -18,32 +18,32 @@
  *
  */
 
-import { CommandBus } from '../../core/command/CommandBus.js';
-import Injectable from '../../core/Injectable.js';
+import { CommandBus } from '../../core/command/CommandBus';
+import Injectable from '../../core/Injectable';
 import {
 	AddFixedFeeRequest,
 	AddFractionalFeeRequest,
 	UpdateCustomFeesRequest,
-} from './request/index.js';
-import { LogError } from '../../core/decorator/LogErrorDecorator.js';
-import { handleValidation } from './Common.js';
-import { HederaId } from '../../domain/context/shared/HederaId.js';
-import { addFixedFeesCommand } from '../../app/usecase/command/stablecoin/fees/addCustomFees/addFixedFeesCommand.js';
+} from "./request";
+import { LogError } from '../../core/decorator/LogErrorDecorator';
+import { handleValidation } from './Common';
+import { HederaId } from '../../domain/context/shared/HederaId';
+import { addFixedFeesCommand } from '../../app/usecase/command/stablecoin/fees/addCustomFees/addFixedFeesCommand';
 import {
 	CustomFee,
 	FixedFee,
 	FractionalFee,
 	MAX_PERCENTAGE_DECIMALS,
 	MAX_CUSTOM_FEES,
-} from '../../domain/context/fee/CustomFee.js';
-import { HBAR_DECIMALS } from '../../core/Constants.js';
-import BigDecimal from '../../domain/context/shared/BigDecimal.js';
-import { addFractionalFeesCommand } from '../../app/usecase/command/stablecoin/fees/addCustomFees/addFractionalFeesCommand.js';
-import { UpdateCustomFeesCommand } from '../../app/usecase/command/stablecoin/fees/updateCustomFees/UpdateCustomFeesCommand.js';
+} from '../../domain/context/fee/CustomFee';
+import { HBAR_DECIMALS } from '../../core/Constants';
+import BigDecimal from '../../domain/context/shared/BigDecimal';
+import { addFractionalFeesCommand } from '../../app/usecase/command/stablecoin/fees/addCustomFees/addFractionalFeesCommand';
+import { UpdateCustomFeesCommand } from '../../app/usecase/command/stablecoin/fees/updateCustomFees/UpdateCustomFeesCommand';
 import {
 	isRequestFractionalFee,
 	isRequestFixedFee,
-} from './request/BaseRequest.js';
+} from './request/BaseRequest';
 
 export { HBAR_DECIMALS, MAX_PERCENTAGE_DECIMALS, MAX_CUSTOM_FEES };
 

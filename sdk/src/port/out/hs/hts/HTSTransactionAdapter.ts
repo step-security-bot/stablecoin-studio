@@ -24,25 +24,25 @@ import {
 	Client,
 } from '@hashgraph/sdk';
 import { singleton } from 'tsyringe';
-import { HederaTransactionAdapter } from '../HederaTransactionAdapter.js';
-import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse.js';
-import { TransactionType } from '../../TransactionResponseEnums.js';
-import { HTSTransactionResponseAdapter } from './HTSTransactionResponseAdapter.js';
-import Injectable from '../../../../core/Injectable.js';
-import { InitializationData } from '../../TransactionAdapter.js';
-import Account from '../../../../domain/context/account/Account.js';
-import { Environment } from '../../../../domain/context/network/Environment.js';
+import { HederaTransactionAdapter } from '../HederaTransactionAdapter';
+import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse';
+import { TransactionType } from '../../TransactionResponseEnums';
+import { HTSTransactionResponseAdapter } from './HTSTransactionResponseAdapter';
+import Injectable from '../../../../core/Injectable';
+import { InitializationData } from '../../TransactionAdapter';
+import Account from '../../../../domain/context/account/Account';
+import { Environment } from '../../../../domain/context/network/Environment';
 import {
 	WalletEvents,
 	WalletPairedEvent,
-} from '../../../../app/service/event/WalletEvent.js';
-import { SupportedWallets } from '../../../in/request/ConnectRequest.js';
-import EventService from '../../../../app/service/event/EventService.js';
-import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator.js';
-import { MirrorNodeAdapter } from '../../mirror/MirrorNodeAdapter.js';
-import NetworkService from '../../../../app/service/NetworkService.js';
-import LogService from '../../../../app/service/LogService.js';
-import { WalletConnectError } from '../../../../domain/context/network/error/WalletConnectError.js';
+} from '../../../../app/service/event/WalletEvent';
+import { SupportedWallets } from '../../../in/request/ConnectRequest';
+import EventService from '../../../../app/service/event/EventService';
+import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator';
+import { MirrorNodeAdapter } from '../../mirror/MirrorNodeAdapter';
+import NetworkService from '../../../../app/service/NetworkService';
+import LogService from '../../../../app/service/LogService';
+import { WalletConnectError } from '../../../../domain/context/network/error/WalletConnectError';
 
 @singleton()
 export class HTSTransactionAdapter extends HederaTransactionAdapter {

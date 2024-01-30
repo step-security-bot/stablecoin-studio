@@ -18,10 +18,10 @@
  *
  */
 
-import { ICommandHandler } from '../../../../../core/command/CommandHandler.js';
-import { CommandHandler } from '../../../../../core/decorator/CommandHandlerDecorator.js';
-import TransactionService from '../../../../service/TransactionService.js';
-import { ConnectCommand, ConnectCommandResponse } from './ConnectCommand.js';
+import { ICommandHandler } from '../../../../../core/command/CommandHandler';
+import { CommandHandler } from '../../../../../core/decorator/CommandHandlerDecorator';
+import TransactionService from '../../../../service/TransactionService';
+import { ConnectCommand, ConnectCommandResponse } from './ConnectCommand';
 
 @CommandHandler(ConnectCommand)
 export class ConnectCommandHandler implements ICommandHandler<ConnectCommand> {
