@@ -80,6 +80,19 @@
 		"awaitingSignatureTitle": "Awaiting wallet action",
 		"loading": "Loading data",
 		"selectWallet": "Select a wallet",
-		"selectNetwork": "Select a network"
+		"selectNetwork": "Select a network",
+		"walletGroups": {
+			"selfCustodial": "Self-Custodial Wallets",
+			"custodial": "Custodial Wallets",
+			"selfCustodialTT": "Your private keys are securely stored on your device, providing you with full ownership and control over your cryptocurrency holdings.",
+			"custodialTT": "These wallets are maintained by trusted third-party services, offering enhanced security and professional management of your digital assets"
+		},
+		"supportedWallets": {
+			"hashpack": "Hashpack",
+			"metamask": "Metamask",
+			"blade": "Blade",
+			"fireblocks": "Fireblocks",
+			"dfns": "DFNS"
+		}
 	}
 }

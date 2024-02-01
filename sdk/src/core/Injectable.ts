@@ -374,6 +374,14 @@ const TRANSACTION_HANDLER = [
 		token: TOKENS.TRANSACTION_HANDLER,
 		useClass: BladeTransactionAdapter,
 	},
+	{
+		token: TOKENS.TRANSACTION_HANDLER,
+		useClass: FireblocksTransactionAdapter,
+	},
+	{
+		token: TOKENS.TRANSACTION_HANDLER,
+		useClass: DFNSTransactionAdapter,
+	},
 ];
 
 const defaultNetworkProps: NetworkProps = {
