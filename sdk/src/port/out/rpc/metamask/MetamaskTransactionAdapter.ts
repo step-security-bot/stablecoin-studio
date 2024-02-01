@@ -119,11 +119,6 @@ export default class MetamaskTransactionAdapter extends RPCTransactionAdapter {
 		return Promise.resolve(true);
 	}
 
-	//------------
-
-	/**
-	 * TODO consider leaving this as a service and putting two implementations on top for rpc and web wallet.
-	 */
 	async connectMetamask(pair = true): Promise<void> {
 		try {
 			const ethProvider = await detectEthereumProvider({ silent: true });

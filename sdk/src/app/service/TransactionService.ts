@@ -30,6 +30,7 @@ import Service from './Service.js';
 import { BladeTransactionAdapter } from '../../port/out/hs/blade/BladeTransactionAdapter.js';
 import { FireblocksTransactionAdapter } from '../../port/out/hs/hts/custodial/FireblocksTransactionAdapter';
 import { DFNSTransactionAdapter } from '../../port/out/hs/hts/custodial/DFNSTransactionAdapter';
+import FireblocksBrowserTransactionAdapter from '../../port/out/rpc/fireblocks/FireblocksBrowserTransactionAdapter.js';
 
 @singleton()
 export default class TransactionService extends Service {
@@ -63,6 +64,11 @@ export default class TransactionService extends Service {
 					throw new InvalidWalletTypeError(type);
 				}
 				return Injectable.resolve(MetamaskTransactionAdapter);
+			case SupportedWallets.FIREBLOCKS_BROWSER:
+				if (!Injectable.isWeb()) {
+					throw new InvalidWalletTypeError(type);
+				}
+				return Injectable.resolve(FireblocksBrowserTransactionAdapter);
 			case SupportedWallets.FIREBLOCKS:
 				return Injectable.resolve(FireblocksTransactionAdapter);
 			case SupportedWallets.DFNS:

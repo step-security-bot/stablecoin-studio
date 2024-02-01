@@ -55,6 +55,7 @@ import PublicKey from '../../domain/context/account/PublicKey';
 import { FireblocksTransactionAdapter } from '../out/hs/hts/custodial/FireblocksTransactionAdapter.js';
 import { DFNSTransactionAdapter } from '../out/hs/hts/custodial/DFNSTransactionAdapter.js';
 import RPCTransactionAdapter from '../out/rpc/RPCTransactionAdapter.js';
+import FireblocksBrowserTransactionAdapter from '../out/rpc/fireblocks/FireblocksBrowserTransactionAdapter.js';
 
 export { InitializationData, SupportedWallets };
 
@@ -160,6 +161,8 @@ class NetworkInPort implements INetworkInPort {
 		for (const val of instances) {
 			if (val instanceof MetamaskTransactionAdapter) {
 				wallets.push(SupportedWallets.METAMASK);
+			} else if (val instanceof FireblocksBrowserTransactionAdapter) {
+				wallets.push(SupportedWallets.FIREBLOCKS_BROWSER);
 			} else if (val instanceof HashpackTransactionAdapter) {
 				wallets.push(SupportedWallets.HASHPACK);
 			} else if (val instanceof BladeTransactionAdapter) {

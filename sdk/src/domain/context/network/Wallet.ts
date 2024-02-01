@@ -26,6 +26,7 @@ export enum SupportedWallets {
 	CLIENT = 'Client',
 	BLADE = 'Blade',
 	FIREBLOCKS = 'Fireblocks',
+	FIREBLOCKS_BROWSER = 'Fireblocks_Browser',
 	DFNS = 'DFNS',
 }
 
