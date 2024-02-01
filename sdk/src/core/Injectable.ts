@@ -27,7 +27,7 @@ import {
 	delay,
 } from 'tsyringe';
 import { GetStableCoinQueryHandler } from '../app/usecase/query/stablecoin/get/GetStableCoinQueryHandler.js';
-import RPCTransactionAdapter from '../port/out/rpc/RPCTransactionAdapter.js';
+import MetamaskTransactionAdapter from '../port/out/rpc/metamask/MetamaskTransactionAdapter.js';
 import { Constructor } from './Type.js';
 import { CreateCommandHandler } from '../app/usecase/command/stablecoin/create/CreateCommandHandler.js';
 import { UpdateCommandHandler } from '../app/usecase/command/stablecoin/update/UpdateCommandHandler.js';
@@ -360,7 +360,7 @@ const QUERY_HANDLERS = [
 const TRANSACTION_HANDLER = [
 	{
 		token: TOKENS.TRANSACTION_HANDLER,
-		useClass: RPCTransactionAdapter,
+		useClass: MetamaskTransactionAdapter,
 	},
 	{
 		token: TOKENS.TRANSACTION_HANDLER,
@@ -459,7 +459,7 @@ export default class Injectable {
 		const adapters: TransactionAdapter[] = [];
 		if (this.isWeb()) {
 			adapters.push(Injectable.resolve(HashpackTransactionAdapter));
-			adapters.push(Injectable.resolve(RPCTransactionAdapter));
+			adapters.push(Injectable.resolve(MetamaskTransactionAdapter));
 			adapters.push(Injectable.resolve(BladeTransactionAdapter));
 			adapters.push(Injectable.resolve(FireblocksTransactionAdapter));
 			adapters.push(Injectable.resolve(DFNSTransactionAdapter));

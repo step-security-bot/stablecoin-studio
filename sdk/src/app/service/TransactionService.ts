@@ -24,7 +24,7 @@ import { InvalidWalletTypeError } from '../../domain/context/network/error/Inval
 import { SupportedWallets } from '../../domain/context/network/Wallet.js';
 import { HashpackTransactionAdapter } from '../../port/out/hs/hashpack/HashpackTransactionAdapter.js';
 import { HTSTransactionAdapter } from '../../port/out/hs/hts/HTSTransactionAdapter.js';
-import RPCTransactionAdapter from '../../port/out/rpc/RPCTransactionAdapter.js';
+import MetamaskTransactionAdapter from '../../port/out/rpc/metamask/MetamaskTransactionAdapter.js';
 import TransactionAdapter from '../../port/out/TransactionAdapter.js';
 import Service from './Service.js';
 import { BladeTransactionAdapter } from '../../port/out/hs/blade/BladeTransactionAdapter.js';
@@ -62,7 +62,7 @@ export default class TransactionService extends Service {
 				if (!Injectable.isWeb()) {
 					throw new InvalidWalletTypeError(type);
 				}
-				return Injectable.resolve(RPCTransactionAdapter);
+				return Injectable.resolve(MetamaskTransactionAdapter);
 			case SupportedWallets.FIREBLOCKS:
 				return Injectable.resolve(FireblocksTransactionAdapter);
 			case SupportedWallets.DFNS:

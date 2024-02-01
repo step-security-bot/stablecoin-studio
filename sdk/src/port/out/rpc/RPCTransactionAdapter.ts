@@ -126,8 +126,7 @@ import {
 // eslint-disable-next-line no-var
 declare var ethereum: MetaMaskInpageProvider;
 
-@singleton()
-export default class RPCTransactionAdapter extends TransactionAdapter {
+export default abstract class RPCTransactionAdapter extends TransactionAdapter {
 	account: Account;
 	signerOrProvider: Signer | Provider;
 	mirrorNodes: MirrorNodes;
@@ -136,16 +135,16 @@ export default class RPCTransactionAdapter extends TransactionAdapter {
 
 	constructor(
 		@lazyInject(MirrorNodeAdapter)
-		private readonly mirrorNodeAdapter: MirrorNodeAdapter,
+		protected readonly mirrorNodeAdapter: MirrorNodeAdapter,
 		@lazyInject(NetworkService)
-		private readonly networkService: NetworkService,
+		protected readonly networkService: NetworkService,
 		@lazyInject(EventService)
-		private readonly eventService: EventService,
+		protected readonly eventService: EventService,
 		@lazyInject(CommandBus)
-		private readonly commandBus: CommandBus,
+		protected readonly commandBus: CommandBus,
 	) {
 		super();
-		this.registerMetamaskEvents();
+		this.registerWalletEvents();
 	}
 
 	public async create(
@@ -302,21 +301,7 @@ export default class RPCTransactionAdapter extends TransactionAdapter {
 		}
 	}
 
-	async init(debug = false): Promise<string> {
-		!debug && (await this.connectMetamask(false));
-		const eventData = {
-			initData: {
-				account: this.account,
-				pairing: '',
-				topic: '',
-			},
-			wallet: SupportedWallets.METAMASK,
-		};
-		this.eventService.emit(WalletEvents.walletInit, eventData);
-		LogService.logTrace('Metamask Initialized ', eventData);
-
-		return this.networkService.environment;
-	}
+	abstract init(): Promise<string>;
 
 	public setMirrorNodes(mirrorNodes?: MirrorNodes): void {
 		if (mirrorNodes) this.mirrorNodes = mirrorNodes;
@@ -330,22 +315,7 @@ export default class RPCTransactionAdapter extends TransactionAdapter {
 		if (factories) this.factories = factories;
 	}
 
-	async register(
-		account?: Account,
-		debug = false,
-	): Promise<InitializationData> {
-		if (account) {
-			const accountMirror = await this.mirrorNodeAdapter.getAccountInfo(
-				account.id,
-			);
-			this.account = account;
-			this.account.publicKey = accountMirror.publicKey;
-		}
-		Injectable.registerTransactionHandler(this);
-		!debug && (await this.connectMetamask());
-		LogService.logTrace('Metamask registered as handler');
-		return Promise.resolve({ account });
-	}
+	abstract register(account?: Account): Promise<InitializationData>;
 
 	stop(): Promise<boolean> {
 		this.eventService.emit(WalletEvents.walletConnectionStatusChanged, {
@@ -1264,254 +1234,8 @@ export default class RPCTransactionAdapter extends TransactionAdapter {
 	/**
 	 * TODO consider leaving this as a service and putting two implementations on top for rpc and web wallet.
 	 */
-	async connectMetamask(pair = true): Promise<void> {
-		try {
-			const ethProvider = await detectEthereumProvider({ silent: true });
-			if (ethProvider) {
-				this.eventService.emit(WalletEvents.walletFound, {
-					wallet: SupportedWallets.METAMASK,
-					name: SupportedWallets.METAMASK,
-				});
-				if (ethProvider.isMetaMask) {
-					if (pair && !ethereum.isConnected())
-						throw new WalletConnectError(
-							'Metamask is not connected!',
-						);
 
-					pair && (await this.pairWallet());
-					this.signerOrProvider = new ethers.providers.Web3Provider(
-						// @ts-expect-error No TS compatibility
-						ethereum,
-					).getSigner();
-				} else {
-					throw new WalletConnectError('Metamask was not found!');
-				}
-			}
-		} catch (error: any) {
-			if ('code' in error && error.code === 4001) {
-				throw new WalletConnectRejectedError(SupportedWallets.METAMASK);
-			}
-			if (error instanceof WalletConnectError) {
-				throw error;
-			}
-			throw new RuntimeError((error as Error).message);
-		}
-	}
-
-	private async setMetasmaskAccount(evmAddress: string): Promise<void> {
-		let mirrorAccount = undefined;
-		try {
-			mirrorAccount = await this.mirrorNodeAdapter.getAccountInfo(
-				evmAddress,
-			);
-		} catch (e) {
-			LogService.logError(
-				'account could not be retrieved from mirror error : ' + e,
-			);
-		}
-		if (mirrorAccount) {
-			this.account = new Account({
-				id: mirrorAccount.id!,
-				evmAddress: mirrorAccount.accountEvmAddress,
-				publicKey: mirrorAccount.publicKey,
-			});
-			this.signerOrProvider = new ethers.providers.Web3Provider(
-				// @ts-expect-error No TS compatibility
-				ethereum,
-			).getSigner();
-		} else {
-			this.account = Account.NULL;
-		}
-		LogService.logTrace('Paired Metamask Wallet Event:', this.account);
-	}
-
-	private async setMetamaskNetwork(chainId: any): Promise<void> {
-		let network = unrecognized;
-		let factoryId = '';
-		let mirrorNode: MirrorNode = {
-			baseUrl: '',
-			apiKey: '',
-			headerName: '',
-		};
-		let rpcNode: JsonRpcRelay = {
-			baseUrl: '',
-			apiKey: '',
-			headerName: '',
-		};
-
-		const metamaskNetwork = HederaNetworks.find(
-			(i: any) => '0x' + i.chainId.toString(16) === chainId.toString(),
-		);
-
-		if (metamaskNetwork) {
-			network = metamaskNetwork.network;
-
-			if (this.factories) {
-				try {
-					const result = this.factories.factories.find(
-						(i: EnvironmentFactory) =>
-							i.environment === metamaskNetwork.network,
-					);
-					if (result) {
-						factoryId = result.factory.toString();
-					}
-				} catch (e) {
-					console.error(
-						`Factories could not be found for environment ${metamaskNetwork.network} in  the initially provided list`,
-					);
-				}
-			}
-			if (this.mirrorNodes) {
-				try {
-					const result = this.mirrorNodes.nodes.find(
-						(i: EnvironmentMirrorNode) =>
-							i.environment === metamaskNetwork.network,
-					);
-					if (result) {
-						mirrorNode = result.mirrorNode;
-					}
-				} catch (e) {
-					console.error(
-						`Mirror Nodes could not be found for environment ${metamaskNetwork.network} in  the initially provided list`,
-					);
-				}
-			}
-			if ((this, this.jsonRpcRelays)) {
-				try {
-					const result = this.jsonRpcRelays.nodes.find(
-						(i: EnvironmentJsonRpcRelay) =>
-							i.environment === metamaskNetwork.network,
-					);
-					if (result) {
-						rpcNode = result.jsonRpcRelay;
-					}
-				} catch (e) {
-					console.error(
-						`RPC Nodes could not be found for environment ${metamaskNetwork.network} in  the initially provided list`,
-					);
-				}
-			}
-			LogService.logTrace('Metamask Network:', chainId);
-		} else {
-			console.error(chainId + ' not an hedera network');
-		}
-
-		await this.commandBus.execute(
-			new SetNetworkCommand(network, mirrorNode, rpcNode),
-		);
-		await this.commandBus.execute(new SetConfigurationCommand(factoryId));
-
-		this.signerOrProvider = new ethers.providers.Web3Provider(
-			// @ts-expect-error No TS compatibility
-			ethereum,
-		).getSigner();
-
-		// await new Promise(f => setTimeout(f, 3000));
-	}
-
-	private async pairWallet(): Promise<void> {
-		const accts = await ethereum.request({
-			method: 'eth_requestAccounts',
-		});
-		if (accts && 'length' in accts) {
-			const evmAddress = (accts as string[])[0];
-
-			const chainId = await ethereum.request({ method: 'eth_chainId' });
-			await this.setMetamaskNetwork(chainId);
-			await this.setMetasmaskAccount(evmAddress);
-			this.eventService.emit(WalletEvents.walletPaired, {
-				data: {
-					account: this.account,
-					pairing: '',
-					topic: '',
-				},
-				network: {
-					name: this.networkService.environment,
-					recognized: this.networkService.environment != unrecognized,
-					factoryId: this.networkService.configuration
-						? this.networkService.configuration.factoryAddress
-						: '',
-				},
-				wallet: SupportedWallets.METAMASK,
-			});
-		} else {
-			LogService.logTrace('Paired Metamask failed with no accounts');
-			this.eventService.emit(WalletEvents.walletDisconnect, {
-				wallet: SupportedWallets.METAMASK,
-			});
-		}
-	}
-
-	private registerMetamaskEvents(): void {
-		try {
-			if (typeof window === 'undefined' || !(window as any)?.ethereum)
-				return;
-			ethereum.on('accountsChanged', async (acct) => {
-				const accounts = acct as string[];
-				if (
-					accounts.length > 0 &&
-					this.account &&
-					accounts[0] !== this.account.evmAddress
-				) {
-					await this.setMetasmaskAccount(accounts[0]);
-					this.eventService.emit(WalletEvents.walletPaired, {
-						data: {
-							account: this.account,
-							pairing: '',
-							topic: '',
-						},
-						network: {
-							name: this.networkService.environment,
-							recognized:
-								this.networkService.environment != unrecognized,
-							factoryId:
-								this.networkService.configuration
-									.factoryAddress,
-						},
-						wallet: SupportedWallets.METAMASK,
-					});
-				} else {
-					LogService.logTrace(
-						'Metamask disconnected from the wallet',
-					);
-					this.eventService.emit(WalletEvents.walletDisconnect, {
-						wallet: SupportedWallets.METAMASK,
-					});
-				}
-			});
-			ethereum.on('chainChanged', async (chainId) => {
-				await this.setMetamaskNetwork(chainId);
-				let evmAddress = this.account.evmAddress;
-				if (!evmAddress) {
-					const accts = await ethereum.request({
-						method: 'eth_requestAccounts',
-					});
-					evmAddress =
-						accts && 'length' in accts
-							? (accts as string[])[0]
-							: '';
-				}
-				await this.setMetasmaskAccount(evmAddress);
-				this.eventService.emit(WalletEvents.walletPaired, {
-					data: {
-						account: this.account,
-					},
-					network: {
-						name: this.networkService.environment,
-						recognized:
-							this.networkService.environment != unrecognized,
-						factoryId: this.networkService.configuration
-							? this.networkService.configuration.factoryAddress
-							: '',
-					},
-					wallet: SupportedWallets.METAMASK,
-				});
-			});
-		} catch (error) {
-			LogService.logError(error);
-			throw new WalletConnectError('Ethereum is not defined');
-		}
-	}
+	protected abstract registerWalletEvents(): void;
 
 	async performOperation(
 		coin: StableCoinCapabilities,
@@ -1536,26 +1260,6 @@ export default class RPCTransactionAdapter extends TransactionAdapter {
 						this.networkService.environment,
 					);
 					return response;
-
-				/* case Decision.HTS:
-					if (!coin.coin.evmProxyAddress?.toString())
-						throw new Error(
-							`StableCoin ${coin.coin.name} does not have a proxy address`,
-						);
-					if (!coin.coin.tokenId)
-						throw new Error(
-							`StableCoin ${coin.coin.name}  does not have an underlying token`,
-						);
-					response = await this.performHTSOperation(
-						coin,
-						operation,
-						params,
-					);
-					this.logTransaction(
-						response.id ?? '',
-						this.networkService.environment,
-					);
-					return response; */
 
 				default:
 					const tokenId = coin.coin.tokenId
@@ -1757,183 +1461,6 @@ export default class RPCTransactionAdapter extends TransactionAdapter {
 				);
 		}
 	}
-
-	/* private async performHTSOperation(
-		coin: StableCoinCapabilities,
-		operation: Operation,
-		params?: Params,
-	): Promise<TransactionResponse> {
-		switch (operation) {
-			case Operation.CASH_IN:
-				const coinId = TokenId.fromString(
-					coin.coin.tokenId?.value ?? '',
-				).toSolidityAddress();
-
-				const resp: TransactionResponse<any, Error> =
-					await this.checkTransactionResponse(
-						await RPCTransactionResponseAdapter.manageResponse(
-							await this.precompiledCall('mintToken', [
-								coinId,
-								params?.amount,
-								[],
-							]),
-							this.networkService.environment,
-						),
-					);
-
-				if (
-					resp.error === undefined &&
-					coin.coin.treasury?.value !== params!.targetId?.toString()
-				) {
-					if (coin.coin.treasury?.value === coin.account.id.value) {
-						return await this.transfer(
-							coin,
-							params!.amount!,
-							this.account,
-							HederaId.from(params?.targetId),
-						);
-					} else {
-						return await this.transferFrom(
-							coin,
-							params!.amount!,
-							coin.coin.treasury!,
-							HederaId.from(params?.targetId),
-						);
-					}
-				} else {
-					return resp;
-				}
-
-			case Operation.BURN:
-				return this.checkTransactionResponse(
-					await RPCTransactionResponseAdapter.manageResponse(
-						await this.precompiledCall('burnToken', [
-							TokenId.fromString(
-								coin.coin.tokenId?.value ?? '',
-							).toSolidityAddress(),
-							params?.amount,
-							[],
-						]),
-						this.networkService.environment,
-					),
-				);
-
-			case Operation.WIPE:
-				return this.checkTransactionResponse(
-					await RPCTransactionResponseAdapter.manageResponse(
-						await this.precompiledCall('wipeTokenAccount', [
-							TokenId.fromString(
-								coin.coin.tokenId?.value ?? '',
-							).toSolidityAddress(),
-							params?.targetId,
-							params?.amount,
-						]),
-						this.networkService.environment,
-					),
-				);
-
-			case Operation.FREEZE:
-				return this.checkTransactionResponse(
-					await RPCTransactionResponseAdapter.manageResponse(
-						await this.precompiledCall('freezeToken', [
-							TokenId.fromString(
-								coin.coin.tokenId?.value ?? '',
-							).toSolidityAddress(),
-							params?.targetId,
-						]),
-						this.networkService.environment,
-					),
-				);
-
-			case Operation.UNFREEZE:
-				return this.checkTransactionResponse(
-					await RPCTransactionResponseAdapter.manageResponse(
-						await this.precompiledCall('unfreezeToken', [
-							TokenId.fromString(
-								coin.coin.tokenId?.value ?? '',
-							).toSolidityAddress(),
-							params?.targetId,
-						]),
-						this.networkService.environment,
-					),
-				);
-
-			case Operation.PAUSE:
-				return this.checkTransactionResponse(
-					await RPCTransactionResponseAdapter.manageResponse(
-						await this.precompiledCall('pauseToken', [
-							TokenId.fromString(
-								coin.coin.tokenId?.value ?? '',
-							).toSolidityAddress(),
-						]),
-						this.networkService.environment,
-					),
-				);
-
-			case Operation.UNPAUSE:
-				return this.checkTransactionResponse(
-					await RPCTransactionResponseAdapter.manageResponse(
-						await this.precompiledCall('unpauseToken', [
-							TokenId.fromString(
-								coin.coin.tokenId?.value ?? '',
-							).toSolidityAddress(),
-						]),
-						this.networkService.environment,
-					),
-				);
-
-			case Operation.DELETE:
-				return this.checkTransactionResponse(
-					await RPCTransactionResponseAdapter.manageResponse(
-						await this.precompiledCall('deleteToken', [
-							TokenId.fromString(
-								coin.coin.tokenId?.value ?? '',
-							).toSolidityAddress(),
-						]),
-						this.networkService.environment,
-					),
-				);
-
-			default:
-				throw new Error(`Operation not implemented through HTS`);
-		}
-	} */
-
-	/* private async checkTransactionResponse(
-		transaction: TransactionResponse,
-	): Promise<TransactionResponse> {
-		const responseCodeLength = 66;
-		const responseCodeSuccess =
-			'0x0000000000000000000000000000000000000000000000000000000000000016'; // response code 22 SUCCESS
-
-		if (!transaction.id) return transaction;
-
-		const txResponse = await this.mirrorNodeAdapter.getTransactionResult(
-			transaction.id,
-		);
-
-		this.logTransaction(transaction.id, this.networkService.environment);
-
-		if (
-			!txResponse.result ||
-			txResponse.result.length < responseCodeLength
-		) {
-			return transaction;
-		}
-
-		const responseCode = txResponse.result.substring(0, responseCodeLength);
-
-		LogService.logTrace('Transaction Response Code : ' + responseCode);
-
-		if (responseCodeSuccess === responseCode) return transaction;
-
-		throw new TransactionResponseError({
-			network: this.networkService.environment,
-			message: 'Transaction failed with error code : ' + responseCode,
-			transactionId: transaction.id,
-			RPC_relay: true,
-		});
-	} */
 }
 
 class Params {

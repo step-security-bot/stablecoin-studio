@@ -40,7 +40,7 @@ import {
 } from '../../domain/context/network/Environment.js';
 import InitializationRequest from './request/InitializationRequest.js';
 import Event from './Event.js';
-import RPCTransactionAdapter from '../out/rpc/RPCTransactionAdapter.js';
+import MetamaskTransactionAdapter from '../out/rpc/metamask/MetamaskTransactionAdapter.js';
 import { HashpackTransactionAdapter } from '../out/hs/hashpack/HashpackTransactionAdapter.js';
 import { LogError } from '../../core/decorator/LogErrorDecorator.js';
 import SetConfigurationRequest from './request/SetConfigurationRequest.js';
@@ -54,6 +54,7 @@ import { HederaId } from '../../domain/context/shared/HederaId';
 import PublicKey from '../../domain/context/account/PublicKey';
 import { FireblocksTransactionAdapter } from '../out/hs/hts/custodial/FireblocksTransactionAdapter.js';
 import { DFNSTransactionAdapter } from '../out/hs/hts/custodial/DFNSTransactionAdapter.js';
+import RPCTransactionAdapter from '../out/rpc/RPCTransactionAdapter.js';
 
 export { InitializationData, SupportedWallets };
 
@@ -157,7 +158,7 @@ class NetworkInPort implements INetworkInPort {
 		const wallets: SupportedWallets[] = [];
 		const instances = Injectable.registerTransactionAdapterInstances();
 		for (const val of instances) {
-			if (val instanceof RPCTransactionAdapter) {
+			if (val instanceof MetamaskTransactionAdapter) {
 				wallets.push(SupportedWallets.METAMASK);
 			} else if (val instanceof HashpackTransactionAdapter) {
 				wallets.push(SupportedWallets.HASHPACK);
