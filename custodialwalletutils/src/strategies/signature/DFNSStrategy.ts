@@ -20,20 +20,18 @@
 
 import { AsymmetricKeySigner } from '@dfns/sdk-keysigner';
 import { DfnsApiClient } from '@dfns/sdk';
-import {
-  SignatureKind,
-  SignatureStatus,
-} from '@dfns/sdk/codegen/datamodel/Wallets';
 import { ISignatureStrategy } from './ISignatureStrategy';
-import { DFNSConfig } from '../config/DFNSConfig.js';
-import { SignatureRequest } from '../../models/signature/SignatureRequest.js';
-import { hexStringToUint8Array } from '../../utils/utilities.js';
+import { DFNSConfig } from '../config/DFNSConfig';
+import { SignatureRequest } from '../../models/signature/SignatureRequest';
+import { hexStringToUint8Array } from '../../utils/utilities';
 import { WebAuthn } from '@dfns/sdk-webauthn';
 
 const sleep = (interval = 0) =>
   new Promise((resolve) => setTimeout(resolve, interval));
 const DEFAULT_MAX_RETRIES = 3;
 const DEFAULT_RETRY_INTERVAL = 1000;
+const STATUS_SIGNED = 'Signed';
+const STATUS_FAILED = 'Failed';
 
 /**
  * Represents a signature strategy for DFNSStrategy.
@@ -99,7 +97,7 @@ export class DFNSStrategy implements ISignatureStrategy {
   private async signMessage(message: string): Promise<string> {
     const response = await this.dfnsApiClient.wallets.generateSignature({
       walletId: this.walletId,
-      body: { kind: SignatureKind.Message, message: `0x${message}` },
+      body: { kind: "Message", message: `0x${message}` },
     });
 
     return this.waitForSignature(response.id);
@@ -118,12 +116,12 @@ export class DFNSStrategy implements ISignatureStrategy {
         signatureId,
       });
 
-      if (response.status === SignatureStatus.Signed && response.signature) {
+      if (response.status === STATUS_SIGNED && response.signature) {
         const signature = response.signature;
         const r = signature.r.substring(2);
         const s = signature.s.substring(2);
         return Buffer.from(r + s, 'hex').toString('hex');
-      } else if (response.status === SignatureStatus.Failed) {
+      } else if (response.status === STATUS_FAILED) {
         break;
       }
       await sleep(DEFAULT_RETRY_INTERVAL);

@@ -24,11 +24,11 @@ import {
   DFNSStrategy,
   hexStringToUint8Array,
 } from '../../src';
-import { SignatureStatus } from '@dfns/sdk/codegen/datamodel/Wallets';
+
 
 const signatureResponse = {
   id: 'signature-id',
-  status: SignatureStatus.Signed,
+  status: "Signed",
   signature: { r: '00r', s: '00s' },
 };
 
