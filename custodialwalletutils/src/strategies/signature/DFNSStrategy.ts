@@ -24,10 +24,11 @@ import {
   SignatureKind,
   SignatureStatus,
 } from '@dfns/sdk/codegen/datamodel/Wallets';
-import { ISignatureStrategy } from '../signature/ISignatureStrategy.js';
+import { ISignatureStrategy } from './ISignatureStrategy';
 import { DFNSConfig } from '../config/DFNSConfig.js';
 import { SignatureRequest } from '../../models/signature/SignatureRequest.js';
 import { hexStringToUint8Array } from '../../utils/utilities.js';
+import { WebAuthn } from '@dfns/sdk-webauthn';
 
 const sleep = (interval = 0) =>
   new Promise((resolve) => setTimeout(resolve, interval));
@@ -56,11 +57,18 @@ export class DFNSStrategy implements ISignatureStrategy {
    * @returns The created DfnsApiClient instance.
    */
   private createDfnsApiClient(strategyConfig: DFNSConfig): DfnsApiClient {
-    const signer = new AsymmetricKeySigner({
-      privateKey: strategyConfig.serviceAccountPrivateKey,
-      credId: strategyConfig.serviceAccountCredentialId,
-      appOrigin: strategyConfig.appOrigin,
-    });
+    let signer;
+    if(global.window) {
+       signer = new WebAuthn({
+        rpId: strategyConfig.appOrigin
+      })
+    } else {
+      signer = new AsymmetricKeySigner({
+        privateKey: strategyConfig.serviceAccountPrivateKey,
+        credId: strategyConfig.serviceAccountCredentialId,
+        appOrigin: strategyConfig.appOrigin,
+      });
+    }
 
     return new DfnsApiClient({
       appId: strategyConfig.appId,
