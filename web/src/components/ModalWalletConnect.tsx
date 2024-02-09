@@ -274,7 +274,7 @@ const ModalWalletConnect = () => {
 
 	const handleFireblocksFormConfirm = (formData: FireblocksFormValues) => {
 		handleWalletConnect(
-			SupportedWallets.FIREBLOCKS,
+			SupportedWallets.FIREBLOCKS_BROWSER,
 			'testnet',
 			FireblocksSettings.fromForm(formData),
 		);
