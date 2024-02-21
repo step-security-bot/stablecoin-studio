@@ -38,6 +38,8 @@ import {
 	DFNS_SETTINGS,
 	FACTORY_ADDRESS,
 	HEDERA_TOKEN_MANAGER_ADDRESS,
+	MIRROR_NODE,
+	RPC_NODE,
 } from '../../config';
 import Injectable from '../../../src/core/Injectable';
 import * as fs from 'fs';
@@ -52,20 +54,19 @@ const apiSecretKey = fs.readFileSync(
 
 describe('🧪 DFNSTransactionAdapter test', () => {
 	let stableCoinHTS: StableCoinViewModel;
-
 	const delay = async (seconds = 5): Promise<void> => {
 		seconds = seconds * 1000;
 		await new Promise((r) => setTimeout(r, seconds));
 	};
 
 	const mirrorNode: MirrorNode = {
-		name: 'testmirrorNode',
-		baseUrl: 'https://testnet.mirrornode.hedera.com/api/v1/',
+		name: MIRROR_NODE.name,
+		baseUrl: MIRROR_NODE.baseUrl,
 	};
 
 	const rpcNode: JsonRpcRelay = {
-		name: 'testrpcNode',
-		baseUrl: 'http://127.0.0.1:7546/api',
+		name: RPC_NODE.name,
+		baseUrl: RPC_NODE.baseUrl,
 	};
 
 	const dfnsSettings: DFNSConfigRequest = {
@@ -104,7 +105,6 @@ describe('🧪 DFNSTransactionAdapter test', () => {
 			}),
 		);
 		Injectable.resolveTransactionHandler();
-		await delay();
 	}, 60_000);
 
 	it('DFNS should create a Stable Coin', async () => {
@@ -133,14 +133,16 @@ describe('🧪 DFNSTransactionAdapter test', () => {
 
 		stableCoinHTS = (await StableCoin.create(requestCreateStableCoin)).coin;
 		expect(stableCoinHTS?.tokenId).not.toBeNull();
+		await delay();
 	}, 60_000);
 
 	it('DFNS should associate a token', async () => {
-		await StableCoin.associate(
+		const result = await StableCoin.associate(
 			new AssociateTokenRequest({
 				targetId: DFNS_SETTINGS.hederaAccountId,
 				tokenId: stableCoinHTS?.tokenId?.toString() ?? '0.0.0',
 			}),
 		);
+		expect(result).toBe(true);
 	}, 60_000);
 });

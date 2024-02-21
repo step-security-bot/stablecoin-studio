@@ -53,4 +53,5 @@ describe(`<${ModalWalletConnect.name} />`, () => {
 			undefined,
 		);
 	});
+
 });

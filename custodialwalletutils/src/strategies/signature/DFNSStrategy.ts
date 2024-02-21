@@ -20,11 +20,14 @@
 
 import { AsymmetricKeySigner } from '@dfns/sdk-keysigner';
 import { DfnsApiClient } from '@dfns/sdk';
-import { ISignatureStrategy } from './ISignatureStrategy';
-import { DFNSConfig } from '../config/DFNSConfig';
-import { SignatureRequest } from '../../models/signature/SignatureRequest';
-import { hexStringToUint8Array } from '../../utils/utilities';
-import { WebAuthn } from '@dfns/sdk-webauthn';
+import {
+  SignatureKind,
+  SignatureStatus,
+} from '@dfns/sdk/codegen/datamodel/Wallets';
+import { ISignatureStrategy } from '../signature/ISignatureStrategy.js';
+import { DFNSConfig } from '../config/DFNSConfig.js';
+import { SignatureRequest } from '../../models/signature/SignatureRequest.js';
+import { hexStringToUint8Array } from '../../utils/utilities.js';
 
 const sleep = (interval = 0) =>
   new Promise((resolve) => setTimeout(resolve, interval));

@@ -24,7 +24,7 @@ import {
   DFNSStrategy,
   hexStringToUint8Array,
 } from '../../src';
-
+import { SignatureStatus } from '@dfns/sdk/codegen/datamodel/Wallets';
 
 const signatureResponse = {
   id: 'signature-id',

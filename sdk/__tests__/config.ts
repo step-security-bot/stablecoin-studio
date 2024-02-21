@@ -27,6 +27,7 @@ config();
 
 export const ENVIRONMENT = 'testnet';
 
+
 export const CLIENT_PRIVATE_KEY_ECDSA = new PrivateKey({
 	key: process.env.CLIENT_PRIVATE_KEY_ECDSA ?? '',
 	type: 'ECDSA',
@@ -96,7 +97,7 @@ export const HEDERA_TOKEN_MANAGER_ADDRESS =
 	process.env.HEDERA_TOKEN_MANAGER_ADDRESS ?? '';
 export const FACTORY_ADDRESS = process.env.FACTORY_ADDRESS ?? '';
 
-//*  Infrastructure
+//* Infrastructure
 export const MIRROR_NODE = {
 	name: 'testMirrorNode',
 	baseUrl:
