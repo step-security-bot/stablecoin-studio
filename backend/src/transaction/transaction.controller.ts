@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CreateTransactionResponseDto } from './dto/create-transaction-response.dto';
 import { CreateTransactionRequestDto } from './dto/create-transaction-request.dto';
@@ -16,6 +17,7 @@ import { Transaction } from './transaction.entity';
 import { SignTransactionRequestDto } from './dto/sign-transaction-request.dto';
 import { getTransactionsResponseDto } from './dto/get-transactions-response.dto';
 import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @ApiTags('Transactions')
 @Controller('/api/transactions')
@@ -24,8 +26,11 @@ export class TransactionController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED) // 201 Created
-  @ApiCreatedResponse({description: 'The transaction has been successfully created.', type: CreateTransactionResponseDto})
-  @ApiResponse({ status: 500, description: 'Internal Server Error'})
+  @ApiCreatedResponse({
+    description: 'The transaction has been successfully created.',
+    type: CreateTransactionResponseDto,
+  })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async addTransaction(
     @Body() createTransactionDto: CreateTransactionRequestDto,
   ): Promise<CreateTransactionResponseDto> {
@@ -51,11 +56,10 @@ export class TransactionController {
     await this.transactionService.delete(transactionId);
   }
 
-  @Get(':publicKey')
-  @HttpCode(HttpStatus.OK) // 200 OK
-  async getTransactions(
-    @Param('publicKey') publicKey: string,
-  ): Promise<getTransactionsResponseDto[]> {
-    return await this.transactionService.getAll(publicKey);
-  }
+  // @Get()
+  // @HttpCode(HttpStatus.OK) // 200 OK
+  // @Paginate() query: PaginateQuery,
+  // async getTransactions(): Promise<Paginated<Transaction>> {
+  //
+  // }
 }
