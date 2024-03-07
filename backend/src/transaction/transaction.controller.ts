@@ -56,10 +56,11 @@ export class TransactionController {
     await this.transactionService.delete(transactionId);
   }
 
-  // @Get()
-  // @HttpCode(HttpStatus.OK) // 200 OK
-  // @Paginate() query: PaginateQuery,
-  // async getTransactions(): Promise<Paginated<Transaction>> {
-  //
-  // }
+  @Get()
+  @HttpCode(HttpStatus.OK) // 200 OK
+  async getTransactions(
+    @Paginate() query: PaginateQuery,
+  ): Promise<Paginated<Transaction>> {
+    return this.transactionService.findAll(query);
+  }
 }

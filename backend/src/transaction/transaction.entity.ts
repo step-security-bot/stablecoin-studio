@@ -1,7 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Column, Entity, Generated, PrimaryColumn, Repository } from 'typeorm';
-import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { Column, Entity, Generated, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Transaction {
@@ -18,13 +15,13 @@ export class Transaction {
   @Column()
   hedera_account_id: string;
 
-  @Column('simple-array')
+  @Column('text', { array: true })
   signed_messages: string[];
 
-  @Column('simple-array')
+  @Column('text', { array: true })
   key_list: string[];
 
-  @Column('simple-array')
+  @Column('text', { array: true })
   signed_keys: string[];
 
   @Column({
@@ -36,36 +33,3 @@ export class Transaction {
   @Column('int')
   threshold: number;
 }
-//
-// @Injectable()
-// export class TransactionService {
-//   constructor(
-//     @InjectRepository(Transaction)
-//     private readonly transactionRepository: Repository<Transaction>,
-//   ) {}
-//
-//   public findAll(query: PaginateQuery): Promise<Paginated<Transaction>> {
-//     return paginate(query, this.transactionRepository, {
-//       sortableColumns: ['id', 'status', 'threshold'],
-//       nullSort: 'last',
-//       defaultSortBy: [['id', 'DESC']],
-//       searchableColumns: [
-//         'transaction_message',
-//         'description',
-//         'hedera_account_id',
-//       ],
-//       select: [
-//         'id',
-//         'transaction_message',
-//         'description',
-//         'hedera_account_id',
-//         'status',
-//         'threshold',
-//       ],
-//       filterableColumns: {
-//         status: true,
-//         threshold: true,
-//       },
-//     });
-//   }
-//}

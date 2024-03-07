@@ -3,9 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateTransactionRequestDto } from './dto/create-transaction-request.dto';
 import { Transaction } from './transaction.entity';
 import { SignTransactionRequestDto } from './dto/sign-transaction-request.dto';
+import {
+  FilterOperator,
+  paginate,
+  Paginated,
+  PaginateQuery,
+} from 'nestjs-paginate';
 import { Repository } from 'typeorm';
-import { getTransactionsResponseDto } from './dto/get-transactions-response.dto';
-import { paginate, PaginateQuery, Paginated } from 'nestjs-paginate';
 
 @Injectable()
 export class TransactionService {
@@ -112,54 +116,18 @@ export class TransactionService {
   //   });
   // }
   //
-  // async getAllTransactions(
-  //   query: PaginateQuery,
-  // ): Promise<Paginated<Transaction>> {
-  //   return paginate(query, this.transactionRepository, {
-  //     sortableColumns: ['id', 'status'], // Ejemplo de columnas por las que se puede ordenar
-  //     defaultSortBy: [['status', 'DESC']], // Orden predeterminado
-  //     searchableColumns: ['transaction_message', 'description'], // Ejemplo de columnas que se pueden buscar
-  //     filterableColumns: {
-  //       status: true,
-  //     },
-  //     select: [
-  //       'id',
-  //       'transaction_message',
-  //       'description',
-  //       'status',
-  //       'threshold',
-  //       'key_list',
-  //       'signed_keys',
-  //     ],
-  //   });
-  // }
 
-  async findAll(
-    query: PaginateQuery,
-    publicKey?: string,
-    status?: string,
-  ): Promise<Paginated<Transaction>> {
-    const filters: any = {}; // Objeto para construir dinámicamente los filtros
-
-    // Agregar filtro por publicKey si está presente
-    if (publicKey) {
-      // Aquí necesitas definir la lógica para determinar si filtrar por 'signed_keys' o 'key_list'
-      // Por ejemplo, podrías tener un parámetro adicional para especificar el tipo de filtro
-      filters.signed_keys = publicKey; // O filters.key_list = publicKey, dependiendo de tu lógica
-    }
-
-    // Agregar filtro por estado si está presente
-    if (status) {
-      filters.status = status;
-    }
-
+  async findAll(query: PaginateQuery): Promise<Paginated<Transaction>> {
     return paginate(query, this.transactionRepository, {
-      where: filters,
-      sortableColumns: ['id', 'status'],
-      defaultSortBy: [['id', 'DESC']],
-      searchableColumns: ['transaction_message', 'description'],
+      sortableColumns: ['status', 'hedera_account_id'],
+      nullSort: 'last',
+      defaultSortBy: [['hedera_account_id', 'DESC']],
+      searchableColumns: ['hedera_account_id', 'key_list', 'signed_keys'],
+      select: ['id', 'key_list', 'signed_keys', 'status'],
       filterableColumns: {
         status: true,
+        key_list: true,
+        signed_keys: true,
       },
     });
   }
