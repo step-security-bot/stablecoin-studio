@@ -217,7 +217,7 @@ export class BladeTransactionAdapter extends HederaTransactionAdapter {
 				signedT = await t.freezeWithSigner(this.signer);
 			}
 			const trx = await this.signer.signTransaction(signedT);
-			let hashPackTransactionResponse;
+			let bladeTransactionResponse;
 			if (
 				t instanceof TokenCreateTransaction ||
 				t instanceof TokenWipeTransaction ||
@@ -234,16 +234,16 @@ export class BladeTransactionAdapter extends HederaTransactionAdapter {
 				t instanceof TokenFeeScheduleUpdateTransaction ||
 				t instanceof TokenAssociateTransaction
 			) {
-				hashPackTransactionResponse = await t.executeWithSigner(
+				bladeTransactionResponse = await t.executeWithSigner(
 					this.signer,
 				);
 			} else {
-				hashPackTransactionResponse = await this.signer.call(trx);
+				bladeTransactionResponse = await this.signer.call(trx);
 			}
 			return HashpackTransactionResponseAdapter.manageResponse(
 				this.networkService.environment,
 				this.signer,
-				hashPackTransactionResponse,
+				bladeTransactionResponse,
 				transactionType,
 				nameFunction,
 				abi,

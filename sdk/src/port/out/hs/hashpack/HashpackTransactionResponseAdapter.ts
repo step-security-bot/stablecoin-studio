@@ -25,7 +25,6 @@ import {
 	TransactionRecord,
 	Signer,
 } from '@hashgraph/sdk';
-import { MessageTypes } from '@hashgraph/hashconnect';
 import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse.js';
 import { TransactionResponseError } from '../../error/TransactionResponseError.js';
 import { TransactionType } from '../../TransactionResponseEnums.js';
@@ -36,9 +35,7 @@ export class HashpackTransactionResponseAdapter extends TransactionResponseAdapt
 	public static async manageResponse(
 		network: string,
 		signer: Signer,
-		transactionResponse:
-			| MessageTypes.TransactionResponse
-			| HTransactionResponse,
+		transactionResponse: HTransactionResponse,
 		responseType: TransactionType,
 		nameFunction?: string,
 		abi?: object[],
@@ -53,16 +50,12 @@ export class HashpackTransactionResponseAdapter extends TransactionResponseAdapt
 		if (responseType === TransactionType.RECEIPT) {
 			await this.getReceipt(network, signer, transactionResponse);
 			let transId;
-			if (transactionResponse instanceof HTransactionResponse) {
-				if (transactionResponse?.transactionId) {
-					transId = transactionResponse?.transactionId;
-				} else {
-					transId = JSON.parse(
-						JSON.stringify(transactionResponse),
-					).response.transactionId.toString();
-				}
+			if (transactionResponse?.transactionId) {
+				transId = transactionResponse?.transactionId;
 			} else {
-				transId = transactionResponse.id;
+				transId = JSON.parse(
+					JSON.stringify(transactionResponse),
+				).response.transactionId.toString();
 			}
 			return this.createTransactionResponse(
 				transId,
@@ -102,10 +95,7 @@ export class HashpackTransactionResponseAdapter extends TransactionResponseAdapt
 					network,
 				);
 			}
-			const transactionId =
-				transactionResponse instanceof HTransactionResponse
-					? transactionResponse.transactionId.toString()
-					: (transactionResponse as any).response.transactionId;
+			const transactionId = transactionResponse.transactionId.toString();
 			LogService.logTrace(
 				`Creating RECORD response from TRX (${transactionId}) from record: `,
 				record?.toString(),
@@ -124,128 +114,29 @@ export class HashpackTransactionResponseAdapter extends TransactionResponseAdapt
 			network: network,
 		});
 	}
-	private static async getHashconnectTransactionReceipt(
-		network: string,
-		transactionResponse: MessageTypes.TransactionResponse,
-	): Promise<TransactionReceipt> {
-		try {
-			let receipt;
-			if (
-				(transactionResponse as MessageTypes.TransactionResponse)
-					.receipt
-			) {
-				receipt = TransactionReceipt.fromBytes(
-					(transactionResponse as MessageTypes.TransactionResponse)
-						.receipt as Uint8Array,
-				);
-			} else {
-				const res: any = transactionResponse.error;
-				if (res) {
-					throw new TransactionResponseError({
-						message: res.message,
-						name: res.name,
-						status: res.status,
-						transactionId: res.transactionId,
-						network: network,
-					});
-				} else {
-					throw new TransactionResponseError({
-						transactionId: transactionResponse.id,
-						message: transactionResponse.id ?? '',
-						network: network,
-					});
-				}
-			}
-			if (receipt) {
-				return receipt;
-			} else {
-				const res: any = transactionResponse.error;
-				throw new TransactionResponseError({
-					message: res.message,
-					name: res.name,
-					status: res.status,
-					transactionId: res.transactionId,
-					network: network,
-				});
-			}
-		} catch (error) {
-			const res: any = transactionResponse.error;
-			LogService.logError(error);
-			throw new TransactionResponseError({
-				message: res.message,
-				name: res.name,
-				status: res.status,
-				transactionId: res.transactionId,
-				network: network,
-			});
-		}
-	}
 
 	private static async getReceipt(
 		network: string,
 		signer: Signer,
-		transactionResponse:
-			| MessageTypes.TransactionResponse
-			| HTransactionResponse,
+		transactionResponse: HTransactionResponse,
 	): Promise<TransactionReceipt> {
-		let transactionReceipt: TransactionReceipt;
-		if (transactionResponse instanceof HTransactionResponse) {
-			transactionReceipt = await transactionResponse.getReceiptWithSigner(
-				signer,
-			);
-		} else {
-			transactionReceipt = await this.getHashconnectTransactionReceipt(
-				network,
-				transactionResponse,
-			);
-		}
+		const transactionReceipt =
+			await transactionResponse.getReceiptWithSigner(signer);
 		return transactionReceipt;
 	}
 
 	private static async getRecord(
 		network: string,
 		signer: Signer,
-		transactionResponse:
-			| MessageTypes.TransactionResponse
-			| HTransactionResponse,
+		transactionResponse: HTransactionResponse,
 	): Promise<Uint32Array | undefined | Uint8Array> {
-		let record;
-		if (transactionResponse instanceof HTransactionResponse) {
-			record = await transactionResponse.getRecordWithSigner(signer);
-		} else {
-			record = transactionResponse.record;
-		}
+		const record = await transactionResponse.getRecordWithSigner(signer);
 		if (!record) {
-			let transactionError;
-			if (transactionResponse instanceof HTransactionResponse) {
-				transactionError = {
-					transactionId: transactionResponse.transactionId.toString(),
-					message: transactionResponse.transactionHash.toString(),
-					network: network,
-				};
-			} else {
-				if (transactionResponse.error) {
-					const res: any = transactionResponse.error;
-					transactionError = {
-						message: res.message,
-						name: res.name,
-						status: res.status,
-						transactionId: res.transactionId,
-						network: network,
-					};
-				} else if (transactionResponse.id) {
-					transactionError = {
-						message: transactionResponse.id,
-						transactionId: transactionResponse.id,
-						network: network,
-					};
-				} else {
-					transactionError = {
-						message: transactionResponse.topic,
-						network: network,
-					};
-				}
-			}
+			const transactionError = {
+				transactionId: transactionResponse.transactionId.toString(),
+				message: transactionResponse.transactionHash.toString(),
+				network: network,
+			};
 
 			throw new TransactionResponseError(transactionError);
 		} else {

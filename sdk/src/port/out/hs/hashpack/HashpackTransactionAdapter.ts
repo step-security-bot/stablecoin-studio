@@ -37,14 +37,10 @@ import {
 	TokenGrantKycTransaction,
 	TokenFeeScheduleUpdateTransaction,
 	TokenAssociateTransaction,
+	AccountId,
 } from '@hashgraph/sdk';
 import { singleton } from 'tsyringe';
 import { HederaTransactionAdapter } from '../HederaTransactionAdapter.js';
-import { HashConnect } from '@hashgraph/hashconnect';
-import { HashConnectProvider } from '@hashgraph/hashconnect/provider/provider';
-import { HashConnectSigner } from '@hashgraph/hashconnect/provider/signer';
-import { HashConnectTypes } from '@hashgraph/hashconnect';
-import { HashConnectConnectionState } from '@hashgraph/hashconnect/types';
 import Account from '../../../../domain/context/account/Account.js';
 import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse.js';
 import Injectable from '../../../../core/Injectable.js';
@@ -71,19 +67,20 @@ import { QueryBus } from '../../../../core/query/QueryBus.js';
 import { AccountIdNotValid } from '../../../../domain/context/account/error/AccountIdNotValid.js';
 import { GetAccountInfoQuery } from '../../../../app/usecase/query/account/info/GetAccountInfoQuery.js';
 import Hex from '../../../../core/Hex.js';
+import {
+	HashConnect,
+	HashConnectConnectionState,
+	SessionData,
+	DappMetadata,
+} from 'hashconnect';
+import { LedgerId } from '@hashgraph/sdk';
 
 @singleton()
 export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 	private hc: HashConnect;
 	public account: Account;
-	public provider: HashConnectProvider;
-	public signer: Signer;
-	public hashConnectSigner: HashConnectSigner;
-	private initData: HashConnectTypes.InitilizationData;
-	private hashConnectConectionState: HashConnectConnectionState;
-	private availableExtension = false;
-	private pairingData: HashConnectTypes.SavedPairingData | null = null;
-	state: HashConnectConnectionState;
+
+	public signer: Signer | null;
 
 	constructor(
 		@lazyInject(EventService)
@@ -93,39 +90,87 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 		@lazyInject(MirrorNodeAdapter)
 		public readonly mirrorNodeAdapter: MirrorNodeAdapter,
 		@lazyInject(QueryBus)
-		public readonly queryBus: QueryBus,
+		private readonly queryBus: QueryBus,
 	) {
 		super(mirrorNodeAdapter, networkService);
-		this.hc = new HashConnect();
-		this.setUpHashConnectEvents();
 	}
 
 	async init(network?: string): Promise<string> {
-		const currentNetwork = network ?? this.networkService.environment;
-		this.initData = await this.hc.init(
-			SDK.appMetadata,
-			currentNetwork as 'testnet' | 'previewnet' | 'mainnet',
-		);
-		const eventData: WalletInitEvent = {
-			wallet: SupportedWallets.HASHPACK,
+		const currentNetwork = await this.connectHashConnect(false, network);
+		const eventData = {
 			initData: {
 				account: this.account,
-				pairing: this.initData.pairingString,
-				topic: this.initData.topic,
+				pairing: '',
+				topic: '',
 			},
+			wallet: SupportedWallets.HASHPACK,
 		};
 		this.eventService.emit(WalletEvents.walletInit, eventData);
-		LogService.logTrace(
-			'Checking for previously saved pairings: ',
-			this.initData.savedPairings,
-		);
-		if (this.initData.savedPairings.length > 0) {
-			this.account = await this.getAccountInfo(
-				this.initData.savedPairings[0].accountIds[0],
+
+		return currentNetwork;
+	}
+
+	private async setSigner(): Promise<void> {
+		this.signer = this.hc.getSigner(this.account.id.toHederaAddress());
+	}
+
+	async register(): Promise<InitializationData> {
+		Injectable.registerTransactionHandler(this);
+		LogService.logTrace('Hashpack Registered as handler');
+		this.connectHashConnect(true);
+
+		return Promise.resolve({
+			account: this.account,
+		});
+	}
+
+	async connectHashConnect(pair = true, network?: string): Promise<string> {
+		const currentNetwork = network ?? this.networkService.environment;
+		try {
+			const hashpackNetwork =
+				currentNetwork == 'testnet'
+					? LedgerId.TESTNET
+					: LedgerId.MAINNET;
+
+			this.hc = new HashConnect(
+				hashpackNetwork,
+				'8fc26370383a50de1c3bd638d334292e',
+				{
+					// dApp metadata options are optional, but are highly recommended to use
+					name: 'Stablecoin Studio',
+					description:
+						'Stablecoin Studio is an open-source SDK that makes it easy for web3 stablecoin platforms, institutional issuers, enterprises, and payment providers to build stablecoin applications on the Hedera network.',
+					url: 'https://hedera.com/stablecoin-studio',
+					icons: [],
+				},
 			);
-			eventData.initData.account = this.account;
+		} catch (error: any) {
+			LogService.logTrace('Error initializing Hashpack', error);
+			return currentNetwork;
+		}
+
+		LogService.logTrace('Client Initialized');
+		this.eventService.emit(WalletEvents.walletFound, {
+			wallet: SupportedWallets.HASHPACK,
+			name: SupportedWallets.HASHPACK,
+		});
+
+		if (pair) {
+			LogService.logTrace('Checking for previously saved pairings: ');
+
+			this.setUpHashConnectEvents();
+
+			await this.hc.init();
+
+			await this.hc.openPairingModal();
+
+			/*await this.setSigner();
+
+			const iniData: InitializationData = {
+				account: this.account,
+			};
 			this.eventService.emit(WalletEvents.walletPaired, {
-				data: eventData.initData,
+				data: iniData,
 				network: {
 					name: currentNetwork,
 					recognized: true,
@@ -135,54 +180,22 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 				},
 				wallet: SupportedWallets.HASHPACK,
 			});
-			this.setSigner(currentNetwork);
-			LogService.logTrace(
-				'Previous paring found: ',
-				this.account,
-				eventData,
-			);
+			LogService.logTrace('Previous paring found: ', this.account);*/
 		}
-		LogService.logTrace('HashPack Initialized ', eventData);
+
 		return currentNetwork;
 	}
 
-	private async setSigner(network: string): Promise<void> {
-		const HCSigner = await this.hc.getSigner(
-			this.hc.getProvider(
-				network as 'testnet' | 'previewnet' | 'mainnet',
-				this.initData.topic,
-				this.account.id.toString(),
-			),
-		);
-		this.hashConnectSigner = this.castToSigner(HCSigner);
-		this.signer = this.hashConnectSigner;
-		await this.getAccountKey();
-	}
+	setUpHashConnectEvents() {
+		this.hc.pairingEvent.on(async (newPairing) => {
+			this.account = await this.getAccountInfo(newPairing.accountIds[0]);
+			await this.setSigner();
 
-	async register(): Promise<InitializationData> {
-		Injectable.registerTransactionHandler(this);
-		LogService.logTrace('HashPack Registered as handler');
-		const savedPairing = this.filterAccountIdFromPairingData(
-			this.initData.savedPairings,
-		);
-		if (!this.account || !savedPairing) {
-			LogService.logTrace('Asking for new pairing', {
+			const iniData: InitializationData = {
 				account: this.account,
-				savedPairing,
-			});
-			this.hc.connectToLocalWallet();
-		} else if (
-			this.account &&
-			savedPairing &&
-			this.account.id.toString() === savedPairing
-		) {
+			};
 			this.eventService.emit(WalletEvents.walletPaired, {
-				wallet: SupportedWallets.HASHPACK,
-				data: {
-					account: this.account,
-					pairing: this.initData.pairingString,
-					topic: this.initData.topic,
-				},
+				data: iniData,
 				network: {
 					name: this.networkService.environment,
 					recognized: true,
@@ -190,29 +203,20 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 						? this.networkService.configuration.factoryAddress
 						: '',
 				},
+				wallet: SupportedWallets.HASHPACK,
 			});
-		}
-		return Promise.resolve({
-			name: SupportedWallets.HASHPACK,
-			account: this.account,
-			pairing: this.initData.pairingString,
-			savedPairings: this.initData.savedPairings,
-			topic: this.initData.topic,
+			LogService.logTrace('Previous paring found: ', this.account);
+		});
+
+		this.hc.disconnectionEvent.on((data) => {
+			this.stop();
 		});
 	}
 
-	private filterAccountIdFromPairingData(
-		pairings: HashConnectTypes.SavedPairingData[],
-	): string | undefined {
-		const filtered = pairings.filter((x) => x.accountIds.length > 0);
-		if (filtered.length === 0) return undefined;
-		return filtered[0].accountIds[0];
-	}
-
 	async stop(): Promise<boolean> {
-		await this.hc.disconnect(this.initData.topic);
-		await this.hc.clearConnectionsAndData();
-		LogService.logTrace('HashPack stopped');
+		if (this.hc) await this.hc.disconnect();
+
+		LogService.logTrace('Hashpack stopped');
 		this.eventService.emit(WalletEvents.walletDisconnect, {
 			wallet: SupportedWallets.HASHPACK,
 		});
@@ -228,25 +232,16 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 		if (!this.signer) throw new SigningError('Signer is empty');
 		try {
 			LogService.logTrace(
-				'HashPack is singing and sending transaction:',
+				'Hashpack is singing and sending transaction:',
 				nameFunction,
 				t,
 			);
-			await this.getAccountKey(); // Ensure we have the public key)
+
 			let signedT = t;
 			if (!t.isFrozen()) {
 				signedT = await t.freezeWithSigner(this.signer);
 			}
 			const trx = await this.signer.signTransaction(signedT);
-			const hashPackTrx = {
-				topic: this.initData.topic,
-				byteArray: trx.toBytes(),
-				metadata: {
-					accountToSign: this.account.id.toString(),
-					returnTransaction: false,
-					getRecord: true,
-				},
-			};
 			let hashPackTransactionResponse;
 			if (
 				t instanceof TokenCreateTransaction ||
@@ -267,25 +262,8 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 				hashPackTransactionResponse = await t.executeWithSigner(
 					this.signer,
 				);
-				this.logTransaction(
-					JSON.parse(
-						JSON.stringify(hashPackTransactionResponse),
-					).response.transactionId.toString(),
-					this.networkService.environment,
-				);
 			} else {
-				hashPackTransactionResponse = await this.hc.sendTransaction(
-					this.initData.topic,
-					hashPackTrx,
-				);
-				this.logTransaction(
-					hashPackTransactionResponse.response
-						? (hashPackTransactionResponse.response as any)
-								.transactionId ?? ''
-						: (hashPackTransactionResponse.error as any)
-								.transactionId ?? '',
-					this.networkService.environment,
-				);
+				hashPackTransactionResponse = await this.signer.call(trx);
 			}
 			return HashpackTransactionResponseAdapter.manageResponse(
 				this.networkService.environment,
@@ -301,35 +279,9 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 		}
 	}
 
-	castToSigner(HCSigner: HashConnectSigner): HashConnectSigner {
-		const publicKey = this.account.publicKey;
-
-		if (!publicKey)
-			throw new Error('no public Key for the Hashgraph account');
-
-		const hPublicKey = publicKey.toHederaKey();
-
-		(HCSigner as any).getAccountKey = function (): HPublicKey {
-			return hPublicKey;
-		};
-
-		return HCSigner;
-	}
-
-	async getAccountKey(): Promise<HPublicKey> {
-		if (this.hashConnectSigner?.getAccountKey) {
-			return this.hashConnectSigner.getAccountKey();
-		}
-		const HCSigner = await this.hc.getSigner(this.provider);
-
-		this.hashConnectSigner = this.castToSigner(HCSigner);
-
-		this.signer = this.hashConnectSigner as unknown as Signer;
-		if (this.hashConnectSigner.getAccountKey) {
-			return this.hashConnectSigner.getAccountKey();
-		} else {
-			throw new SigningError('Public key is empty');
-		}
+	public async restart(network: string): Promise<void> {
+		await this.stop();
+		await this.init(network);
 	}
 
 	getAccount(): Account {
@@ -337,94 +289,6 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 		throw new RuntimeError(
 			'There are no accounts currently paired with HashPack!',
 		);
-	}
-
-	public async restart(network: string): Promise<void> {
-		await this.stop();
-		this.hc = new HashConnect();
-		this.setUpHashConnectEvents();
-		await this.init(network);
-	}
-
-	public setUpHashConnectEvents(): void {
-		//This is fired when a extension is found
-		this.hc.foundExtensionEvent.on((data) => {
-			if (data) {
-				LogService.logTrace('Found HashPack Extension Event: ', data);
-				this.availableExtension = true;
-				this.eventService.emit(WalletEvents.walletFound, {
-					wallet: SupportedWallets.HASHPACK,
-					name: SupportedWallets.HASHPACK,
-				});
-			}
-		});
-
-		//This is fired when a wallet approves a pairing
-		this.hc.pairingEvent.on(async (data) => {
-			try {
-				if (data.pairingData) {
-					this.pairingData = data.pairingData;
-					LogService.logInfo('Paired HashPack Wallet Event: ', data);
-					const id = data.pairingData.accountIds[0];
-					this.account = await this.getAccountInfo(id);
-					this.setSigner(this.networkService.environment);
-					this.eventService.emit(WalletEvents.walletPaired, {
-						wallet: SupportedWallets.HASHPACK,
-						data: {
-							account: this.account,
-							pairing: this.initData.pairingString,
-							topic: this.pairingData.topic,
-						},
-						network: {
-							name: this.pairingData.network,
-							recognized: true,
-							factoryId: this.networkService.configuration
-								? this.networkService.configuration
-										.factoryAddress
-								: '',
-						},
-					});
-				} else {
-					throw new PairingError(data);
-				}
-			} catch (error) {
-				LogService.logError(error);
-				throw new PairingError(error);
-			}
-		});
-
-		//This is fired when HashConnect loses connection, pairs successfully, or is starting connection
-		this.hc.connectionStatusChangeEvent.on((state) => {
-			this.hashConnectConectionState = state;
-			LogService.logTrace('HashPack Connection Status Event: ', state);
-			if (state === HashConnectConnectionState.Disconnected) {
-				this.eventService.emit(WalletEvents.walletDisconnect, {
-					wallet: SupportedWallets.HASHPACK,
-				});
-			}
-			this.eventService.emit(WalletEvents.walletConnectionStatusChanged, {
-				wallet: SupportedWallets.HASHPACK,
-				status: this
-					.hashConnectConectionState as unknown as ConnectionState,
-			});
-
-			this.state = state;
-		});
-
-		this.hc.acknowledgeMessageEvent.on((msg) => {
-			this.eventService.emit(WalletEvents.walletAcknowledgeMessage, {
-				wallet: SupportedWallets.HASHPACK,
-				result: !!msg,
-			});
-		});
-	}
-
-	getAvailabilityExtension(): boolean {
-		return this.availableExtension;
-	}
-
-	gethashConnectConectionState(): HashConnectConnectionState {
-		return this.hashConnectConectionState;
 	}
 
 	async getAccountInfo(id: string): Promise<Account> {
@@ -458,48 +322,29 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 				);
 			}
 
-			const hashPackTrx = {
-				topic: this.initData.topic,
-				byteArray: message.toBytes(),
-				metadata: {
-					accountToSign: this.account.id.toString(),
-					returnTransaction: true,
-					getRecord: false,
-				},
-			};
-
 			const PublicKey_Der_Encoded =
 				this.account.publicKey?.toHederaKey().toStringDer() ?? '';
 
-			const t = await this.hc.sendTransaction(
-				this.initData.topic,
-				hashPackTrx,
-			);
+			const signedTrans = await this.signer.signTransaction(message);
 
-			if (t.signedTransaction instanceof Uint8Array) {
-				const signedTrans = Transaction.fromBytes(t.signedTransaction);
-				const signatures_list = signedTrans.getSignatures();
-				const nodes_signature = signatures_list.get(
-					this.networkService.consensusNodes[0].nodeId,
-				);
-				if (nodes_signature) {
-					const signature = nodes_signature.get(
-						PublicKey_Der_Encoded,
-					);
-					if (signature) {
-						return Hex.fromUint8Array(signature);
-					}
-					throw new Error(
-						'Hashapck no signatures found for public key : ' +
-							PublicKey_Der_Encoded,
-					);
+			const list = signedTrans.getSignatures();
+			const nodes_signature = list.get(
+				this.networkService.consensusNodes[0].nodeId,
+			);
+			if (nodes_signature) {
+				const pk_signature = nodes_signature.get(PublicKey_Der_Encoded);
+				if (pk_signature) {
+					return Hex.fromUint8Array(pk_signature);
 				}
 				throw new Error(
-					'Hashapck no signatures found for node id : ' +
-						this.networkService.consensusNodes[0].nodeId,
+					'Hashpack no signatures found for public key : ' +
+						PublicKey_Der_Encoded,
 				);
 			}
-			throw new Error('Hashapck wrong signed transaction');
+			throw new Error(
+				'Hashpack no signatures found for node id : ' +
+					this.networkService.consensusNodes[0].nodeId,
+			);
 		} catch (error) {
 			LogService.logError(error);
 			throw new SigningError(error);
