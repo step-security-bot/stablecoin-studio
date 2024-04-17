@@ -147,13 +147,14 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 	}
 
 	private async setSigner(network: string): Promise<void> {
-		this.hashConnectSigner = await this.hc.getSignerWithAccountKey(
+		const HCSigner = await this.hc.getSigner(
 			this.hc.getProvider(
 				network as 'testnet' | 'previewnet' | 'mainnet',
 				this.initData.topic,
 				this.account.id.toString(),
 			),
 		);
+		this.hashConnectSigner = this.castToSigner(HCSigner);
 		this.signer = this.hashConnectSigner;
 		await this.getAccountKey();
 	}
@@ -300,13 +301,29 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 		}
 	}
 
+	castToSigner(HCSigner: HashConnectSigner): HashConnectSigner {
+		const publicKey = this.account.publicKey;
+
+		if (!publicKey)
+			throw new Error('no public Key for the Hashgraph account');
+
+		const hPublicKey = publicKey.toHederaKey();
+
+		(HCSigner as any).getAccountKey = function (): HPublicKey {
+			return hPublicKey;
+		};
+
+		return HCSigner;
+	}
+
 	async getAccountKey(): Promise<HPublicKey> {
 		if (this.hashConnectSigner?.getAccountKey) {
 			return this.hashConnectSigner.getAccountKey();
 		}
-		this.hashConnectSigner = await this.hc.getSignerWithAccountKey(
-			this.provider,
-		);
+		const HCSigner = await this.hc.getSigner(this.provider);
+
+		this.hashConnectSigner = this.castToSigner(HCSigner);
+
 		this.signer = this.hashConnectSigner as unknown as Signer;
 		if (this.hashConnectSigner.getAccountKey) {
 			return this.hashConnectSigner.getAccountKey();
