@@ -40,6 +40,8 @@ export class HashpackTransactionResponseAdapter extends TransactionResponseAdapt
 		nameFunction?: string,
 		abi?: object[],
 	): Promise<TransactionResponse> {
+		window.alert('manage Response');
+
 		let results: Uint8Array = new Uint8Array();
 		LogService.logTrace(
 			'Managing HashPack Transaction response: ',
@@ -48,6 +50,8 @@ export class HashpackTransactionResponseAdapter extends TransactionResponseAdapt
 			nameFunction,
 		);
 		if (responseType === TransactionType.RECEIPT) {
+			window.alert('getting Receit');
+
 			await this.getReceipt(network, signer, transactionResponse);
 			let transId;
 			if (transactionResponse?.transactionId) {
@@ -65,6 +69,7 @@ export class HashpackTransactionResponseAdapter extends TransactionResponseAdapt
 		}
 
 		if (responseType === TransactionType.RECORD) {
+			window.alert('getting Record');
 			const transactionRecord:
 				| TransactionRecord
 				| Uint32Array
@@ -120,8 +125,13 @@ export class HashpackTransactionResponseAdapter extends TransactionResponseAdapt
 		signer: Signer,
 		transactionResponse: HTransactionResponse,
 	): Promise<TransactionReceipt> {
+		window.alert('getting receipt with signer');
+
 		const transactionReceipt =
 			await transactionResponse.getReceiptWithSigner(signer);
+
+		window.alert(JSON.stringify(transactionReceipt));
+
 		return transactionReceipt;
 	}
 
@@ -130,7 +140,10 @@ export class HashpackTransactionResponseAdapter extends TransactionResponseAdapt
 		signer: Signer,
 		transactionResponse: HTransactionResponse,
 	): Promise<Uint32Array | undefined | Uint8Array> {
+		window.alert('getting record with signer');
 		const record = await transactionResponse.getRecordWithSigner(signer);
+		window.alert(JSON.stringify(record));
+
 		if (!record) {
 			const transactionError = {
 				transactionId: transactionResponse.transactionId.toString(),

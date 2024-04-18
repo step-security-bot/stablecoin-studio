@@ -37,7 +37,7 @@ import {
 	TokenGrantKycTransaction,
 	TokenFeeScheduleUpdateTransaction,
 	TokenAssociateTransaction,
-	AccountId,
+	TransactionResponse as HTransactionResponse,
 } from '@hashgraph/sdk';
 import { singleton } from 'tsyringe';
 import { HederaTransactionAdapter } from '../HederaTransactionAdapter.js';
@@ -74,6 +74,8 @@ import {
 	DappMetadata,
 } from 'hashconnect';
 import { LedgerId } from '@hashgraph/sdk';
+
+const projectId = '8fc26370383a50de1c3bd638d334292e';
 
 @singleton()
 export class HashpackTransactionAdapter extends HederaTransactionAdapter {
@@ -132,20 +134,15 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 					? LedgerId.TESTNET
 					: LedgerId.MAINNET;
 
-			this.hc = new HashConnect(
-				hashpackNetwork,
-				'8fc26370383a50de1c3bd638d334292e',
-				{
-					// dApp metadata options are optional, but are highly recommended to use
-					name: 'Stablecoin Studio',
-					description:
-						'Stablecoin Studio is an open-source SDK that makes it easy for web3 stablecoin platforms, institutional issuers, enterprises, and payment providers to build stablecoin applications on the Hedera network.',
-					url: 'https://hedera.com/stablecoin-studio',
-					icons: [],
-				},
-			);
+			this.hc = new HashConnect(hashpackNetwork, projectId, {
+				// dApp metadata options are optional, but are highly recommended to use
+				name: SDK.appMetadata.name,
+				description: SDK.appMetadata.description,
+				url: SDK.appMetadata.url,
+				icons: [],
+			});
 		} catch (error: any) {
-			LogService.logTrace('Error initializing Hashpack', error);
+			LogService.logTrace('Error instantianting Hashpack', error);
 			return currentNetwork;
 		}
 
@@ -163,24 +160,6 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 			await this.hc.init();
 
 			await this.hc.openPairingModal();
-
-			/*await this.setSigner();
-
-			const iniData: InitializationData = {
-				account: this.account,
-			};
-			this.eventService.emit(WalletEvents.walletPaired, {
-				data: iniData,
-				network: {
-					name: currentNetwork,
-					recognized: true,
-					factoryId: this.networkService.configuration
-						? this.networkService.configuration.factoryAddress
-						: '',
-				},
-				wallet: SupportedWallets.HASHPACK,
-			});
-			LogService.logTrace('Previous paring found: ', this.account);*/
 		}
 
 		return currentNetwork;
@@ -241,7 +220,6 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 			if (!t.isFrozen()) {
 				signedT = await t.freezeWithSigner(this.signer);
 			}
-			const trx = await this.signer.signTransaction(signedT);
 			let hashPackTransactionResponse;
 			if (
 				t instanceof TokenCreateTransaction ||
@@ -259,16 +237,27 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 				t instanceof TokenFeeScheduleUpdateTransaction ||
 				t instanceof TokenAssociateTransaction
 			) {
+				window.alert('hedera transaction');
+
 				hashPackTransactionResponse = await t.executeWithSigner(
 					this.signer,
 				);
+
+				window.alert('hedera transaction executed');
 			} else {
-				hashPackTransactionResponse = await this.signer.call(trx);
+				hashPackTransactionResponse = await t.executeWithSigner(
+					this.signer,
+				);
+
+				console.log(
+					'hashPackTransactionResponse : ' +
+						hashPackTransactionResponse,
+				);
 			}
-			return HashpackTransactionResponseAdapter.manageResponse(
+			return await HashpackTransactionResponseAdapter.manageResponse(
 				this.networkService.environment,
 				this.signer,
-				hashPackTransactionResponse,
+				hashPackTransactionResponse as HTransactionResponse,
 				transactionType,
 				nameFunction,
 				abi,
