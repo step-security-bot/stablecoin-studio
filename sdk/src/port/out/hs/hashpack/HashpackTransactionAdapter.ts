@@ -19,26 +19,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-	Transaction,
-	Signer,
-	PublicKey as HPublicKey,
-	TokenBurnTransaction,
-	TokenCreateTransaction,
-	TokenDeleteTransaction,
-	TokenFreezeTransaction,
-	TokenMintTransaction,
-	TokenPauseTransaction,
-	TokenUnfreezeTransaction,
-	TokenUnpauseTransaction,
-	TokenWipeTransaction,
-	TransferTransaction,
-	TokenRevokeKycTransaction,
-	TokenGrantKycTransaction,
-	TokenFeeScheduleUpdateTransaction,
-	TokenAssociateTransaction,
-	TransactionResponse as HTransactionResponse,
-} from '@hashgraph/sdk';
+import { Transaction, Signer } from '@hashgraph/sdk';
 import { singleton } from 'tsyringe';
 import { HederaTransactionAdapter } from '../HederaTransactionAdapter.js';
 import Account from '../../../../domain/context/account/Account.js';
@@ -49,7 +30,6 @@ import { HashpackTransactionResponseAdapter } from './HashpackTransactionRespons
 import { TransactionType } from '../../TransactionResponseEnums.js';
 import LogService from '../../../../app/service/LogService.js';
 import EventService from '../../../../app/service/event/EventService.js';
-import { PairingError } from './error/PairingError.js';
 import { InitializationData } from '../../TransactionAdapter.js';
 import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator.js';
 import NetworkService from '../../../../app/service/NetworkService.js';
@@ -217,47 +197,19 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 			);
 
 			let signedT = t;
+
 			if (!t.isFrozen()) {
 				signedT = await t.freezeWithSigner(this.signer);
 			}
-			let hashPackTransactionResponse;
-			if (
-				t instanceof TokenCreateTransaction ||
-				t instanceof TokenWipeTransaction ||
-				t instanceof TokenBurnTransaction ||
-				t instanceof TokenMintTransaction ||
-				t instanceof TokenPauseTransaction ||
-				t instanceof TokenUnpauseTransaction ||
-				t instanceof TokenDeleteTransaction ||
-				t instanceof TokenFreezeTransaction ||
-				t instanceof TokenUnfreezeTransaction ||
-				t instanceof TokenGrantKycTransaction ||
-				t instanceof TokenRevokeKycTransaction ||
-				t instanceof TransferTransaction ||
-				t instanceof TokenFeeScheduleUpdateTransaction ||
-				t instanceof TokenAssociateTransaction
-			) {
-				window.alert('hedera transaction');
 
-				hashPackTransactionResponse = await t.executeWithSigner(
-					this.signer,
-				);
+			const hashPackTransactionResponse = await t.executeWithSigner(
+				this.signer,
+			);
 
-				window.alert('hedera transaction executed');
-			} else {
-				hashPackTransactionResponse = await t.executeWithSigner(
-					this.signer,
-				);
-
-				console.log(
-					'hashPackTransactionResponse : ' +
-						hashPackTransactionResponse,
-				);
-			}
 			return await HashpackTransactionResponseAdapter.manageResponse(
 				this.networkService.environment,
 				this.signer,
-				hashPackTransactionResponse as HTransactionResponse,
+				hashPackTransactionResponse,
 				transactionType,
 				nameFunction,
 				abi,

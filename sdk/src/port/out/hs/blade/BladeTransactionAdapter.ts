@@ -239,6 +239,10 @@ export class BladeTransactionAdapter extends HederaTransactionAdapter {
 				);
 			} else {
 				bladeTransactionResponse = await this.signer.call(trx);
+
+				console.log(
+					'bladeTransactionResponse : ' + bladeTransactionResponse,
+				);
 			}
 			return HashpackTransactionResponseAdapter.manageResponse(
 				this.networkService.environment,
@@ -302,13 +306,26 @@ export class BladeTransactionAdapter extends HederaTransactionAdapter {
 
 			const signedTrans = await this.signer.signTransaction(message);
 
+			console.log('signedTrans : ' + JSON.stringify(signedTrans));
+
 			const list = signedTrans.getSignatures();
+
+			console.log('list : ' + JSON.stringify(list));
+
 			const nodes_signature = list.get(
 				this.networkService.consensusNodes[0].nodeId,
 			);
+
+			console.log('nodes_signature : ' + nodes_signature);
+
 			if (nodes_signature) {
 				const pk_signature = nodes_signature.get(PublicKey_Der_Encoded);
+
 				if (pk_signature) {
+					console.log(
+						'pk_signature : ' + Hex.fromUint8Array(pk_signature),
+					);
+
 					return Hex.fromUint8Array(pk_signature);
 				}
 				throw new Error(
