@@ -196,10 +196,9 @@ export class HashpackTransactionAdapter extends HederaTransactionAdapter {
 				t,
 			);
 
-			let signedT = t;
 
 			if (!t.isFrozen()) {
-				signedT = await t.freezeWithSigner(this.signer);
+				await t.freezeWithSigner(this.signer);
 			}
 
 			const hashPackTransactionResponse = await t.executeWithSigner(
