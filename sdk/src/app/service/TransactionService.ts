@@ -19,7 +19,6 @@
  */
 
 import { singleton } from 'tsyringe';
-import Injectable from '../../core/Injectable.js';
 import { InvalidWalletTypeError } from '../../domain/context/network/error/InvalidWalletAccountTypeError.js';
 import { SupportedWallets } from '../../domain/context/network/Wallet.js';
 import { HashpackTransactionAdapter } from '../../port/out/hs/hashpack/HashpackTransactionAdapter.js';
@@ -61,6 +60,7 @@ import {
 import { ethers } from 'ethers';
 import Hex from '../../core/Hex.js';
 import { HederaWalletConnectTransactionAdapter } from '../../port/out/hs/walletconnect/HederaWalletConnectTransactionAdapter.js';
+import Injectable from '../../core/Injectable';
 
 export const EVM_ADDRESS_REGEX = /0x[a-fA-F0-9]{40}$/;
 

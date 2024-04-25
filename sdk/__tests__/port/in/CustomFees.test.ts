@@ -49,10 +49,10 @@ import {
 	MIRROR_NODE,
 	RPC_NODE,
 } from '../../config';
-import Injectable from '../../../src/core/Injectable';
 import StableCoinService from '../../../src/app/service/StableCoinService';
 import { MirrorNode } from '../../../src/domain/context/network/MirrorNode.js';
 import { JsonRpcRelay } from '../../../src/domain/context/network/JsonRpcRelay.js';
+import Injectable from '../../../src/core/Injectable';
 
 const decimals = 6;
 const mirrorNode: MirrorNode = {

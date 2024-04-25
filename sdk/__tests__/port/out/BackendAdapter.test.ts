@@ -18,7 +18,7 @@
  *
  */
 
-import { BackendAdapter } from '../../../src/port/out/backend/BackendAdapter.js';
+import { BackendAdapter } from '../../../src/port/out/backend/BackendAdapter';
 
 const URL = 'http://example.com/';
 

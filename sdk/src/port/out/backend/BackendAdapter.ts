@@ -18,17 +18,23 @@
  *
  */
 
-import { singleton } from 'tsyringe';
+// External modules
 import axios, { AxiosInstance } from 'axios';
+import { singleton } from 'tsyringe';
+
+// First import Injectable if it needs to configure dependency injection first
+import Injectable from '../../../core/Injectable';
+
+// Then import modules that use Injectable
 import {
 	MultiSigTransaction,
 	MultiSigTransactions,
 	Pagination,
 } from '../../../domain/context/transaction/MultiSigTransaction.js';
-import { BackendError } from './error/BackendError.js';
 import BackendEndpoint from '../../../domain/context/network/BackendEndpoint.js';
-import Injectable from '../../../core/Injectable.js';
 import { Environment } from '../../../domain/context/network/Environment.js';
+import { BackendError } from './error/BackendError.js';
+
 
 @singleton()
 export class BackendAdapter {

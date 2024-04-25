@@ -19,7 +19,6 @@
  */
 
 import NetworkService from '../../../src/app/service/NetworkService.js';
-import Injectable from '../../../src/core/Injectable.js';
 import {
 	InitializationRequest,
 	Network,
@@ -44,6 +43,7 @@ import {
 import { MirrorNode } from 'domain/context/network/MirrorNode.js';
 import { JsonRpcRelay } from 'domain/context/network/JsonRpcRelay.js';
 import { ConsensusNode } from '../../../src/domain/context/network/ConsensusNodes.js';
+import Injectable from '../../../src/core/Injectable';
 
 const mirrorNode: MirrorNode = {
 	name: MIRROR_NODE.name,
