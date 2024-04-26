@@ -137,26 +137,23 @@ export class HederaWalletConnectTransactionAdapter extends HederaTransactionAdap
 		// TODO:  SWITCH TO CHAINIDs
 		switch (this.networkService.environment) {
 			case testnet:
-				console.log(testnet);
 				this.chainId = HederaChainId.Testnet;
 				break;
 			case previewnet:
-				console.log(previewnet);
 				this.chainId = HederaChainId.Previewnet;
 				break;
 			case mainnet:
-				console.log(mainnet);
 				this.chainId = HederaChainId.Mainnet;
 				break;
 			default:
 				throw new Error(
 					`❌ Invalid network name: ${this.networkService.environment}. Must be 'testnet', 'previewnet', or 'mainnet'`,
 				);
-				break;
 		}
+		LogService.logTrace(`⛓️ Using chainId: ${this.chainId} for network`);
 
 		if (!hWCSettings)
-			throw new Error('hedera wallet conenct settings not set');
+			throw new Error('❌ Hedera wallet connect settings not set');
 
 		this.projectId = hWCSettings.projectId ?? '';
 		this.dappMetadata = {
@@ -184,8 +181,6 @@ export class HederaWalletConnectTransactionAdapter extends HederaTransactionAdap
 		const currentNetwork = network ?? this.networkService.environment;
 
 		try {
-			const hwcNetwork = this.getLedgerId(currentNetwork);
-			console.log('hwcNetwork', hwcNetwork);
 			// Create dApp Connector instance
 			// metadata,
 			// 	LedgerId.TESTNET,
@@ -316,28 +311,13 @@ export class HederaWalletConnectTransactionAdapter extends HederaTransactionAdap
 		await this.init(network);
 	}
 
-	// async function hedera_signAndExecuteTransaction(_: Event) {
-	// 	const transaction = new TransferTransaction()
-	// 		.setTransactionId(TransactionId.generate(getState('sign-send-from')))
-	// 		.addHbarTransfer(getState('sign-send-from'), new Hbar(-getState('sign-send-amount')))
-	// 		.addHbarTransfer(getState('sign-send-to'), new Hbar(+getState('sign-send-amount')))
-	//
-	// 	const params: SignAndExecuteTransactionParams = {
-	// 		transactionList: transactionToBase64String(transaction),
-	// 		signerAccountId: 'hedera:testnet:' + getState('sign-send-from'),
-	// 	}
-	//
-	// 	console.log(params)
-	//
-	// 	return await dAppConnector!.signAndExecuteTransaction(params)
-	// }
-
 	public async signAndSendTransaction(
 		t: Transaction,
 		transactionType: TransactionType,
 		nameFunction?: string | undefined,
 		abi?: object[] | undefined,
 	): Promise<TransactionResponse> {
+		LogService.logInfo('🔏 Signing and sending transaction from HWC...');
 		if (!this.dAppConnector) {
 			throw new Error('Hedera WalletConnect not initialized');
 		}
@@ -363,14 +343,11 @@ export class HederaWalletConnectTransactionAdapter extends HederaTransactionAdap
 		// 		signerAccountId: 'hedera:testnet:' + getState('sign-send-from'),
 		// 	}
 		//
-		// 	console.log(params)
-		//
 		// 	return await dAppConnector!.signAndExecuteTransaction(params)
 		// }
 
 		if (!t.isFrozen()) {
-			console.log('🔒 Freezing transaction...');
-			LogService.logTrace(`🔒 Freezing transaction...`);
+			LogService.logTrace(`🔒 Tx not frozen, freezing transaction...`);
 			t._freezeWithAccountId(
 				AccountId.fromString(this.account.id.toString()),
 			);
@@ -381,8 +358,6 @@ export class HederaWalletConnectTransactionAdapter extends HederaTransactionAdap
 			signerAccountId: `${this.chainId}:${this.account.id.toString()}`,
 		};
 
-		console.log('params', params);
-
 		// const nodeAccountID = AccountId.fromString(this.account.id.toString())
 		// const signParams: SignTransactionParams = {
 		// 	transactionBody: transactionToTransactionBody(t, nodeAccountID),
@@ -390,8 +365,13 @@ export class HederaWalletConnectTransactionAdapter extends HederaTransactionAdap
 		// };
 
 		try {
-			console.log('🔏 Signing and sending transaction...');
-			LogService.logInfo(`🔏 Signing and sending transaction...`);
+			LogService.logTrace(
+				`🖋️ [HWC] Signing tx with params: ${JSON.stringify(
+					params,
+					null,
+					2,
+				)}`,
+			);
 			// const signedTx = await this.dAppConnector.signTransaction(
 			// 	signParams,
 			// );
@@ -431,9 +411,13 @@ export class HederaWalletConnectTransactionAdapter extends HederaTransactionAdap
 			// }
 			const transactionResponseRaw =
 				await this.dAppConnector?.signAndExecuteTransaction(params);
-			console.log(
-				'transactionResponseRaw : ' +
-					JSON.stringify(transactionResponseRaw),
+			LogService.logInfo(`✅ Transaction signed successfully!`);
+			LogService.logTrace(
+				`Transaction RAW Response: ${JSON.stringify(
+					transactionResponseRaw,
+					null,
+					2,
+				)}`,
 			);
 
 			/*const transactionJson: TransactionResponseJSON = {
@@ -442,20 +426,19 @@ export class HederaWalletConnectTransactionAdapter extends HederaTransactionAdap
 				transactionId: (transactionResponseRaw as any).transactionId
 
 			};*/
-			//console.log('transactionJson : ' + JSON.stringify(transactionJson))
 
 			const transactionResponse = HTransactionResponse.fromJSON(
 				transactionResponseRaw as unknown as TransactionResponseJSON,
 			);
-			console.log(
-				'transactionResponse : ' + JSON.stringify(transactionResponse),
+			LogService.logTrace(
+				`Transaction Response: ${JSON.stringify(
+					transactionResponse,
+					null,
+					2,
+				)}`,
 			);
 
-			LogService.logInfo(
-				`✅ Transaction signed and sent. Response: ${transactionResponse}`,
-			);
-
-			console.log('transactionResponse', transactionResponse);
+			LogService.logInfo(`✅ Transaction signed and sent successfully.`);
 			return HashpackTransactionResponseAdapter.manageResponse(
 				this.networkService.environment,
 				this.signer,
@@ -465,13 +448,13 @@ export class HederaWalletConnectTransactionAdapter extends HederaTransactionAdap
 				abi,
 			);
 		} catch (error) {
-			const errorMessage = `❌ Error signing and sending transaction: ${JSON.stringify(
-				error,
-				null,
-				2,
-			)}`;
-			LogService.logError(errorMessage);
-			throw new Error(errorMessage);
+			throw new Error(
+				`❌ Error signing and sending transaction: ${JSON.stringify(
+					error,
+					null,
+					2,
+				)}`,
+			);
 		}
 	}
 

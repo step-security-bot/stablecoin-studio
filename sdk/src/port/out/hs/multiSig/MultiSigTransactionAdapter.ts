@@ -124,8 +124,8 @@ export class MultiSigTransactionAdapter extends HederaTransactionAdapter {
 	}
 
 	// MultiSig cannot eb used to sign anything
-	sign(/* message: string */): Promise<string> {
-		throw new Error('Method not implemented.');
+	sign(message: string): Promise<string> {
+		throw new Error(`Method not implemented. sign(message: ${message})`);
 	}
 
 	getSupportedWallet(): SupportedWallets {

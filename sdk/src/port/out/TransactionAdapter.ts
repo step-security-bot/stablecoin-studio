@@ -607,7 +607,6 @@ export default abstract class TransactionAdapter
 			id.startsWith('0x') ? HASHSCAN_TX_URL : HASHSCAN_URL
 		}${id}\n`;
 		LogService.logInfo(msg);
-		console.log(msg);
 	}
 
 	sign(message: string | Transaction): Promise<string> {

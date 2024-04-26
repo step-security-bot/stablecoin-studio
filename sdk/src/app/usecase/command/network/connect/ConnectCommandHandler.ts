@@ -18,15 +18,16 @@
  *
  */
 
+import LogService from '../../../../../app/service/LogService.js';
+import TransactionService from '../../../../../app/service/TransactionService.js';
 import { ICommandHandler } from '../../../../../core/command/CommandHandler.js';
 import { CommandHandler } from '../../../../../core/decorator/CommandHandlerDecorator.js';
-import TransactionService from '../../../../service/TransactionService.js';
 import { ConnectCommand, ConnectCommandResponse } from './ConnectCommand.js';
 
 @CommandHandler(ConnectCommand)
 export class ConnectCommandHandler implements ICommandHandler<ConnectCommand> {
 	async execute(command: ConnectCommand): Promise<ConnectCommandResponse> {
-		console.log('ConnectCommand Handler' + command.wallet);
+		LogService.logTrace(`ConnectCommandHandler: ${command.wallet}`);
 		const handler = TransactionService.getHandlerClass(command.wallet);
 		const input =
 			command.custodialSettings === undefined

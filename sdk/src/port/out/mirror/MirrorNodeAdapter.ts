@@ -116,8 +116,7 @@ export class MirrorNodeAdapter {
 		const url = `${
 			this.mirrorNodeConfig.baseUrl
 		}tokens/${tokenId.toString()}`;
-		console.log('Getting token from mirror node -> ', url);
-		LogService.logTrace('Getting token from mirror node -> ', url);
+		LogService.logTrace(`Getting token info from mirror node -> ${url}`);
 
 		const retry = 10;
 		let i = 0;
@@ -137,9 +136,8 @@ export class MirrorNodeAdapter {
 	public async getStableCoin(
 		tokenId: HederaId,
 	): Promise<StableCoinViewModel> {
-		console.log(
-			'Getting stablecoin from mirror node -> ',
-			tokenId.toString(),
+		LogService.logTrace(
+			`Getting stablecoin from mirror node -> ${tokenId}`,
 		);
 		try {
 			const response = await this.getTokenInfo(tokenId);
@@ -158,7 +156,7 @@ export class MirrorNodeAdapter {
 					return undefined;
 				}
 			};
-			console.log('CUSTOM FEES' + response.data.custom_fees);
+			LogService.logTrace(`Custom fees ${response.data.custom_fees}`);
 			const getCustomFeesOrDefault = async (
 				val?: ICustomFees,
 			): Promise<RequestCustomFee[] | undefined> => {
@@ -197,7 +195,7 @@ export class MirrorNodeAdapter {
 
 					customFees.push(requestFixedFee);
 				}
-				console.log('FRACTIONAL FEES' + val.fractional_fees);
+				LogService.logTrace(`Fractional fees ${val.fractional_fees}`);
 				val.fractional_fees.forEach((fractionalFee) => {
 					const requestFractionalFee: RequestFractionalFee = {
 						decimals: decimals,

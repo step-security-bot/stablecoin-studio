@@ -18,6 +18,7 @@
  *
  */
 
+import LogService from '../../../../../app/service/LogService.js';
 import { lazyInject } from '../../../../../core/decorator/LazyInjectDecorator.js';
 import { QueryHandler } from '../../../../../core/decorator/QueryHandlerDecorator.js';
 import { IQueryHandler } from '../../../../../core/query/QueryHandler.js';
@@ -45,7 +46,7 @@ export class GetStableCoinQueryHandler
 		query: GetStableCoinQuery,
 	): Promise<GetStableCoinQueryResponse> {
 		const { tokenId } = query;
-		console.log('GetStableCoinQueryHandler', tokenId);
+		LogService.logTrace(`GetStableCoinQueryHandler: ${tokenId}`);
 		const coin = await this.mirrorNode.getStableCoin(tokenId);
 
 		if (!coin.evmProxyAddress) throw new Error('Invalid proxy address');
