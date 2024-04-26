@@ -45,7 +45,6 @@ import {
 import ConnectRequest, {
 	SupportedWallets,
 } from '../../../src/port/in/request/ConnectRequest.js';
-
 import {
 	CLIENT_ACCOUNT_ED25519_2,
 	CLIENT_ACCOUNT_ED25519,

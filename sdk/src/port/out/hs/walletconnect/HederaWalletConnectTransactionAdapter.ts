@@ -41,8 +41,8 @@ import {
 import { SignClientTypes } from '@walletconnect/types';
 import { HederaTransactionAdapter } from '../HederaTransactionAdapter';
 import { TransactionType } from '../../TransactionResponseEnums';
-import { InitializationData } from '../../TransactionAdapter';
 import { MirrorNodeAdapter } from '../../mirror/MirrorNodeAdapter';
+import { InitializationData } from '../../TransactionAdapter';
 import {
 	WalletEvents,
 	WalletPairedEvent,
@@ -53,6 +53,7 @@ import NetworkService from '../../../../app/service/NetworkService';
 import { lazyInject } from '../../../../core/decorator/LazyInjectDecorator';
 import Injectable from '../../../../core/Injectable';
 import { QueryBus } from '../../../../core/query/QueryBus';
+import Hex from '../../../../core/Hex.js';
 import Account from '../../../../domain/context/account/Account';
 import TransactionResponse from '../../../../domain/context/transaction/TransactionResponse.js';
 import {
@@ -65,7 +66,6 @@ import { SupportedWallets } from '../../../../domain/context/network/Wallet';
 import HWCSettings from '../../../../domain/context/hwalletconnectsettings/HWCSettings.js';
 import { HashpackTransactionResponseAdapter } from '../hashpack/HashpackTransactionResponseAdapter';
 import { SigningError } from '../error/SigningError';
-import Hex from '../../../../core/Hex.js';
 
 @singleton()
 /**

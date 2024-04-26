@@ -42,7 +42,6 @@ import StableCoinListViewModel from '../out/mirror/response/StableCoinListViewMo
 import { InvalidResponse } from '../out/mirror/error/InvalidResponse.js';
 import { handleValidation } from './Common.js';
 
-
 export { AccountViewModel, StableCoinListViewModel };
 
 interface IAccountInPort {

@@ -18,46 +18,46 @@
  *
  */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import LogService from '../../app/service/LogService.js';
+import TransactionService from '../../app/service/TransactionService.js';
+import NetworkService from '../../app/service/NetworkService.js';
+import { ConnectCommand } from '../../app/usecase/command/network/connect/ConnectCommand.js';
+import { SetNetworkCommand } from '../../app/usecase/command/network/setNetwork/SetNetworkCommand.js';
+import { SetConfigurationCommand } from '../../app/usecase/command/network/setConfiguration/SetConfigurationCommand.js';
+import { SetBackendCommand } from '../../app/usecase/command/network/setBackend/SetBackendCommand.js';
 import Injectable from '../../core/Injectable.js';
 import { CommandBus } from '../../core/command/CommandBus.js';
+import { LogError } from '../../core/decorator/LogErrorDecorator.js';
+import {
+	Environment,
+	unrecognized,
+} from '../../domain/context/network/Environment.js';
+import { MirrorNode } from '../../domain/context/network/MirrorNode.js';
+import { JsonRpcRelay } from '../../domain/context/network/JsonRpcRelay.js';
+import DfnsSettings from '../../domain/context/custodialwalletsettings/DfnsSettings.js';
+import FireblocksSettings from '../../domain/context/custodialwalletsettings/FireblocksSettings';
+import BackendEndpoint from '../../domain/context/network/BackendEndpoint.js';
+import { ConsensusNode } from '../../domain/context/network/ConsensusNodes.js';
+import { HederaWalletConnectTransactionAdapter } from '../out/hs/walletconnect/HederaWalletConnectTransactionAdapter';
+import { BladeTransactionAdapter } from '../out/hs/blade/BladeTransactionAdapter.js';
+import RPCTransactionAdapter from '../out/rpc/RPCTransactionAdapter.js';
 import { InitializationData } from '../out/TransactionAdapter.js';
-import { ConnectCommand } from '../../app/usecase/command/network/connect/ConnectCommand.js';
+import { HashpackTransactionAdapter } from '../out/hs/hashpack/HashpackTransactionAdapter.js';
+import { FireblocksTransactionAdapter } from '../out/hs/hts/custodial/FireblocksTransactionAdapter.js';
+import { DFNSTransactionAdapter } from '../out/hs/hts/custodial/DFNSTransactionAdapter.js';
+import { MultiSigTransactionAdapter } from '../out/hs/multiSig/MultiSigTransactionAdapter.js';
 import ConnectRequest, {
 	DFNSConfigRequest,
 	FireblocksConfigRequest,
 	SupportedWallets,
 } from './request/ConnectRequest.js';
-import RequestMapper from './request/mapping/RequestMapper.js';
-import TransactionService from '../../app/service/TransactionService.js';
-import NetworkService from '../../app/service/NetworkService.js';
-import SetNetworkRequest from './request/SetNetworkRequest.js';
-import { SetNetworkCommand } from '../../app/usecase/command/network/setNetwork/SetNetworkCommand.js';
-import { SetConfigurationCommand } from '../../app/usecase/command/network/setConfiguration/SetConfigurationCommand.js';
-import {
-	Environment,
-	unrecognized,
-} from '../../domain/context/network/Environment.js';
-import InitializationRequest from './request/InitializationRequest.js';
-import Event from './Event.js';
-import RPCTransactionAdapter from '../out/rpc/RPCTransactionAdapter.js';
-import { HashpackTransactionAdapter } from '../out/hs/hashpack/HashpackTransactionAdapter.js';
-import { LogError } from '../../core/decorator/LogErrorDecorator.js';
-import SetConfigurationRequest from './request/SetConfigurationRequest.js';
 import { handleValidation } from './Common.js';
-import { MirrorNode } from '../../domain/context/network/MirrorNode.js';
-import { JsonRpcRelay } from '../../domain/context/network/JsonRpcRelay.js';
-import { BladeTransactionAdapter } from '../out/hs/blade/BladeTransactionAdapter.js';
-import DfnsSettings from 'domain/context/custodialwalletsettings/DfnsSettings.js';
-import FireblocksSettings from '../../domain/context/custodialwalletsettings/FireblocksSettings';
-import { FireblocksTransactionAdapter } from '../out/hs/hts/custodial/FireblocksTransactionAdapter.js';
-import { DFNSTransactionAdapter } from '../out/hs/hts/custodial/DFNSTransactionAdapter.js';
-import { MultiSigTransactionAdapter } from '../out/hs/multiSig/MultiSigTransactionAdapter.js';
+import Event from './Event.js';
+import RequestMapper from './request/mapping/RequestMapper.js';
+import SetNetworkRequest from './request/SetNetworkRequest.js';
+import InitializationRequest from './request/InitializationRequest.js';
 import SetBackendRequest from './request/SetBackendRequest.js';
-import { SetBackendCommand } from '../../app/usecase/command/network/setBackend/SetBackendCommand.js';
-import BackendEndpoint from '../../domain/context/network/BackendEndpoint.js';
-import { ConsensusNode } from '../../domain/context/network/ConsensusNodes.js';
-import { HederaWalletConnectTransactionAdapter } from '../out/hs/walletconnect/HederaWalletConnectTransactionAdapter';
+import SetConfigurationRequest from './request/SetConfigurationRequest.js';
 
 export { InitializationData, SupportedWallets };
 
@@ -203,7 +203,6 @@ class NetworkInPort implements INetworkInPort {
 	@LogError
 	async connect(req: ConnectRequest): Promise<InitializationData> {
 		handleValidation('ConnectRequest', req);
-		console.log('connect');
 		const account = req.account
 			? RequestMapper.mapAccount(req.account)
 			: undefined;
@@ -226,11 +225,8 @@ class NetworkInPort implements INetworkInPort {
 			}
 		}
 		// TODO: check this, when should be select the network when wallet connect mode(?)
-		console.log(
-			'SetNetworkCommand',
-			req.network,
-			req.mirrorNode,
-			req.rpcNode,
+		LogService.logTrace(
+			`SetNetworkCommand ${req.network} ${req.mirrorNode} ${req.rpcNode} ${req.consensusNodes}`,
 		);
 		await this.commandBus.execute(
 			new SetNetworkCommand(
@@ -240,7 +236,9 @@ class NetworkInPort implements INetworkInPort {
 				req.consensusNodes,
 			),
 		);
-		console.log('ConnectRequest', req.wallet, account, custodialSettings);
+		LogService.logTrace(
+			`ConnectRequest ${req.wallet} ${account} ${custodialSettings}`,
+		);
 		const res = await this.commandBus.execute(
 			new ConnectCommand(
 				req.network,

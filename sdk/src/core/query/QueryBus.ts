@@ -30,8 +30,6 @@ import { QueryMetadata } from '../decorator/QueryMetadata.js';
 import { QueryHandlerNotFoundException } from './error/QueryHandlerNotFoundException.js';
 import { InvalidQueryHandlerException } from './error/InvalidQueryHandlerException.js';
 
-
-
 export type QueryHandlerType = IQueryHandler<Query<QueryResponse>>;
 
 export interface IQueryBus<T extends QueryResponse> {

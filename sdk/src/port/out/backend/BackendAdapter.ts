@@ -35,7 +35,6 @@ import BackendEndpoint from '../../../domain/context/network/BackendEndpoint.js'
 import { Environment } from '../../../domain/context/network/Environment.js';
 import { BackendError } from './error/BackendError.js';
 
-
 @singleton()
 export class BackendAdapter {
 	private httpClient: AxiosInstance;

@@ -84,7 +84,6 @@ import { ConsensusNode } from '../../../src/domain/context/network/ConsensusNode
 import Injectable from '../../../src/core/Injectable';
 import EventService from '../../../src/app/service/event/EventService.js';
 
-
 const decimals = 6;
 const initialSupply = 1000;
 const maxSupply = 1000000;
