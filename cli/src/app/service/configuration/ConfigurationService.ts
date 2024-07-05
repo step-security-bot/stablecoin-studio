@@ -45,7 +45,7 @@ import BackendConfig from '../../../domain/configuration/interfaces/BackendConfi
  */
 export default class ConfigurationService extends Service {
   private configuration: IConfiguration;
-  private configFileName = '.hedera-stable-coin-cli.yaml';
+  private configFileName = '.hedera-stable-coin-cli.yaml'; // TODO: this should not be hardcoded
   private path = this.getDefaultConfigurationPath();
 
   constructor() {
@@ -61,20 +61,38 @@ export default class ConfigurationService extends Service {
       !fs.existsSync(this.getDefaultConfigurationPath()) ||
       !this.validateConfigurationFile()
     ) {
-      const setConfigurationService: SetConfigurationService =
-        new SetConfigurationService();
-      await setConfigurationService.initConfiguration(
+      await new SetConfigurationService().initConfiguration(
         path,
         overrides?.defaultNetwork,
       );
     }
 
     this.configuration = this.setConfigFromConfigFile();
-    if (overrides?.defaultNetwork) {
-      this.configuration.defaultNetwork = overrides.defaultNetwork;
-    }
-    if (overrides?.logs) {
-      this.configuration.logs = overrides.logs;
+    if (overrides) {
+      if (overrides.defaultNetwork) {
+        this.configuration.defaultNetwork = overrides.defaultNetwork;
+      }
+      if (overrides.logs) {
+        this.configuration.logs = overrides.logs;
+      }
+      if (overrides.accounts) {
+        this.configuration.accounts = overrides.accounts;
+      }
+      if (overrides.networks) {
+        this.configuration.networks = overrides.networks;
+      }
+      if (overrides.mirrors) {
+        this.configuration.mirrors = overrides.mirrors;
+      }
+      if (overrides.rpcs) {
+        this.configuration.rpcs = overrides.rpcs;
+      }
+      if (overrides.backend) {
+        this.configuration.backend = overrides.backend;
+      }
+      if (overrides.factories) {
+        this.configuration.factories = overrides.factories;
+      }
     }
   }
 
@@ -260,6 +278,13 @@ export default class ConfigurationService extends Service {
     );
   }
 
+  /**
+   * Logs a warning if the factory ID of a target does not match the latest version of the SDK in the configuration.
+   * @param targetId - The ID of the target.
+   * @param targetName - The name of the target.
+   * @param network - The network of the target.
+   * @param arr - An optional array of objects containing IDs and networks.
+   */
   public logFactoryIdWarning(
     targetId: string,
     targetName: string,
