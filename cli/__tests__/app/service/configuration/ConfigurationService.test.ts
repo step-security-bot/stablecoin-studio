@@ -26,10 +26,9 @@ import {
   configurationService,
   setConfigurationService,
 } from '../../../../src/index.js';
-// import Language from '../../../../src/domain/language/Language.js';
 import { IConfiguration } from '../../../../src/domain/configuration/interfaces/IConfiguration.js';
-// import { LogOptions } from '@hashgraph/stablecoin-npm-sdk';
 import { AccountType } from '../../../../src/domain/configuration/interfaces/AccountType';
+import { LogOptions } from '@hashgraph/stablecoin-npm-sdk';
 
 // const language: Language = new Language();
 const DEFAULT_ACCOUNTS = [
@@ -167,10 +166,11 @@ describe('Configuration Service', () => {
     mocks.showSpinner = jest
       .spyOn(utilsService, 'showSpinner')
       .mockImplementation();
-    //! mocks.log = jest.spyOn(console, 'log').mockImplementation(); <<-- Restore this line
+    mocks.log = jest.spyOn(console, 'log').mockImplementation();
     mocks.info = jest.spyOn(console, 'info').mockImplementation();
     mocks.error = jest.spyOn(console, 'warn').mockImplementation();
     mocks.error = jest.spyOn(console, 'error').mockImplementation();
+    mocks.dir = jest.spyOn(console, 'dir').mockImplementation();
     mocks.cleanAndShowBanner = jest
       .spyOn(utilsService, 'cleanAndShowBanner')
       .mockImplementation();
@@ -178,9 +178,6 @@ describe('Configuration Service', () => {
       .spyOn(utilsService, 'showMessage')
       .mockImplementation();
     // Not fixed, only defined
-    mocks.defaultSingleAsk = jest.spyOn(utilsService, 'defaultSingleAsk');
-    mocks.defaultConfirmAsk = jest.spyOn(utilsService, 'defaultConfirmAsk');
-    mocks.defaultMultipleAsk = jest.spyOn(utilsService, 'defaultMultipleAsk');
     mocks.getDefaultConfigurationPath = jest.spyOn(
       configurationService,
       'getDefaultConfigurationPath',
@@ -196,48 +193,40 @@ describe('Configuration Service', () => {
   describe('Init configuration', () => {
     beforeAll(() => {
       mocks.getDefaultConfigurationPath.mockReturnValue(CONFIG_FILE_PATH);
-    });
-    afterAll(() => {
-      jest.restoreAllMocks();
+      mocks.initConfiguration = jest
+        .spyOn(setConfigurationService, 'initConfiguration')
+        .mockResolvedValue(null);
+      mocks.fsReadFile = jest.spyOn(fs, 'readFileSync').mockReturnValue('');
     });
     it('should init configuration with no initial configuration or a file path', async () => {
       //* 🗂️ Arrange
-      // Write configuration mock to file
-      fs.writeFileSync(CONFIG_FILE_PATH, yaml.dump(''));
-      const initConfigurationMock = jest
-        .spyOn(setConfigurationService, 'initConfiguration')
-        .mockResolvedValueOnce(null);
+      mocks.yamlLoad = jest
+        .spyOn(yaml, 'load')
+        .mockReturnValueOnce({})
+        .mockReturnValueOnce(CONFIG_MOCK);
       //* 🎬 Act
       await configurationService.init();
       //* 🕵️ Assert
-      expect(initConfigurationMock).toHaveBeenCalledTimes(1);
-      expect(initConfigurationMock).toHaveBeenCalledWith(undefined, undefined);
+      expect(mocks.initConfiguration).toHaveBeenCalledTimes(1);
+      expect(mocks.initConfiguration).toHaveBeenCalledWith(
+        undefined,
+        undefined,
+      );
     });
 
     it('should init configuration with path', async () => {
       //* 🗂️ Arrange
-      const setConfigFromConfigFileMock = jest
-        .spyOn(configurationService, 'setConfigFromConfigFile')
-        .mockReturnValueOnce(CONFIG_MOCK);
-      const initConfigurationMock = jest
-        .spyOn(setConfigurationService, 'initConfiguration')
-        .mockResolvedValueOnce(null);
+      mocks.yamlLoad = jest.spyOn(yaml, 'load').mockReturnValue(CONFIG_MOCK);
       //* 🎬 Act
       await configurationService.init(undefined, CONFIG_FILE_PATH);
       //* 🕵️ Assert
       const config = configurationService.getConfiguration();
-      expect(setConfigFromConfigFileMock).toHaveBeenCalledTimes(1);
-      expect(initConfigurationMock).toHaveBeenCalledTimes(0);
+      expect(mocks.initConfiguration).toHaveBeenCalledTimes(0);
       expect(config).toStrictEqual(CONFIG_MOCK);
     });
     it('should init configuration with path and override account', async () => {
       //* 🗂️ Arrange
-      const setConfigFromConfigFileMock = jest
-        .spyOn(configurationService, 'setConfigFromConfigFile')
-        .mockReturnValueOnce(CONFIG_MOCK);
-      const setConfigurationServiceMock = jest
-        .spyOn(setConfigurationService, 'initConfiguration')
-        .mockResolvedValueOnce(null);
+      mocks.yamlLoad = jest.spyOn(yaml, 'load').mockReturnValue(CONFIG_MOCK);
       //* 🎬 Act
       await configurationService.init(
         {
@@ -250,53 +239,82 @@ describe('Configuration Service', () => {
       );
       //* 🕵️ Assert
       const config = configurationService.getConfiguration();
-      expect(setConfigFromConfigFileMock).toHaveBeenCalledTimes(1);
-      expect(setConfigurationServiceMock).toHaveBeenCalledTimes(0);
+      expect(mocks.initConfiguration).toHaveBeenCalledTimes(0);
       expect(config.accounts[0].accountId).toStrictEqual(DEFAULT_ACCOUNTS[0]);
     });
   });
-  // it('should get configuration and log configuration', async () => {
-  //   const conf: IConfiguration = configurationService.getConfiguration();
 
-  //   expect(configurationService).not.toBeNull();
-  //   expect(conf.defaultNetwork).toStrictEqual(configurationMock.defaultNetwork);
-  //   // expect(conf.accounts).toStrictEqual(configurationMock.accounts);
-  //   expect(conf.factories).toStrictEqual(configurationMock.factories);
-  //   expect(conf.mirrors).toStrictEqual(configurationMock.mirrors);
-  //   expect(conf.rpcs).toStrictEqual(configurationMock.rpcs);
-  //   expect(conf.logs).toStrictEqual(configurationMock.logs);
-  //   expect(configurationService).not.toBeNull();
+  describe('Get Configuration', () => {
+    it('should get configuration', async () => {
+      //* 🗂️ Arrange
+      // init configuration
+      mocks.yamlLoad = jest.spyOn(yaml, 'load').mockReturnValue(CONFIG_MOCK);
+      await configurationService.init(undefined, CONFIG_FILE_PATH);
+      //* 🎬 Act
+      const result: IConfiguration = configurationService.getConfiguration();
+      //* 🕵️ Assert
+      expect(result).toStrictEqual(CONFIG_MOCK);
+    });
 
-  //   const logConf: LogOptions = configurationService.getLogConfiguration();
+    it('should get log configuration', async () => {
+      //* 🗂️ Arrange
+      // init configuration
+      mocks.yamlLoad = jest.spyOn(yaml, 'load').mockReturnValue(CONFIG_MOCK);
+      await configurationService.init(undefined, CONFIG_FILE_PATH);
+      //* 🎬 Act
+      const result: LogOptions = configurationService.getLogConfiguration();
+      //* 🕵️ Assert
+      expect(result.level).toStrictEqual(CONFIG_MOCK.logs.level);
+    });
+    it('should not get log configuration', async () => {
+      //* 🗂️ Arrange
+      // init configuration with logs undefined
+      mocks.yamlLoad = jest
+        .spyOn(yaml, 'load')
+        .mockReturnValue({ ...CONFIG_MOCK, logs: undefined });
+      await configurationService.init(undefined, CONFIG_FILE_PATH);
+      //* 🎬 Act
+      const result: LogOptions = configurationService.getLogConfiguration();
+      //* 🕵️ Assert
+      expect(result).toBeUndefined();
+    });
+  });
 
-  //   expect(logConf.level).toStrictEqual(configurationMock.logs.level);
-  // });
+  it('should show full configuration', async () => {
+    //* 🗂️ Arrange
+    const getConfigM = jest
+      .spyOn(configurationService, 'getConfiguration')
+      .mockReturnValue(CONFIG_MOCK);
+    const consoleDirM = jest.spyOn(console, 'dir');
+    //* 🎬 Act
+    configurationService.showFullConfiguration();
+    //* 🕵️ Assert
+    expect(getConfigM).toHaveBeenCalledTimes(1);
+    expect(consoleDirM).toHaveBeenCalledTimes(1);
+    expect(consoleDirM).toHaveBeenCalledWith(
+      expect.objectContaining({ defaultNetwork: CONFIG_MOCK.defaultNetwork }),
+      {
+        depth: null,
+      },
+    );
+  });
 
-  // it('should show full configuration', async () => {
-  //   jest.spyOn(console, 'dir');
-
-  //   configurationService.showFullConfiguration();
-
-  //   expect(configurationService).not.toBeNull();
-  //   expect(console.dir).toHaveBeenCalledTimes(1);
-  // });
-
-  // it('should check the configurated factory id', async () => {
-  //   jest.spyOn(utilsService, 'showWarning');
-
-  //   configurationService.logFactoryIdWarning(
-  //     '0.0.13570',
-  //     'factory',
-  //     'testnet',
-  //     [
-  //       {
-  //         id: '0.0.13579',
-  //         network: 'testnet',
-  //       },
-  //     ],
-  //   );
-
-  //   expect(configurationService).not.toBeNull();
-  //   expect(utilsService.showWarning).toHaveBeenCalledTimes(1);
-  // });
+  it('should check the configurated factory id', async () => {
+    //* 🗂️ Arrange
+    jest.spyOn(utilsService, 'showWarning');
+    //* 🎬 Act
+    configurationService.logFactoryIdWarning(
+      '0.0.13570',
+      'factory',
+      'testnet',
+      [
+        {
+          id: '0.0.13579',
+          network: 'testnet',
+        },
+      ],
+    );
+    //* 🕵️ Assert
+    expect(utilsService.showWarning).toHaveBeenCalledTimes(1);
+  });
 });
