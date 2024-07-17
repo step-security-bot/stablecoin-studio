@@ -21,6 +21,7 @@
 import { rimraf } from 'rimraf';
 import yaml from 'js-yaml';
 import fs from 'fs-extra';
+import { LogOptions } from '@hashgraph/stablecoin-npm-sdk';
 import {
   utilsService,
   configurationService,
@@ -28,7 +29,6 @@ import {
 } from '../../../../src/index.js';
 import { IConfiguration } from '../../../../src/domain/configuration/interfaces/IConfiguration.js';
 import { AccountType } from '../../../../src/domain/configuration/interfaces/AccountType';
-import { LogOptions } from '@hashgraph/stablecoin-npm-sdk';
 
 // const language: Language = new Language();
 const DEFAULT_ACCOUNTS = [
