@@ -70,11 +70,16 @@ const CONFIG_MOCK: IConfiguration = {
     },
     {
       accountId: DEFAULT_ACCOUNTS[1],
-      type: AccountType.SelfCustodial,
-      selfCustodial: {
-        privateKey: {
-          key: '0xbcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789a',
-          type: 'ED25519',
+      type: AccountType.Fireblocks,
+      custodial: {
+        fireblocks: {
+          apiSecretKeyPath: '/user/foo/keystore/key.pem',
+          apiKey: 'bbe6a358-0c98-460a-a2fc-91e035f74d54',
+          baseUrl: 'https://api.fireblocks.io',
+          assetId: 'HBAR_TEST',
+          vaultAccountId: '2',
+          hederaAccountPublicKey:
+            '04eb152576e3af4dccbabda7026b85d8fdc0ad3f18f26540e42ac71a08e21623',
         },
       },
       network: NETWORKS.test,
@@ -83,11 +88,19 @@ const CONFIG_MOCK: IConfiguration = {
     },
     {
       accountId: DEFAULT_ACCOUNTS[2],
-      type: AccountType.SelfCustodial,
-      selfCustodial: {
-        privateKey: {
-          key: 'abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789',
-          type: 'ED25519',
+      type: AccountType.Dfns,
+      custodial: {
+        dfns: {
+          authorizationToken: '',
+          credentialId: 'Y2ktMTZ2NTMtZXF0ZzAtOWRvOXJub3NjbGI1a3RwYg',
+          privateKeyPath: '/user/foo/keystore/key.pem',
+          appOrigin: 'https://localhost:3000',
+          appId: 'Y2ktMTZ2NTMtZXF0ZzAtOWRvOXJub3NjbGI1a3RwYg',
+          testUrl: 'https://api.dfns.ninja/',
+          walletId: 'wa-6qfr0-heg0c-985bmvv9hphbok47',
+          hederaAccountPublicKey:
+            '04eb152576e3af4dccbabda7026b85d8fdc0ad3f18f26540e42ac71a08e21623',
+          hederaAccountKeyType: 'E25519',
         },
       },
       network: NETWORKS.test,
@@ -365,14 +378,11 @@ describe('setConfigurationService', () => {
   });
 
   describe('Account configuration', () => {
+    let spy;
     beforeEach(async () => {
       jest
         .spyOn(configurationService, 'getDefaultConfigurationPath')
         .mockReturnValue(CONFIG_FILE_PATH);
-
-      jest
-        .spyOn(utilsService, 'getCurrentAccount')
-        .mockReturnValue(CONFIG_MOCK.accounts[0]);
 
       jest
         .spyOn(utilsService, 'getCurrentMirror')
@@ -385,6 +395,9 @@ describe('setConfigurationService', () => {
       jest.spyOn(utilsService, 'initSDK').mockImplementation(jest.fn());
 
       jest.spyOn(wizardService, 'mainMenu').mockImplementation(jest.fn());
+    });
+    afterEach(() => {
+      spy.mockRestore();
     });
 
     const buildInitDefaultMultipleAsk = (
@@ -405,8 +418,9 @@ describe('setConfigurationService', () => {
     const buildDefaultMultipleAskMock = (
       accountType: string,
     ): jest.SpyInstance => {
-      return buildInitDefaultMultipleAsk(accountType)
-        .mockResolvedValueOnce('ED25519')
+      const b = buildInitDefaultMultipleAsk(accountType);
+      if (accountType !== 'FIREBLOCKS') b.mockResolvedValueOnce('ED25519');
+      return b
         .mockResolvedValueOnce(
           language.getText('wizard.manageAccountOptions.Change'),
         )
@@ -447,6 +461,10 @@ describe('setConfigurationService', () => {
         .mockImplementationOnce(() => Promise.resolve(false));
     };
     it('should manage account menu for self custodial accounts', async () => {
+      jest
+        .spyOn(utilsService, 'getCurrentAccount')
+        .mockReturnValue(CONFIG_MOCK.accounts[0]);
+
       const accountType = 'SELF-CUSTODIAL';
       const defaultMultipleAskMock = buildDefaultMultipleAskMock(accountType);
       const defaultSingleAskMock = buildDefaultSingleAskMock(accountType);
@@ -454,7 +472,7 @@ describe('setConfigurationService', () => {
       const defaultConfirmAskMock = buildDefaultConfirmAskMock();
 
       const keep = setConfigurationService.manageAccountMenu;
-      jest
+      spy = jest
         .spyOn(setConfigurationService, 'manageAccountMenu')
         .mockImplementationOnce(keep)
         .mockImplementationOnce(keep)
@@ -471,129 +489,111 @@ describe('setConfigurationService', () => {
       expect(defaultPasswordAskMock).toHaveBeenCalledTimes(1);
     });
 
-    // it('should manage account menu for non-custodial Firebloks', async () => {
-    //   const accountType = 'FIREBLOCKS';
-    //   const defaultMultipleAskMock = buildInitDefaultMultipleAsk(accountType)
-    //     .mockResolvedValueOnce(
-    //       language.getText('wizard.manageAccountOptions.Change'),
-    //     )
-    //     .mockResolvedValueOnce('0.0.456789')
-    //     .mockResolvedValueOnce(
-    //       language.getText('wizard.manageAccountOptions.Delete'),
-    //     )
-    //     .mockResolvedValueOnce(
-    //       `0.0.456789 - Account alias ${accountType} (testnet)`,
-    //     );
-    //   const defaultSingleAskMock = buildDefaultSingleAskMock(accountType)
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve(language.getText('configuration.fireblocks.title')),
-    //     )
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve('/user/foo/keystore/key.pem'),
-    //     )
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve('bbe6a358-0c98-460a-a2fc-91e035f74d54'),
-    //     )
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve('https://api.fireblocks.io'),
-    //     )
-    //     .mockImplementationOnce(() => Promise.resolve('HBAR_TEST'))
-    //     .mockImplementationOnce(() => Promise.resolve('2'))
-    //     .mockImplementationOnce(() => Promise.resolve('0.0.5712904'))
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve(
-    //         '04eb152576e3af4dccbabda7026b85d8fdc0ad3f18f26540e42ac71a08e21623',
-    //       ),
-    //     );
-    //   const defaultConfirmAskMock = buildDefaultConfirmAskMock();
-    //   const privateKeyPathValidation = jest
-    //     .spyOn(fs, 'existsSync')
-    //     .mockImplementationOnce(() => true);
+    it('should manage account menu for non-custodial Firebloks', async () => {
+      jest
+        .spyOn(utilsService, 'getCurrentAccount')
+        .mockReturnValue(CONFIG_MOCK.accounts[1]);
 
-    //   const keep = setConfigurationService.manageAccountMenu;
-    //   jest
-    //     .spyOn(setConfigurationService, 'manageAccountMenu')
-    //     .mockImplementationOnce(keep)
-    //     .mockImplementationOnce(keep)
-    //     .mockImplementationOnce(keep)
-    //     .mockImplementationOnce(keep)
-    //     .mockImplementation(jest.fn());
+      const accountType = 'FIREBLOCKS';
+      const defaultMultipleAskMock = buildDefaultMultipleAskMock(accountType);
+      const defaultSingleAskMock = buildDefaultSingleAskMock(accountType)
+        .mockImplementationOnce(() =>
+          Promise.resolve(language.getText('configuration.fireblocks.title')),
+        )
+        .mockImplementationOnce(() =>
+          Promise.resolve('/user/foo/keystore/key.pem'),
+        )
+        .mockImplementationOnce(() =>
+          Promise.resolve('bbe6a358-0c98-460a-a2fc-91e035f74d54'),
+        )
+        .mockImplementationOnce(() =>
+          Promise.resolve('https://api.fireblocks.io'),
+        )
+        .mockImplementationOnce(() => Promise.resolve('HBAR_TEST'))
+        .mockImplementationOnce(() => Promise.resolve('2'))
+        .mockImplementationOnce(() => Promise.resolve('0.0.5712904'))
+        .mockImplementationOnce(() =>
+          Promise.resolve(
+            '04eb152576e3af4dccbabda7026b85d8fdc0ad3f18f26540e42ac71a08e21623',
+          ),
+        );
+      const defaultConfirmAskMock = buildDefaultConfirmAskMock();
 
-    //   await setConfigurationService.manageAccountMenu();
+      const privateKeyPathValidation = jest
+        .spyOn(fs, 'existsSync')
+        .mockImplementationOnce(() => true);
 
-    //   expect(setConfigurationService).not.toBeNull();
-    //   expect(defaultMultipleAskMock).toHaveBeenCalledTimes(8);
-    //   expect(defaultConfirmAskMock).toHaveBeenCalledTimes(2);
-    //   expect(defaultSingleAskMock).toHaveBeenCalledTimes(10);
-    //   expect(privateKeyPathValidation).toHaveBeenCalledTimes(1);
-    // });
+      const keep = setConfigurationService.manageAccountMenu;
+      spy = jest
+        .spyOn(setConfigurationService, 'manageAccountMenu')
+        .mockImplementationOnce(keep)
+        .mockImplementationOnce(keep)
+        .mockImplementationOnce(keep)
+        .mockImplementationOnce(keep)
+        .mockImplementation(jest.fn());
 
-    // it('should manage account menu for non-custodial Dfns', async () => {
-    //   const accountType = 'DFNS';
-    //   const defaultMultipleAskMock = buildInitDefaultMultipleAsk(accountType)
-    //     .mockImplementationOnce(() => Promise.resolve('ED25519'))
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve(
-    //         language.getText('wizard.manageAccountOptions.Change'),
-    //       ),
-    //     )
-    //     .mockImplementationOnce(() => Promise.resolve('0.0.456789'))
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve(
-    //         language.getText('wizard.manageAccountOptions.Delete'),
-    //       ),
-    //     )
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve(
-    //         `0.0.456789 - Account alias ${accountType} (testnet)`,
-    //       ),
-    //     );
-    //   const defaultSingleAskMock = buildDefaultSingleAskMock(accountType)
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve('Y2ktMTZ2NTMtZXF0ZzAtOWRvOXJub3NjbGI1a3RwYg'),
-    //     )
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve('/user/foo/keystore/key.pem'),
-    //     )
-    //     .mockImplementationOnce(() => Promise.resolve('https://localhost:3000'))
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve('ap-2ng9jv-80cfc-983pop0iauf2sv8r'),
-    //     )
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve('https://api.dfns.ninja/'),
-    //     )
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve('wa-6qfr0-heg0c-985bmvv9hphbok47'),
-    //     )
-    //     .mockImplementationOnce(() => Promise.resolve('0.0.50000'))
-    //     .mockImplementationOnce(() =>
-    //       Promise.resolve(
-    //         '04eb152576e3af4dccbabda7026b85d8fdc0ad3f18f26540e42ac71a08e21623',
-    //       ),
-    //     );
-    //   const defaultPasswordAskMock = buildDefaultPasswordAskMock();
-    //   const defaultConfirmAskMock = buildDefaultConfirmAskMock();
-    //   const privateKeyPathValidation = jest
-    //     .spyOn(fs, 'existsSync')
-    //     .mockImplementationOnce(() => true);
+      await setConfigurationService.manageAccountMenu();
 
-    //   const keep = setConfigurationService.manageAccountMenu;
-    //   jest
-    //     .spyOn(setConfigurationService, 'manageAccountMenu')
-    //     .mockImplementationOnce(keep)
-    //     .mockImplementationOnce(keep)
-    //     .mockImplementationOnce(keep)
-    //     .mockImplementationOnce(keep)
-    //     .mockImplementation(jest.fn());
+      expect(setConfigurationService).not.toBeNull();
+      expect(defaultMultipleAskMock).toHaveBeenCalledTimes(8);
+      expect(defaultConfirmAskMock).toHaveBeenCalledTimes(2);
+      expect(defaultSingleAskMock).toHaveBeenCalledTimes(10);
+      expect(privateKeyPathValidation).toHaveBeenCalledTimes(1);
+    });
 
-    //   await setConfigurationService.manageAccountMenu();
+    it('should manage account menu for non-custodial Dfns', async () => {
+      jest
+        .spyOn(utilsService, 'getCurrentAccount')
+        .mockReturnValue(CONFIG_MOCK.accounts[2]);
 
-    //   expect(setConfigurationService).not.toBeNull();
-    //   expect(defaultMultipleAskMock).toHaveBeenCalledTimes(9);
-    //   expect(defaultConfirmAskMock).toHaveBeenCalledTimes(2);
-    //   expect(defaultSingleAskMock).toHaveBeenCalledTimes(10);
-    //   expect(defaultPasswordAskMock).toHaveBeenCalledTimes(1);
-    //   expect(privateKeyPathValidation).toHaveBeenCalledTimes(1);
-    // });
+      const accountType = 'DFNS';
+      const defaultMultipleAskMock = buildDefaultMultipleAskMock(accountType);
+      const defaultSingleAskMock = buildDefaultSingleAskMock(accountType)
+        .mockImplementationOnce(() =>
+          Promise.resolve('Y2ktMTZ2NTMtZXF0ZzAtOWRvOXJub3NjbGI1a3RwYg'),
+        )
+        .mockImplementationOnce(() =>
+          Promise.resolve('/user/foo/keystore/key.pem'),
+        )
+        .mockImplementationOnce(() => Promise.resolve('https://localhost:3000'))
+        .mockImplementationOnce(() =>
+          Promise.resolve('ap-2ng9jv-80cfc-983pop0iauf2sv8r'),
+        )
+        .mockImplementationOnce(() =>
+          Promise.resolve('https://api.dfns.ninja/'),
+        )
+        .mockImplementationOnce(() =>
+          Promise.resolve('wa-6qfr0-heg0c-985bmvv9hphbok47'),
+        )
+        .mockImplementationOnce(() => Promise.resolve('0.0.50000'))
+        .mockImplementationOnce(() =>
+          Promise.resolve(
+            '04eb152576e3af4dccbabda7026b85d8fdc0ad3f18f26540e42ac71a08e21623',
+          ),
+        );
+      const defaultPasswordAskMock = buildDefaultPasswordAskMock();
+      const defaultConfirmAskMock = buildDefaultConfirmAskMock();
+      const privateKeyPathValidation = jest
+        .spyOn(fs, 'existsSync')
+        .mockImplementationOnce(() => true);
+
+      const keep = setConfigurationService.manageAccountMenu;
+      spy = jest
+        .spyOn(setConfigurationService, 'manageAccountMenu')
+        .mockImplementationOnce(keep)
+        .mockImplementationOnce(keep)
+        .mockImplementationOnce(keep)
+        .mockImplementationOnce(keep)
+        .mockImplementation(jest.fn());
+
+      await setConfigurationService.manageAccountMenu();
+
+      expect(setConfigurationService).not.toBeNull();
+      expect(defaultMultipleAskMock).toHaveBeenCalledTimes(9);
+      expect(defaultConfirmAskMock).toHaveBeenCalledTimes(2);
+      expect(defaultSingleAskMock).toHaveBeenCalledTimes(10);
+      expect(defaultPasswordAskMock).toHaveBeenCalledTimes(1);
+      expect(privateKeyPathValidation).toHaveBeenCalledTimes(1);
+    });
   });
 });
