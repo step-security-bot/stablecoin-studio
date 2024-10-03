@@ -13,6 +13,8 @@ module.exports = function override(config) {
 		path: require.resolve('path-browserify'),
 		zlib: require.resolve('browserify-zlib'),
 		fs: false,
+		vm: false,
+		process: false,
 	});
 	config.resolve.fallback = fallback;
 	config.plugins = (config.plugins || []).concat([
@@ -21,6 +23,15 @@ module.exports = function override(config) {
 			Buffer: ['buffer', 'Buffer'],
 		}),
 	]);
-	config.ignoreWarnings = [/Failed to parse source map/]; // this is a temporary solution until the source map issue in react-scripts is fixed
+	config.ignoreWarnings = [/Failed to parse source map/];
+
+	// config to fix @chakra-ui/icon y chakra-react-select compatibility issues (not working)
+	config.resolve.alias = {
+		...config.resolve.alias,
+		'@chakra-ui/icon': '@chakra-ui/react',
+		'chakra-react-select': '@chakra-ui/react',
+		'@chakra-ui/icon/dist/Icon': '@chakra-ui/react',
+	};
+
 	return config;
 };
